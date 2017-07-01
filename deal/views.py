@@ -2,11 +2,22 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
 
+from django.utils import timezone
+
 from .models import Board, Hand, Card
 
 import random
 # Create your views here.
 def index(request):
+    if len(Board.objects.all()) == 0:
+        b = Board(pub_date=timezone.now())
+        b.save()
+        b.hand_set.create(cardinal_direction=0)
+        b.hand_set.create(cardinal_direction=1)
+        b.hand_set.create(cardinal_direction=2)
+        b.hand_set.create(cardinal_direction=3)
+
+
     board = Board.objects.get(pk=1)
     hands = board.hand_set.all()
 
