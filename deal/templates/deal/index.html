@@ -1,0 +1,9 @@
+<ul>
+{% for hand in hands %}
+    <li>Hand {{ hand.cardinal_direction }}</li>
+    {% for card in hand.card_set.all %}
+        <li>{{ card.suit }} {{ card.value }}</li>
+    {% endfor %}
+    <br>
+{% endfor %}
+</ul>
