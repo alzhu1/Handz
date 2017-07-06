@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/William/python-docs-samples/appengine/flexible/django_cloudsql/env"
+VIRTUAL_ENV="/Users/lusicheng/TEST"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

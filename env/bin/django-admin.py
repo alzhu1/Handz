@@ -1,4 +1,4 @@
-#!/Users/William/python-docs-samples/appengine/flexible/django_cloudsql/env/bin/python3.6
+#!/Users/lusicheng/TEST/bin/python3.6
 from django.core import management
 
 if __name__ == "__main__":
