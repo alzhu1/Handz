@@ -15,7 +15,7 @@ import numpy as np
 import random
 # Create your views here.
 
-@login_required(login_url='/deal/login')
+@login_required(login_url='/login')
 def index(request):
     deck = []
 
