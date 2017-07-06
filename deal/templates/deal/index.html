@@ -1,8 +1,9 @@
+<a href="{% url 'logout' %}">Logout</a>
 <ul>
 {% for hand in hands %}
-    <li>Hand {{ hand.cardinal_direction }}</li>
-    {% for card in hand.card_set.all %}
-        <li>{{ card.suit }} {{ card.value }}</li>
+    <li>Hand </li>
+    {% for card in hand %}
+        <li>{{ card }}</li>
     {% endfor %}
     <br>
 {% endfor %}
