@@ -1,51 +1,44 @@
 from django.http import HttpResponse
 from django.template import loader
-from django.shortcuts import render
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from django.utils import timezone
 
-from .models import Board, Hand, Card
+from .models import Deal, Card
+from .functions import *
+from .forms import SignUpForm
 
+import numpy as np
 import random
 # Create your views here.
+
+@login_required(login_url='/deal/login')
 def index(request):
-    if len(Board.objects.all()) == 0:
-        b = Board(pub_date=timezone.now())
-        b.save()
-        b.hand_set.create(cardinal_direction=0)
-        b.hand_set.create(cardinal_direction=1)
-        b.hand_set.create(cardinal_direction=2)
-        b.hand_set.create(cardinal_direction=3)
+    deck = []
 
+    for i in range(0, 52):
+        card_string = ""
+        if i < 13:
+            deck.append("N")
+        elif i < 26:
+            deck.append("E")
+        elif i < 39:
+            deck.append("S")
+        else:
+            deck.append("W")
 
-    board = Board.objects.get(pk=1)
-    hands = board.hand_set.all()
+    np.random.shuffle(deck)
+    hand_string = ""
 
-    #for hand in hands:
-     #   hand.card_set.all().delete()
+    for i in range(0, 52):
+        hand_string = hand_string + deck[i]
 
-    cards = []
-    suits = ["Spade", "Heart", "Club", "Diamond"]
-    for i in range(1, 14):
-        for s in suits:
-            cards.append( Card(suit=s, value=i) )
-
-    for hand in hands:
-        hand_size = len(hand.card_set.all())
-        for j in range(1, 14):
-            ran = random.randrange(len(cards))
-            card_suit = cards[ran].suit
-            card_value = cards[ran].value
-
-            if hand_size == 0:
-                hand.card_set.create(suit=card_suit, value=card_value, card_position=j)
-            else:
-                filtered_hand = hand.card_set.all().filter(card_position=j)
-                filtered_hand.update(suit=card_suit, value=card_value)
-
-            #cards[ran].hand = hands.get(pk=i)
-            cards.remove(cards[ran])
-        #hands.get(pk=i).save()
+    new_deal = Deal(hand_string=hand_string, dealer=0, vulnerability=0, board_number=0)
+    new_deal.save()
+    hands = hand_conversion(new_deal.hand_string)
 
     template = loader.get_template("deal/index.html")
     context = {
@@ -53,3 +46,17 @@ def index(request):
     }
 
     return HttpResponse(template.render(context, request))
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('/deal')
+    else:
+        form = SignUpForm()
+    return render(request, 'deal/signup.html', {'form': form})
