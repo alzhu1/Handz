@@ -40,9 +40,21 @@ def index(request):
     new_deal.save()
     hands = hand_conversion(new_deal.hand_string)
 
+    #create string paths for each card to get images from static folder
+    hand_list_for_template_images = [[],[],[],[]]
+
+    count = 0
+    for x in hands:
+        for card in x:
+            image_string = 'deal/' + card + '.png'
+            hand_list_for_template_images[count].append(image_string)
+        count += 1
+
     template = loader.get_template("deal/index.html")
     context = {
-        'hands': hands
+        'hands': hands ,
+        'hand_list_for_template_images': hand_list_for_template_images
+
     }
 
     return HttpResponse(template.render(context, request))
@@ -56,7 +68,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('/deal')
+            return redirect('/')
     else:
         form = SignUpForm()
     return render(request, 'deal/signup.html', {'form': form})
