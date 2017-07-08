@@ -177,15 +177,25 @@ def hand_conversion(HandString):
     for i in range(0, 52):
         card_string = ""
         if i < 13:
-            card_string = card_string + "Spade "
+            card_string = card_string + "spade"
         elif i < 26:
-            card_string = card_string + "Heart "
+            card_string = card_string + "heart"
         elif i < 39:
-            card_string = card_string + "Diamond "
+            card_string = card_string + "diamond"
         else:
-            card_string = card_string + "Club "
+            card_string = card_string + "club"
 
-        card_string = card_string + str(13 - (i % 13))
+        value = str(13 - (i % 13))
+        if value == '1':
+            value = 'A'
+        elif value == '11':
+            value = 'J'
+        elif value == '12':
+            value = 'Q'
+        elif value == '13':
+            value = 'K'
+
+        card_string = card_string + " " + value
 
         if HandString[i] == "N":
             Nhand.append(card_string)

@@ -121,8 +121,8 @@ USE_TZ = True
 # [START staticurl]
 # Fill in your cloud bucket and switch which one of the following 2 lines
 # is commented to serve static content from GCS
-# STATIC_URL = 'https://storage.googleapis.com/<your-gcs-bucket>/static/'
-STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
+#STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
+STATIC_URL = 'static/'
 # [END staticurl]
 
 STATIC_ROOT = 'static/'
