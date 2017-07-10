@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import CreateView
 
 from django.utils import timezone
 
@@ -59,16 +60,21 @@ def index(request):
 
     return HttpResponse(template.render(context, request))
 
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('/')
-    else:
+class SignupView(CreateView):
+    template_name = 'deal/signup.html'
+    form_class = SignUpForm
+    success_url = "/"
+
+    def get(self, request):
         form = SignUpForm()
-    return render(request, 'deal/signup.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
+
+    def form_valid(self, form):
+        form.save()
+        username = form.cleaned_data.get('username')
+        raw_password = form.cleaned_data.get('password1')
+        user = authenticate(username=username, password=raw_password)
+        return super(SignupView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(SignupView, self).form_invalid(form)
