@@ -53,8 +53,8 @@ def index(request):
     template = loader.get_template("deal/index.html")
     context = {
         'hands': hands ,
-        'hand_list_for_template_images': hand_list_for_template_images
-
+        'hand_list_for_template_images': hand_list_for_template_images,
+        'username': request.user.username
     }
 
     return HttpResponse(template.render(context, request))

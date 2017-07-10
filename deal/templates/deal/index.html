@@ -1,6 +1,7 @@
 {% load static %}
 <a href="{% url 'logout' %}">Logout</a>
 <ul>
+<li> {{ username }}  </li>
 {% for hand in hand_list_for_template_images %}
     <li> Hand   </li>
     {% for card in hand %}
