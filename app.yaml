@@ -8,4 +8,10 @@ beta_settings:
 
 runtime_config:
   python_version: 3
+
+env_variables:
+    REDIS_HOST: pub-redis-15180.us-west-2-1.1.ec2.garantiadata.com:
+    REDIS_PORT: 15180
+    REDIS_PASSWORD: theworldisquiethere
+
 # [END runtime]
