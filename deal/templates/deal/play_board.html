@@ -1,0 +1,143 @@
+{% extends 'deal/base.html' %}
+
+{% block title %}Board{% endblock title %}
+
+{% block content %}
+{% load static %}
+<a href="{% url 'deal:logout' %}">Logout</a>
+<a href="{% url 'deal:lobby' %}">Back to Lobby</a>
+<ul>
+<li> {{ username }}  </li>
+{% for hand in hand_list_for_template_images %}
+    <a href="#" onclick="return false;" data-handnum="{{ forloop.counter0 }}" class="hand">Hand</a>
+    {% for card in hand %}
+        <img src="{% static card %}" width="80px"/>
+    {% endfor %}
+    <br>
+{% endfor %}
+</ul>
+<button type="button" id="leave">Leave seat</button>
+<button type="button" id="start">Start game</button>
+{% endblock content %}
+
+{% block script %}
+<script>
+    var table_id = {{ table_id }}
+
+    // Create a new WebSocket, connected to hand-claiming
+    socket = new WebSocket("ws://" + window.location.host + "/table/" +
+                           table_id + "/");
+
+    /**
+     *  Function listens for successful WebSocket connection; if successful,
+     *  this function is triggered.
+     */
+    socket.onopen = function() {
+        console.log("Connected");
+    }
+
+    /**
+     *  Function listens for receiving WebSocket messages. If message is
+     *  is received, function is triggered.
+     *
+     *  @param e: contains the data of the sent message, details of which
+     *  found in consumers.py
+     */
+    socket.onmessage = function(e) {
+
+        // Parse data of message, have access to all details sent
+        var data = JSON.parse(e.data);
+
+        // Only triggers for first connection, in ws_connect (consumers.py)
+        if( data["first_connect"] == true )
+        {
+            // Loop through all users at the table
+            for(var i = 0; i < data["users"].length; i++)
+            {
+                // Variable stores all links where the data-handnum attribute
+                // matches another user's handnum value via dictionary
+                var takenHand = $('a').filter(function() {
+                    return $(this).data('handnum') ==
+                           data["users_handnum"][data["users"][i]];
+                });
+
+                // Set inner HTML code to user's username
+                takenHand.html(data["users"][i]);
+            }
+
+        }
+
+        // Only triggers for disconnection, in ws_disconnect (consumers.py)
+        else if( data["disconnect"] == true )
+        {
+            // Variable takes any links with the same username
+            var takenHand = $('a').filter(function () {
+                return $(this).html() == data["username"];
+            });
+
+            // Resets links' inner HTML back to default
+            takenHand.html("Hand");
+        }
+
+        // Triggered if messages send are from ws_message (consumers.py)
+        else
+        {
+            // -1 means user chose to leave their current hand
+            if( data["handnum"] == -1)
+            {
+                // Variable stores link with user's name
+                var leave = $('a').filter(function() {
+                   return $(this).html() == data["username"]
+                });
+
+                // Inner HTML set to default, effectively left hand
+                leave.html("Hand");
+            }
+
+            // Gets the link with the received handnum
+            var hand = $('a').filter(function () {
+                return $(this).data('handnum') == data["handnum"];
+            });
+
+            // Only allow hand changing if no one else claimed a hand
+            if( hand.html() == "Hand" )
+            {
+                // Variable stores link with user's name
+                var leave = $('a').filter(function() {
+                   return $(this).html() == data["username"]
+                });
+
+                // Reset user's hand to default, set new hand to user's name
+                leave.html("Hand");
+                hand.html(data["username"]);
+            }
+        }
+    }
+
+    /**
+     *  Function listening for disconnecting WebSocket; if WebSocket
+     *  connection is closed, trigger this function.
+     */
+    socket.onclose = function() {
+        console.log("Goodbye");
+    }
+
+    /**
+     *  JQuery function: if any HTML element with the attribute class="hand" is
+     *  clicked, send a message containing element's data-handnum value back to
+     *  ws_message via WebSocket
+     */
+    $('.hand').click(function() {
+        socket.send($(this).attr("data-handnum"));
+    });
+
+    /**
+     *  JQuery function: if HTML element with the attribute id="leave" is
+     *  clicked, send the number -1 back to ws_message via WebSocket
+     */
+    $("#leave").click(function() {
+       socket.send(-1);
+    });
+
+</script>
+{% endblock script %}

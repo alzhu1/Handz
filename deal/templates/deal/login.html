@@ -1,6 +1,6 @@
 {% extends 'deal/base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login{% endblock title %}
 
 {% block content %}
   <h2>Login</h2>
@@ -9,5 +9,5 @@
     {{ form.as_p }}
     <button type="submit">Login</button>
   </form>
-  <a href="{% url 'signup' %}">Create an account</a>
-{% endblock %}
+  <a href="{% url 'deal:signup' %}">Create an account</a>
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% extends 'deal/base.html' %}
+
+{% block title %}Create a board{% endblock %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Create Board</button>
+  </form>
+  <a href="{% url 'deal:lobby' %}">Back to lobby</a>
+{% endblock content %}

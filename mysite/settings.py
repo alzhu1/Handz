@@ -14,6 +14,7 @@
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import asgi_redis
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -44,7 +45,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'polls',
-    'deal.apps.DealConfig'
+    'deal.apps.DealConfig',
+    'channels'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -126,3 +128,13 @@ STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
 # [END staticurl]
 
 STATIC_ROOT = 'static/'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "deal.routing.channel_routing",
+    },
+}

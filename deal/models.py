@@ -3,8 +3,12 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class BridgeTable(models.Model):
+    users = models.ManyToManyField(User)
+
 class Deal(models.Model):
     deal_id = models.AutoField(primary_key=True, blank=True)
+    bridge_table = models.ForeignKey(BridgeTable, on_delete=models.CASCADE)
     hand_string = models.CharField(max_length=52)
     dealer = models.IntegerField()
     vulnerability = models.IntegerField()
@@ -12,8 +16,9 @@ class Deal(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    country = models.CharField(max_length=30) # replace with list table
-    language = models.CharField(max_length=30) # replace with list table
+    # country = models.CharField(max_length=30) # replace with list table
+    # language = models.CharField(max_length=30) # replace with list table
+    hand_position = models.IntegerField(default=-1) # temporary holds
 
 class Card(models.Model):
     board = models.ForeignKey(Deal, on_delete=models.CASCADE)

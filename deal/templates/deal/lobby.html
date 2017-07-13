@@ -1,0 +1,18 @@
+{% extends 'deal/base.html' %}
+
+{% block title %}Handz Lobby{% endblock title %}
+
+{% block content %}
+<h1>Lobby</h1>
+
+<p>Current Boards:</p>
+<ul>
+    {% for bridge_table in bridge_tables %}
+    <li><a href="{% url 'deal:play_board' bridge_table.id %}">
+        Board {{ forloop.counter }}
+    </a></li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'deal:create_board' %}">Create new board</a>
+{% endblock content %}
