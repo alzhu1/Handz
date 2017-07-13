@@ -9,9 +9,4 @@ beta_settings:
 runtime_config:
   python_version: 3
 
-env_variables:
-    REDIS_HOST: redis-11325.c1.us-central1-2.gce.cloud.redislabs.com
-    REDIS_PORT: 11325
-    REDIS_PASSWORD: theworldisquiethere
-
 # [END runtime]
