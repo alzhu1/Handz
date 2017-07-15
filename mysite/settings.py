@@ -60,33 +60,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
-if 'handz-postgres-db.cxjmugyhoqin.us-west-1.rds.amazonaws.com' in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ['handz_db'],
-            'USER': os.environ['william'],
-            'PASSWORD': os.environ['william123'],
-            'HOST': os.environ['handz-postgres-db.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
-            'PORT': os.environ['5432'],
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ['handz_db'],
+        'USER': os.environ['william'],
+        'PASSWORD': os.environ['william123'],
+        'HOST': os.environ['handz-postgres-db.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
+        'PORT': os.environ['5432'],
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'william',
-            'USER': 'william',
-            'PASSWORD': 'william1',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
-    }
+}
 
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
