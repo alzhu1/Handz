@@ -60,14 +60,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
-if 'handz-postgres-db' in os.environ:
+if 'handz-postgres-db.cxjmugyhoqin.us-west-1.rds.amazonaws.com' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': os.environ['handz_db'],
             'USER': os.environ['william'],
             'PASSWORD': os.environ['william123'],
-            'HOST': os.environ['handz-postgres-db'],
+            'HOST': os.environ['handz-postgres-db.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
             'PORT': os.environ['5432'],
         }
     }
