@@ -63,7 +63,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ['handz_db'],
         'USER': os.environ['william'],
         'PASSWORD': os.environ['william123'],
