@@ -64,10 +64,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['handz_db'],
+        'NAME': os.environ['dbhandz'],
         'USER': os.environ['william'],
         'PASSWORD': os.environ['william123'],
-        'HOST': os.environ['handz-postgres-db.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
+        'HOST': os.environ['dbhandz.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
         'PORT': os.environ['5432'],
     }
 }
