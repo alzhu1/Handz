@@ -60,19 +60,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['dbhandz'],
-        'USER': os.environ['william'],
-        'PASSWORD': os.environ['william123'],
-        'HOST': os.environ['dbhandz.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
-        'PORT': os.environ['5432'],
+if 'dbhandz' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['dbhandz'],
+            'USER': os.environ['william'],
+            'PASSWORD': os.environ['william123'],
+            'HOST': os.environ['dbhandz.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
+            'PORT': os.environ['5432'],
+        }
     }
-}
-
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'iotd',
+            'USER': 'iotd',
+            'PASSWORD': 'iotd',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 # Internationalization
 
