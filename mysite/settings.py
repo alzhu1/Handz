@@ -60,14 +60,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
-if 'dbhandz' in os.environ:
+if 'ebdb' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['dbhandz'],
+            'NAME': os.environ['ebdb'],
             'USER': os.environ['william'],
             'PASSWORD': os.environ['william123'],
-            'HOST': os.environ['dbhandz.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
+            'HOST': os.environ['aa6v12ng1geoo7.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
             'PORT': os.environ['5432'],
         }
     }
