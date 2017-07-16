@@ -64,11 +64,11 @@ if 'aa6v12ng1geoo7.cxjmugyhoqin.us-west-1.rds.amazonaws.com' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['ebdb'],
-            'USER': os.environ['william'],
-            'PASSWORD': os.environ['william123'],
-            'HOST': os.environ['aa6v12ng1geoo7.cxjmugyhoqin.us-west-1.rds.amazonaws.com'],
-            'PORT': os.environ['5432'],
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
         }
     }
 else:
