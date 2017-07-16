@@ -60,7 +60,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
-if 'aa6v12ng1geoo7.cxjmugyhoqin.us-west-1.rds.amazonaws.com' in os.environ:
+if 'RDS_HOSTNAME' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
