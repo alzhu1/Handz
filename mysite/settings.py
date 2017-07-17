@@ -111,7 +111,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis://:theworldisquiethere@redis-11325.c1.us-central1-2.gce.cloud.redislabs.com:11325/0")],
+            "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
         },
         "ROUTING": "deal.routing.channel_routing",
     },
