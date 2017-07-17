@@ -1,6 +1,8 @@
 #mysite/settings.py
 #app.yaml
 
+*.pyc
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
