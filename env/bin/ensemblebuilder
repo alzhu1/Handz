@@ -1,0 +1,7 @@
+#!/Users/William/Handz/Handz/env/bin/python3.6
+
+import sys
+
+if __name__ == "__main__":
+    from EB.builder.eb_main import main
+    sys.exit(main(sys.argv))
