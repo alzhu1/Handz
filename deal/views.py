@@ -16,7 +16,7 @@ import numpy as np
 import random
 # Create your views here.
 
-@login_required(login_url='/login/')
+@login_required(login_url='/login')
 def lobby(request):
     """
     Function based view that controls the lobby.
