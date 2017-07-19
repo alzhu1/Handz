@@ -113,12 +113,11 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'asgi_redis.RedisChannelLayer',
         'CONFIG': {
-#            if 'RDS_HOSTNAME' in os.environ:
+            if 'RDS_HOSTNAME' in os.environ:
                 'hosts': [('handz-redis-001.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
-#            else:
-#                'hosts': [('localhost', 6379)],
+            else:
+                'hosts': [('localhost', 6379)],
 #                "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
-
         },
         'ROUTING': 'deal.routing.channel_routing',
     }
