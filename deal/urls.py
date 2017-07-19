@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^board/(?P<pk>[0-9]+)/$', views.play_board, name='play_board'),
     url(r'^login/$', auth_views.login,
         {'template_name': 'deal/login.html'}, name='login'),
-        
-    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
+
+    url(r'^logout/$', auth_views.logout, {'next_page': '/login'}, name='logout'),
     url(r'^signup/$', views.SignupView.as_view(), name='signup'),
 ]
