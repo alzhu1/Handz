@@ -118,3 +118,14 @@ if 'RDS_HOSTNAME' in os.environ:
             'ROUTING': 'deal.routing.channel_routing',
         }
     }
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'asgi_redis.RedisChannelLayer',
+            'CONFIG': {
+                    'hosts': [('localhost', 6379)],
+    #                "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
+            },
+            'ROUTING': 'deal.routing.channel_routing',
+        }
+    }
