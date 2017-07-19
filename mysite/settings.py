@@ -113,7 +113,7 @@ if 'RDS_HOSTNAME' in os.environ:
         'default': {
             'BACKEND': 'asgi_redis.RedisChannelLayer',
             'CONFIG': {
-                'hosts': [('handz-redis.dmkkt6.ng.0001.usw1.cache.amazonaws.com', 6379)],
+                'hosts': [('handz-redis-001.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
             },
             'ROUTING': 'deal.routing.channel_routing',
         }
