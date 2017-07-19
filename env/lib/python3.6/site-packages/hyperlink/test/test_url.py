@@ -6,11 +6,12 @@
 from __future__ import unicode_literals
 
 import socket
-from unittest import TestCase
 
+from .common import HyperlinkTestCase
 from .. import URL, URLParseError
 # automatically import the py27 windows implementation when appropriate
-from .._url import inet_pton, SCHEME_PORT_MAP
+from .. import _url
+from .._url import inet_pton, SCHEME_PORT_MAP, parse_host
 
 unicode = type(u'')
 
@@ -115,10 +116,33 @@ ROUNDTRIP_TESTS = (
      '20Linux%20precise-5.7.1.iso&tr=udp://tracker.openbittorrent.com:80&'
      'tr=udp://tracker.publicbt.com:80&tr=udp://tracker.istole.it:6969&'
      'tr=udp://tracker.ccc.de:80&tr=udp://open.demonii.com:1337'),
+
+    # percent-encoded delimiters in percent-encodable fields
+
+    'https://%3A@example.com/',  # colon in username
+    'https://%40@example.com/',  # at sign in username
+    'https://%2f@example.com/',  # slash in username
+    'https://a:%3a@example.com/',  # colon in password
+    'https://a:%40@example.com/',  # at sign in password
+    'https://a:%2f@example.com/',  # slash in password
+    'https://a:%3f@example.com/',  # question mark in password
+    'https://example.com/%2F/',  # slash in path
+    'https://example.com/%3F/',  # question mark in path
+    'https://example.com/%23/',  # hash in path
+    'https://example.com/?%23=b',  # hash in query param name
+    'https://example.com/?%3D=b',  # equals in query param name
+    'https://example.com/?%26=b',  # ampersand in query param name
+    'https://example.com/?a=%23',  # hash in query param value
+    'https://example.com/?a=%26',  # ampersand in query param value
+    'https://example.com/?a=%3D',  # equals in query param value
+    # double-encoded percent sign in all percent-encodable positions:
+    "http://(%2525):(%2525)@example.com/(%2525)/?(%2525)=(%2525)#(%2525)",
+    # colon in first part of schemeless relative url
+    'first_seg_rel_path__colon%3Anotok/second_seg__colon%3Aok',
 )
 
 
-class TestURL(TestCase):
+class TestURL(HyperlinkTestCase):
     """
     Tests for L{URL}.
     """
@@ -231,8 +255,20 @@ class TestURL(TestCase):
         L{URL.to_text} should invert L{URL.from_text}.
         """
         for test in ROUNDTRIP_TESTS:
-            result = URL.from_text(test).to_text()
+            result = URL.from_text(test).to_text(with_password=True)
             self.assertEqual(test, result)
+
+    def test_roundtrip_double_iri(self):
+        for test in ROUNDTRIP_TESTS:
+            url = URL.from_text(test)
+            iri = url.to_iri()
+            double_iri = iri.to_iri()
+            assert iri == double_iri
+
+            iri_text = iri.to_text(with_password=True)
+            double_iri_text = double_iri.to_text(with_password=True)
+            assert iri_text == double_iri_text
+        return
 
     def test_equality(self):
         """
@@ -245,7 +281,7 @@ class TestURL(TestCase):
         self.assertNotEqual(
             urlpath,
             URL.from_text('ftp://www.anotherinvaliddomain.com/'
-                         'foo/bar/baz/?zot=21&zut')
+                          'foo/bar/baz/?zot=21&zut')
         )
 
     def test_fragmentEquality(self):
@@ -821,8 +857,36 @@ class TestURL(TestCase):
         url = URL.from_text(t)
         assert url.host == '2001:0db8:85a3:0000:0000:8a2e:0370:7334'
         assert url.port == 80
-        assert url.family == socket.AF_INET6
         assert SCHEME_PORT_MAP[url.scheme] != url.port
+
+    def test_basic(self):
+        text = 'https://user:pass@example.com/path/to/here?k=v#nice'
+        url = URL.from_text(text)
+        assert url.scheme == 'https'
+        assert url.userinfo == 'user:pass'
+        assert url.host == 'example.com'
+        assert url.path == ('path', 'to', 'here')
+        assert url.fragment == 'nice'
+
+        text = 'https://user:pass@127.0.0.1/path/to/here?k=v#nice'
+        url = URL.from_text(text)
+        assert url.scheme == 'https'
+        assert url.userinfo == 'user:pass'
+        assert url.host == '127.0.0.1'
+        assert url.path == ('path', 'to', 'here')
+
+        text = 'https://user:pass@[::1]/path/to/here?k=v#nice'
+        url = URL.from_text(text)
+        assert url.scheme == 'https'
+        assert url.userinfo == 'user:pass'
+        assert url.host == '::1'
+        assert url.path == ('path', 'to', 'here')
+
+    def test_invalid_url(self):
+        self.assertRaises(URLParseError, URL.from_text, '#\n\n')
+
+    def test_invalid_authority_url(self):
+        self.assertRaises(URLParseError, URL.from_text, 'http://abc:\n\n/#')
 
     def test_invalid_ipv6(self):
         invalid_ipv6_ips = ['2001::0234:C1ab::A0:aabc:003F',
@@ -835,16 +899,6 @@ class TestURL(TestCase):
             self.assertRaises(socket.error, inet_pton,
                               socket.AF_INET6, ip)
             self.assertRaises(URLParseError, URL.from_text, url_text)
-
-    def test_ip_family_detection(self):
-        u = URL.from_text('http://giggle.com')
-        self.assertEqual(u.family, None)
-
-        u = URL.from_text('http://127.0.0.1/a/b/?c=d')
-        self.assertEqual(u.family, socket.AF_INET)
-
-        u = URL.from_text('http://[::1]/a/b/?c=d')
-        self.assertEqual(u.family, socket.AF_INET6)
 
     def test_invalid_port(self):
         self.assertRaises(URLParseError, URL.from_text, 'ftp://portmouth:smash')
@@ -905,6 +959,13 @@ class TestURL(TestCase):
         url = URL.from_text('file:///path/to/heck')
         url2 = url.replace(scheme='mailto')
         self.assertEquals(url2.to_text(), 'mailto:/path/to/heck')
+
+        url_text = 'unregisteredscheme:///a/b/c'
+        url = URL.from_text(url_text)
+        no_netloc_url = url.replace(uses_netloc=False)
+        self.assertEquals(no_netloc_url.to_text(), 'unregisteredscheme:/a/b/c')
+        netloc_url = url.replace(uses_netloc=True)
+        self.assertEquals(netloc_url.to_text(), url_text)
 
         return
 
@@ -1021,68 +1082,21 @@ class TestURL(TestCase):
 
         assert u1 == u2
 
+    def test_from_text_type(self):
+        assert URL.from_text(u'#ok').fragment == u'ok'  # sanity
+        self.assertRaises(TypeError, URL.from_text, b'bytes://x.y.z')
+        self.assertRaises(TypeError, URL.from_text, object())
 
-    # python 2.6 compat
-    def assertRaises(self, excClass, callableObj=None, *args, **kwargs):
-        """Fail unless an exception of class excClass is raised
-           by callableObj when invoked with arguments args and keyword
-           arguments kwargs. If a different type of exception is
-           raised, it will not be caught, and the test case will be
-           deemed to have suffered an error, exactly as for an
-           unexpected exception.
+    def test_from_text_bad_authority(self):
+        # bad ipv6 parentheses
+        self.assertRaises(URLParseError, URL.from_text, 'http://[::1/')
+        self.assertRaises(URLParseError, URL.from_text, 'http://::1]/')
+        self.assertRaises(URLParseError, URL.from_text, 'http://[[::1]/')
+        self.assertRaises(URLParseError, URL.from_text, 'http://[::1]]/')
 
-           If called with callableObj omitted or None, will return a
-           context object used like this::
-
-                with self.assertRaises(SomeException):
-                    do_something()
-
-           The context manager keeps a reference to the exception as
-           the 'exception' attribute. This allows you to inspect the
-           exception after the assertion::
-
-               with self.assertRaises(SomeException) as cm:
-                   do_something()
-               the_exception = cm.exception
-               self.assertEqual(the_exception.error_code, 3)
-        """
-        context = _AssertRaisesContext(excClass, self)
-        if callableObj is None:
-            return context
-        with context:
-            callableObj(*args, **kwargs)
-
-
-# PYTHON 2.6 compat
-
-class _AssertRaisesContext(object):
-    """A context manager used to implement TestCase.assertRaises* methods."""
-
-    def __init__(self, expected, test_case, expected_regexp=None):
-        self.expected = expected
-        self.failureException = test_case.failureException
-        self.expected_regexp = expected_regexp
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, tb):
-        if exc_type is None:
-            try:
-                exc_name = self.expected.__name__
-            except AttributeError:
-                exc_name = str(self.expected)
-            raise self.failureException(
-                "{0} not raised".format(exc_name))
-        if not issubclass(exc_type, self.expected):
-            # let unexpected exceptions pass through
-            return False
-        self.exception = exc_value # store for later retrieval
-        if self.expected_regexp is None:
-            return True
-
-        expected_regexp = self.expected_regexp
-        if not expected_regexp.search(str(exc_value)):
-            raise self.failureException('"%s" does not match "%s"' %
-                     (expected_regexp.pattern, str(exc_value)))
-        return True
+        # empty port
+        self.assertRaises(URLParseError, URL.from_text, 'http://127.0.0.1:')
+        # non-integer port
+        self.assertRaises(URLParseError, URL.from_text, 'http://127.0.0.1:hi')
+        # extra port colon (makes for an invalid host)
+        self.assertRaises(URLParseError, URL.from_text, 'http://127.0.0.1::80')
