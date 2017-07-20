@@ -60,28 +60,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
-if 'RDS_HOSTNAME' in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'william',
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
-    }
+# if 'RDS_HOSTNAME' in os.environ:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': os.environ['RDS_DB_NAME'],
+#             'USER': os.environ['RDS_USERNAME'],
+#             'PASSWORD': os.environ['RDS_PASSWORD'],
+#             'HOST': os.environ['RDS_HOSTNAME'],
+#             'PORT': os.environ['RDS_PORT'],
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': 'william',
+#             'USER': '',
+#             'PASSWORD': '',
+#             'HOST': 'localhost',
+#             'PORT': '5432',
+#         }
+#     }
 
 DATABASES = {
     'default': {
@@ -119,27 +119,27 @@ STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
 STATIC_ROOT = 'static/'
 
 
-if 'RDS_HOSTNAME' in os.environ:
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'asgi_redis.RedisChannelLayer',
-            'CONFIG': {
-                    'hosts': [('handz-redis-001.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
-            },
-            'ROUTING': 'deal.routing.channel_routing',
-        }
-    }
-else:
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'asgi_redis.RedisChannelLayer',
-            'CONFIG': {
-                    'hosts': [('localhost', 6379)],
-    #                "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
-            },
-            'ROUTING': 'deal.routing.channel_routing',
-        }
-    }
+# if 'RDS_HOSTNAME' in os.environ:
+#     CHANNEL_LAYERS = {
+#         'default': {
+#             'BACKEND': 'asgi_redis.RedisChannelLayer',
+#             'CONFIG': {
+#                     'hosts': [('handz-redis-001.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
+#             },
+#             'ROUTING': 'deal.routing.channel_routing',
+#         }
+#     }
+# else:
+#     CHANNEL_LAYERS = {
+#         'default': {
+#             'BACKEND': 'asgi_redis.RedisChannelLayer',
+#             'CONFIG': {
+#                     'hosts': [('localhost', 6379)],
+#     #                "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
+#             },
+#             'ROUTING': 'deal.routing.channel_routing',
+#         }
+#     }
 
 CHANNEL_LAYERS = {
     'default': {
