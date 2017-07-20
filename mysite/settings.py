@@ -83,6 +83,17 @@ else:
         }
     }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['RDS_DB_NAME'],
+        'USER': os.environ['RDS_USERNAME'],
+        'PASSWORD': os.environ['RDS_PASSWORD'],
+        'HOST': os.environ['RDS_HOSTNAME'],
+        'PORT': os.environ['RDS_PORT'],
+    }
+}
+
 # Internationalization
 
 LANGUAGE_CODE = 'en-us'
@@ -129,3 +140,13 @@ else:
             'ROUTING': 'deal.routing.channel_routing',
         }
     }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'CONFIG': {
+                'hosts': [('handz-redis-001.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
+        },
+        'ROUTING': 'deal.routing.channel_routing',
+    }
+}
