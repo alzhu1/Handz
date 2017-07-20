@@ -108,26 +108,17 @@ STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
 STATIC_ROOT = 'static/'
 
 
-if 'RDS_HOSTNAME' in os.environ:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "asgi_redis.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
-            },
-            "ROUTING": "deal.routing.channel_routing",
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
         },
-    }
-else:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "asgi_redis.RedisChannelLayer",
-            "CONFIG": {
-                'hosts': [('localhost', 6379)],
-            },
-            "ROUTING": "deal.routing.channel_routing",
-        },
-    }
+        "ROUTING": "deal.routing.channel_routing",
+    },
+}
+
 
 # if 'RDS_HOSTNAME' in os.environ:
 #     CHANNEL_LAYERS = {
