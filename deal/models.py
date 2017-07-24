@@ -20,14 +20,77 @@ class UserProfile(models.Model):
     # language = models.CharField(max_length=30) # replace with list table
     hand_position = models.IntegerField(default=-1) # temporary holds
 
+class Trick(models.Model):
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE, null=True)
+    leading_suit = models.CharField(max_length=7, blank=True)
+
+    def evaluate(self):
+        """
+        Evaluates the trick by comparing suits, then comparing values to find
+        trick winner.
+        """
+
+        # Filter cards in trick based on the leading suit
+        cards = self.card_set.filter(suit=self.leading_suit)
+        winner = 0
+
+        # Loop through card set and compare card's value
+        for i in range( 1, len(cards.all()) ):
+            check_card = cards.all()[winner]
+
+            if cards.all()[i].greater_than(check_card):
+                winner = i
+
+        # Return the cardinal direction of person who won trick
+        return cards.all()[winner].cardinal_direction
+
 class Card(models.Model):
-    board = models.ForeignKey(Deal, on_delete=models.CASCADE)
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE, null=True)
+    trick = models.ForeignKey(Trick, on_delete=models.CASCADE, blank=True, null=True)
 
     # 0 is N, 1 is E, 2 is S, 3 is W
     cardinal_direction = models.IntegerField()
 
-    # S for Spade, H for Heart, D for Diamond, C for Club
-    suit = models.CharField(max_length=1)
+    suit = models.CharField(max_length=7)
+    value = models.CharField(max_length=7)
 
-    # 1 is A, 11 is J, 12 is Q, 13 is K
-    value = models.IntegerField()
+    card_position = models.IntegerField()
+
+    def greater_than(self, card_two):
+        """
+        Compares two cards' value.
+        """
+
+        # Set values to variables for ease of use
+        first_val = self.value
+        second_val = card_two.value
+
+        # Set first_val to appropriate value
+        if first_val == "A":
+            first_val = 14
+        elif first_val == "K":
+            first_val = 13
+        elif first_val == "Q":
+            first_val = 12
+        elif first_val == "J":
+            first_val = 11
+        else:
+            first_val = int(first_val)
+
+        # Set second_val to appropriate value
+        if second_val == "A":
+            second_val = 14
+        elif second_val == "K":
+            second_val = 13
+        elif second_val == "Q":
+            second_val = 12
+        elif second_val == "J":
+            second_val = 11
+        else:
+            second_val = int(second_val)
+
+        # First > second returns true, second > first returns false
+        if first_val > second_val:
+            return True
+        else:
+            return False

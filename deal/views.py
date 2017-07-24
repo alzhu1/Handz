@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 
@@ -16,7 +16,7 @@ import numpy as np
 import random
 # Create your views here.
 
-@login_required(login_url='/login/')
+@login_required(login_url='/login')
 def lobby(request):
     """
     Function based view that controls the lobby.
@@ -45,42 +45,34 @@ def play_board(request, pk):
     Function based view that sets up the table with a deal.
     """
 
+    user = request.user
+    user.userprofile.hand_position = -1
+    user.userprofile.save()
+
     # Get table equivalent to pk (from urls.py), will eventually change
     # to using a room name
     bridge_table = BridgeTable.objects.get(pk=pk)
 
     # If the table is empty, populate it with a deal
     if len(bridge_table.deal_set.all()) == 0:
-
-        # Deck list will ultimately containg 52 letters composed of N, E, S,
-        # and W, all shuffled
-        deck = []
-
-        for i in range(0, 52):
-            card_string = ""
-            if i < 13:
-                deck.append("N")
-            elif i < 26:
-                deck.append("E")
-            elif i < 39:
-                deck.append("S")
-            else:
-                deck.append("W")
-
-        # Shuffles the deck, creates a randomized deal
-        np.random.shuffle(deck)
-
-        # Create hand string by concatenating all letters in the deck list
-        hand_string = ""
-        for i in range(0, 52):
-            hand_string = hand_string + deck[i]
-
-        # Create a Deal object that belongs to this single bridge table
-        bridge_table.deal_set.create(hand_string=hand_string, dealer=0, vulnerability=0, board_number=pk)
+        # Helper function in functions.py
+        populate_table(bridge_table, pk)
 
     # Get the current deal from this board
     deal = bridge_table.deal_set.get(board_number=pk)
     hands = hand_conversion(deal.hand_string)
+
+    if len(deal.card_set.all()) == 0:
+        counter = 0
+        for hand in hands:
+            pos = 0
+            for card in hand:
+                suit_value = card.split(" ")
+                deal.card_set.create(cardinal_direction=counter,
+                                     suit=suit_value[0], value=suit_value[1],
+                                     card_position=pos)
+                pos += 1
+            counter +=1
 
     # Create string paths for each card to get images from static folder
     hand_list_for_template_images = [[],[],[],[]]
@@ -105,6 +97,16 @@ def play_board(request, pk):
 
     return render(request, 'deal/play_board.html', context)
 
+def log_in(request):
+    form = AuthenticationForm()
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return redirect(reverse('deal:lobby'))
+        else:
+            print(form.errors)
+    return render(request, 'deal/login.html', {'form': form})
 
 class SignupView(CreateView):
     """

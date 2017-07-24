@@ -1,3 +1,7 @@
+from .models import Deal, BridgeTable, Card
+
+import numpy as np
+
 def hand_conversion(HandString):
     """
     Converts a length 52 string composed of 13 different N's, E's, S's, and W's
@@ -52,3 +56,31 @@ def hand_conversion(HandString):
 
     # Return iterable 4-tuple of hands in the order of N, E, S, W
     return (Nhand, Ehand, Shand, Whand)
+
+
+def populate_table(bridge_table, pk):
+    # Deck list will ultimately containg 52 letters composed of N, E, S,
+    # and W, all shuffled
+    deck = []
+
+    for i in range(0, 52):
+        card_string = ""
+        if i < 13:
+            deck.append("N")
+        elif i < 26:
+            deck.append("E")
+        elif i < 39:
+            deck.append("S")
+        else:
+            deck.append("W")
+
+    # Shuffles the deck, creates a randomized deal
+    np.random.shuffle(deck)
+
+    # Create hand string by concatenating all letters in the deck list
+    hand_string = ""
+    for i in range(0, 52):
+        hand_string = hand_string + deck[i]
+
+    # Create a Deal object that belongs to this single bridge table
+    bridge_table.deal_set.create(hand_string=hand_string, dealer=0, vulnerability=0, board_number=pk)

@@ -1,9 +1,10 @@
 import json
+import random
 from channels import Group
 from channels.auth import channel_session_user, channel_session_user_from_http
 
 from django.contrib.auth.models import User
-from .models import BridgeTable, UserProfile
+from .models import BridgeTable, UserProfile, Trick, Deal, Card
 
 
 @channel_session_user_from_http
@@ -55,7 +56,7 @@ def ws_connect(message, table_id):
 def ws_message(message, table_id):
     """
     Runs when a WebSocket with the path "/table/<table_id> calls its
-    send function in JS (socket.send(data)). Handles how hands are claimed
+    send function in JS (handsocket.send(data)). Handles how hands are claimed
     by users at the current table.
     """
 
@@ -127,3 +128,126 @@ def ws_disconnect(message, table_id):
 
     # Removes user from this table specific group
     Group('table-%s' % table_id).discard(message.reply_channel)
+
+
+@channel_session_user_from_http
+def ws_play_connect(message, table_id):
+    """
+    Runs when a WebSocket with the path "/table/<table_id>/play is created,
+    where <table_id> is the id number of the current table.
+    """
+
+    # Accept incoming connection, add user to new group for play
+    message.reply_channel.send({"accept": True})
+    Group('play-%s' % table_id).add(message.reply_channel)
+
+
+@channel_session_user
+def ws_play_message(message, table_id):
+    """
+    Runs when a WebSocket with the path "/table/<table_id>/play calls its
+    send function in JS (playsocket.send(data)). Handles the play logic of
+    the game.
+    """
+
+    # First retrieve the table and current deal being played
+    bridge_table = BridgeTable.objects.get(pk=table_id)
+    current_deal = bridge_table.deal_set.all()[len(bridge_table.deal_set.all()) - 1]
+
+    # Variable used to track if game is being played and next player
+    in_progress = True # might take out
+    next_player = int()
+
+    # Sending "Finish" means game is over
+    if message.content['text'] == "Finish":
+        in_progress = False
+
+    # Sending "Start" picks random person to start, will change with auction
+    elif message.content['text'] == "Start":
+        next_player = random.randrange(4)
+
+    # Actual play logic here
+    else:
+        # [0] is the hand number/cardinal direction, [1] is the card position
+        hand_and_card = message.content['text'].split(" ")
+
+        # Separate into two variables, store as ints
+        handnum = int(hand_and_card[0])
+        card_pos = int(hand_and_card[1])
+
+        # Move on to next hand number for player
+        next_player = (handnum + 1) % 4
+
+        # Only run for very beginning of game, when first card is played
+        if len(current_deal.trick_set.all()) == 0:
+            # Create new Trick
+            current_deal.trick_set.create()
+            new_trick = current_deal.trick_set.all()[0]
+
+            # Get the played card and add to the trick's card set
+            card = current_deal.card_set.get(cardinal_direction=handnum, card_position=card_pos)
+            new_trick.card_set.add(card)
+
+            # First card sets the trick's leading suit, others follow suit
+            new_trick.leading_suit = card.suit
+            new_trick.save()
+
+            # Remove the card from the deal, now card only exists in the trick
+            current_deal.card_set.remove(card)
+        else:
+            # Get the last trick/trick currently being played, and played card
+            last_trick = current_deal.trick_set.all()[len(current_deal.trick_set.all()) - 1]
+            card = current_deal.card_set.get(cardinal_direction=handnum, card_position=card_pos)
+
+            # Set suit of the trick if the card played is the first card
+            if len(last_trick.card_set.all()) == 0:
+                last_trick.leading_suit = card.suit
+                last_trick.save()
+
+            # Add card to trick, remove from deal if suit matches
+            if card.suit == last_trick.leading_suit:
+                last_trick.card_set.add(card)
+                current_deal.card_set.remove(card)
+
+            # Must check if player can play card of differing suit
+            else:
+                # Get player's cards that match the trick's leading suit
+                possible_suit = current_deal.card_set.filter(cardinal_direction=handnum, suit=last_trick.leading_suit)
+
+                # If no such cards exist, player can play the card
+                if len(possible_suit.all()) == 0:
+                    last_trick.card_set.add(card)
+                    current_deal.card_set.remove(card)
+
+                # If cards do exist, player needs to pick a correct suit
+                else:
+                    message.content['text'] = "SuitError"
+
+                    # Rollback next_player variable, player must choose new card
+                    next_player -= 1
+
+                    if next_player == -1:
+                        next_player = 3
+
+            # If card played is 4th card in trick, want to evaluate trick and
+            # set appropriate next player, also create new trick
+            if len(last_trick.card_set.all()) == 4:
+                next_player = last_trick.evaluate()
+                current_deal.trick_set.create()
+
+    # Send info back to JS, accessible in playsocket.onmessage
+    Group('play-%s' % table_id).send({
+        'text': json.dumps({
+            'info': message.content['text'],
+            'playing': in_progress,
+            'nextplay': next_player
+        })
+    })
+
+@channel_session_user
+def ws_play_disconnect(message, table_id):
+    """
+    Runs when a WebSocket with the path "/table/<table_id>/play disconnects,
+    either through leaving the table or logging out. Disconnects the game.
+    """
+    Group('play-%s' % table_id).discard(message.reply_channel)
