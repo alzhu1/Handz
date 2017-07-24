@@ -25,8 +25,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'polls',
     'deal.apps.DealConfig',
-    'channels',
-    'storages'
+    'channels'
 )
 
 MIDDLEWARE_CLASSES = (
