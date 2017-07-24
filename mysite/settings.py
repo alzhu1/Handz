@@ -12,7 +12,7 @@ SECRET_KEY = 'pf-@jxtojga)z+4s*uwbgjrq$aep62-thd0q7f&o77xtpka!_m'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://handz-dev.us-west-1.elasticbeanstalk.com/']
 
 # Application definition
 
