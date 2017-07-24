@@ -25,7 +25,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'polls',
     'deal.apps.DealConfig',
-    'channels'
+    'channels',
+    'storages'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,14 +96,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-# [START staticurl]
-# Fill in your cloud bucket and switch which one of the following 2 lines
-# is commented to serve static content from GCS
-#STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
 STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
-# [END staticurl]
 
 STATIC_ROOT = 'static/'
 
