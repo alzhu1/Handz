@@ -14,7 +14,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# Application definition
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -101,23 +100,15 @@ STATIC_ROOT = 'static/'
 
 if 'RDS_HOSTNAME' in os.environ:
     CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "asgi_redis.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
+        'default': {
+            'BACKEND': 'asgi_redis.RedisChannelLayer',
+            'CONFIG': {
+                'hosts': [('handz-redis-aws.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
+                # "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
             },
-            "ROUTING": "deal.routing.channel_routing",
-        },
+            'ROUTING': 'deal.routing.channel_routing',
+        }
     }
-    # CHANNEL_LAYERS = {
-    #     'default': {
-    #         'BACKEND': 'asgi_redis.RedisChannelLayer',
-    #         'CONFIG': {
-    #             'hosts': [('handz-redis-aws.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
-    #         },
-    #         'ROUTING': 'deal.routing.channel_routing',
-    #     }
-    # }
 else:
     CHANNEL_LAYERS = {
         'default': {
@@ -128,12 +119,3 @@ else:
             'ROUTING': 'deal.routing.channel_routing',
         }
     }
-    # CHANNEL_LAYERS = {
-    #     "default": {
-    #         "BACKEND": "asgi_redis.RedisChannelLayer",
-    #         "CONFIG": {
-    #             "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
-    #         },
-    #         "ROUTING": "deal.routing.channel_routing",
-    #     },
-    # }
