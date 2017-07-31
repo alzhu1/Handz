@@ -80,7 +80,7 @@ def play_board(request, pk):
     count = 0
     for hand in hands:
         for card in hand:
-            image_string = 'deal/' + card + '.png'
+            image_string = 'deal/cards/' + card + '.png'
             hand_list_for_template_images[count].append(image_string)
         count += 1
 

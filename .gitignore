@@ -1,6 +1,3 @@
-#mysite/settings.py
-#app.yaml
-
 *.pyc
 
 # Elastic Beanstalk Files

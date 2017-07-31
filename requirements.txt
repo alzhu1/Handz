@@ -7,3 +7,4 @@ channels==1.1.6
 asgi_redis==1.4.2
 gunicorn==19.7.1
 django-storages==1.6.3
+boto3

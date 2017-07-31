@@ -24,7 +24,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'polls',
     'deal.apps.DealConfig',
-    'channels'
+    'channels',
+    'storages'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -94,10 +95,36 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
+# STATIC_URL = 'http://storage.googleapis.com/gcs_bucket_handz/static/'
+#
+# STATIC_ROOT = 'static/'
 
-STATIC_ROOT = 'static/'
+AWS_STORAGE_BUCKET_NAME = 'handz-deal'
+AWS_ACCESS_KEY_ID = 'AKIAI723EJY2BX7K4NIA'
+AWS_SECRET_ACCESS_KEY = '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'
+# Tell django-storages that when coming up with the URL for an item in S3 storage, keep
+# it simple - just use this domain plus the path. (If this isn't set, things get complicated).
+# This controls how the `static` template tag from `staticfiles` gets expanded, if you're using it.
+# We also use it in the next setting.
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
+# # This is used by the `static` template tag from `static`, if you're using that. Or if anything else
+# # refers directly to STATIC_URL. So it's safest to always set it.
+# STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+#
+# # Tell the staticfiles app to use S3Boto storage when writing the collected static files (when
+# # you run `collectstatic`).
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+STATICFILES_LOCATION = 'static'
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
+#database settings
 if 'RDS_HOSTNAME' in os.environ:
     CHANNEL_LAYERS = {
         'default': {
