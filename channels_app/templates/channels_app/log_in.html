@@ -1,0 +1,15 @@
+{% extends 'channels_app/_base.html' %}
+
+{% block content %}
+  <form action="{% url 'channels_app:log_in' %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div>
+        {{ field.label_tag }}
+        {{ field }}
+      </div>
+    {% endfor %}
+    <button type="submit">Log in</button>
+  </form>
+  <p>Don't have an account? <a href="{% url 'channels_app:sign_up' %}">Sign up!</a></p>
+{% endblock content %}
