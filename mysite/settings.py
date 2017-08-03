@@ -4,6 +4,7 @@ import asgi_redis
 LOGIN_REDIRECT_URL = '/'
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
