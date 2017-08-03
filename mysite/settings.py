@@ -26,7 +26,8 @@ INSTALLED_APPS = (
     'polls',
     'deal.apps.DealConfig',
     'channels',
-    'storages'
+    'storages',
+    'channels_app'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -75,12 +76,12 @@ if 'RDS_HOSTNAME' in os.environ:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'poll',
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': 5432,
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'poll',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': 5432,
         }
     }
 # Internationalization
@@ -134,7 +135,7 @@ if 'RDS_HOSTNAME' in os.environ:
                 'hosts': [('handz-redis-aws.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
                 # "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
             },
-            'ROUTING': 'deal.routing.channel_routing',
+            'ROUTING': 'mysite.routing.channel_routing',
         }
     }
 else:
@@ -144,6 +145,6 @@ else:
             'CONFIG': {
                 'hosts': [('localhost', 6379)],
             },
-            'ROUTING': 'deal.routing.channel_routing',
+            'ROUTING': 'mysite.routing.channel_routing',
         }
     }
