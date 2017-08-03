@@ -8,23 +8,26 @@
 <a href="{% url 'deal:lobby' %}">Back to Lobby</a>
 <ul>
 <li> {{ username }}  </li>
-{% for hand in hand_list_for_template_images %}
+{% for hand in hands %}
     <p class="hand" data-handnum="{{ forloop.counter0 }}">Hand</p>
     <button type="button" class="hand-button" data-handnum="{{ forloop.counter0 }}">Claim hand</button>
     <br>
+    <div id="hand{{ forloop.counter0 }}">
     {% for card in hand %}
-        <img src="{% static card %}" data-handnum="{{ forloop.parentloop.counter0 }}" data-cardnum="{{ forloop.counter0 }}" width="80px"/>
+        <a href="#"><img src="{{ card.img_string }}" data-handnum="{{ forloop.parentloop.counter0 }}" width="80px" /></a>
     {% endfor %}
+    </div>
     <br>
 {% endfor %}
 </ul>
 <button type="button" id="leave">Leave seat</button>
 <button type="button" id="start">Start game</button>
+<div id="tricks"></div>
 {% endblock content %}
 
 {% block script %}
 <script>
-    var table_id = {{ table_id }}
+    var table_id = {{ table_id }};
     var in_play = false;
     var current_player = -1;
     var user = "{{ username }}";
@@ -99,6 +102,7 @@
 
                 // Inner HTML set to default, effectively left hand
                 leave.html("Hand");
+                in_play = false;
             }
 
             // Gets the link with the received handnum
@@ -117,6 +121,8 @@
                 // Reset user's hand to default, set new hand to user's name
                 leave.html("Hand");
                 hand.html(data["username"]);
+                in_play = data["playing"];
+                current_player = data["nextplay"]
             }
         }
     }
@@ -162,7 +168,7 @@
         {
             alert("All hands must be claimed before play");
         }
-        else
+        else if(in_play == false)
         {
             playsocket.send("Start");
         }
@@ -184,34 +190,60 @@
         {
             in_play = false;
             current_player = -1;
+            $("#start").show();
         }
 
         // Starting game sets current player
         else if( data["info"] == "Start" )
         {
-            in_play = true;
-            current_player = data["nextplay"]
+            if( in_play == false )
+            {
+                in_play = true;
+                current_player = data["nextplay"];
+                $("#start").hide();
+            }
         }
         else
         {
-            in_play = true;
-
             // SuitError means wrong suit was played, run code if not the case
-            if(data["info"] != "SuitError")
+            if( data["info"] != "SuitError" )
             {
-                // First number is hand number, second is card number
-                var hand_and_card = data["info"].split(" ");
-                var handnum = parseInt(hand_and_card[0])
-                var cardnum = parseInt(hand_and_card[1])
-
+                var img_string = data["info"].split(" ")[1];
                 // Filter imgs to get matching card, hide it to show played
                 var card = $('img').filter(function() {
-                    return $(this).data("handnum") == handnum &&
-                           $(this).data("cardnum") == cardnum;
+                    return $(this).attr("src") == img_string;
                 });
-                card.hide()
+
+                var trick = $("#tricks");
+                card.detach().appendTo(trick);
+
+                if( trick.children("img").length % 4 == 0 )
+                {
+                    trick.append("<br>");
+                }
             }
-            current_player = data["nextplay"]
+            current_player = data["nextplay"];
+
+            if( data["playing"] == false )
+            {
+                in_play = false;
+                $("#start").show();
+
+                for(var i = 0; i < 4; i++)
+                {
+                    var hand = "#hand" + i;
+                    var imgs = $('img').filter(function() {
+                        return $(this).data("handnum") == i;
+                    });
+
+                    imgs.detach().appendTo($(hand));
+                }
+
+                for(var j = 0; j < 52; j++)
+                {
+                    $('img')[j].src = data["nextcards"][j];
+                }
+            }
         }
     }
 
@@ -244,7 +276,8 @@
                 else
                 {
                     // Send message
-                    playsocket.send(playerHandnum + " " + $(this).attr("data-cardnum"));
+                    //playsocket.send(playerHandnum + " " + $(this).attr("data-cardnum"));
+                    playsocket.send(current_player + " " + $(this).attr("src"));
                 }
             }
         }

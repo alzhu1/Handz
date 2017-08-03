@@ -15,6 +15,9 @@ class Deal(models.Model):
     vulnerability = models.IntegerField()
     board_number = models.IntegerField()
 
+    in_play = models.BooleanField()
+    next_player = models.IntegerField(default=-1)
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # country = models.CharField(max_length=30) # replace with list table
@@ -43,19 +46,19 @@ class Trick(models.Model):
                 winner = i
 
         # Return the cardinal direction of person who won trick
-        return cards.all()[winner].cardinal_direction
+        return cards.all()[winner].handnum
 
 class Card(models.Model):
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE, null=True)
     trick = models.ForeignKey(Trick, on_delete=models.CASCADE, blank=True, null=True)
 
     # 0 is N, 1 is E, 2 is S, 3 is W
-    cardinal_direction = models.IntegerField()
+    handnum = models.IntegerField()
 
     suit = models.CharField(max_length=7)
     value = models.CharField(max_length=7)
 
-    card_position = models.IntegerField()
+    img_string = models.CharField(max_length=100, blank=True)
 
     def greater_than(self, card_two):
         """

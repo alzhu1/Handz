@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
+from django.templatetags.static import static
 
 from django.utils import timezone
 
@@ -56,41 +57,24 @@ def play_board(request, pk):
     # If the table is empty, populate it with a deal
     if len(bridge_table.deal_set.all()) == 0:
         # Helper function in functions.py
-        populate_table(bridge_table, pk)
+        populate_table(bridge_table, 1)
 
     # Get the current deal from this board
-    deal = bridge_table.deal_set.get(board_number=pk)
-    hands = hand_conversion(deal.hand_string)
-
-    if len(deal.card_set.all()) == 0:
-        counter = 0
-        for hand in hands:
-            pos = 0
-            for card in hand:
-                suit_value = card.split(" ")
-                deal.card_set.create(cardinal_direction=counter,
-                                     suit=suit_value[0], value=suit_value[1],
-                                     card_position=pos)
-                pos += 1
-            counter +=1
-
-    # Create string paths for each card to get images from static folder
-    hand_list_for_template_images = [[],[],[],[]]
-
-    count = 0
-    for hand in hands:
-        for card in hand:
-            image_string = 'deal/cards/' + card + '.png'
-            hand_list_for_template_images[count].append(image_string)
-        count += 1
+    deal = bridge_table.deal_set.last()
 
     # Get access to the table id
     table_id = bridge_table.pk
 
+    north = deal.card_set.filter(handnum=0)
+    east = deal.card_set.filter(handnum=1)
+    south = deal.card_set.filter(handnum=2)
+    west = deal.card_set.filter(handnum=3)
+
+    final_hands = (north, east, south, west)
+
     # Dictionary below include values to pass to the template
     context = {
-        'hands': hands ,
-        'hand_list_for_template_images': hand_list_for_template_images,
+        'hands': final_hands,
         'username': request.user.username,
         'table_id': table_id
     }

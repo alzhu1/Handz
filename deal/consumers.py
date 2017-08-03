@@ -5,6 +5,7 @@ from channels.auth import channel_session_user, channel_session_user_from_http
 
 from django.contrib.auth.models import User
 from .models import BridgeTable, UserProfile, Trick, Deal, Card
+from .functions import *
 
 
 @channel_session_user_from_http
@@ -64,6 +65,8 @@ def ws_message(message, table_id):
     current_table = BridgeTable.objects.get(pk=table_id)
     all_users = current_table.users.all()
 
+    current_deal = current_table.deal_set.last()
+
     # Get the User object of whoever attempted to claim a hand via username
     user = User.objects.get(username=message.user.username)
 
@@ -89,13 +92,16 @@ def ws_message(message, table_id):
         user.userprofile.hand_position = message.content['text']
         user.userprofile.save()
 
+
     # Send message back to WebSocket to make real-time updates to web page
     Group('table-%s' % table_id).send({
         "text": json.dumps({
             'handnum': message.content['text'],
             'username': message.user.username,
             'first_connect': False,
-            'disconnect': False
+            'disconnect': False,
+            'playing': current_deal.in_play,
+            'nextplay': current_deal.next_player
         })
     })
 
@@ -152,31 +158,32 @@ def ws_play_message(message, table_id):
 
     # First retrieve the table and current deal being played
     bridge_table = BridgeTable.objects.get(pk=table_id)
-    current_deal = bridge_table.deal_set.all()[len(bridge_table.deal_set.all()) - 1]
+    current_deal = bridge_table.deal_set.last()
 
     # Variable used to track if game is being played and next player
-    in_progress = True # might take out
     next_player = int()
 
     # Sending "Finish" means game is over
     if message.content['text'] == "Finish":
-        in_progress = False
+        current_deal.in_play = False
+        current_deal.save()
 
     # Sending "Start" picks random person to start, will change with auction
     elif message.content['text'] == "Start":
-        next_player = random.randrange(4)
+        current_deal.next_player = random.randrange(4)
+        current_deal.in_play = True
+        current_deal.save()
 
     # Actual play logic here
     else:
-        # [0] is the hand number/cardinal direction, [1] is the card position
-        hand_and_card = message.content['text'].split(" ")
+        handnum_and_img = message.content['text'].split(" ")
 
-        # Separate into two variables, store as ints
-        handnum = int(hand_and_card[0])
-        card_pos = int(hand_and_card[1])
+        handnum = int(handnum_and_img[0])
+        img = handnum_and_img[1]
 
         # Move on to next hand number for player
-        next_player = (handnum + 1) % 4
+        current_deal.next_player = (handnum + 1) % 4
+        current_deal.save()
 
         # Only run for very beginning of game, when first card is played
         if len(current_deal.trick_set.all()) == 0:
@@ -185,7 +192,7 @@ def ws_play_message(message, table_id):
             new_trick = current_deal.trick_set.all()[0]
 
             # Get the played card and add to the trick's card set
-            card = current_deal.card_set.get(cardinal_direction=handnum, card_position=card_pos)
+            card = current_deal.card_set.get(img_string=img)
             new_trick.card_set.add(card)
 
             # First card sets the trick's leading suit, others follow suit
@@ -196,8 +203,8 @@ def ws_play_message(message, table_id):
             current_deal.card_set.remove(card)
         else:
             # Get the last trick/trick currently being played, and played card
-            last_trick = current_deal.trick_set.all()[len(current_deal.trick_set.all()) - 1]
-            card = current_deal.card_set.get(cardinal_direction=handnum, card_position=card_pos)
+            last_trick = current_deal.trick_set.last()
+            card = current_deal.card_set.get(img_string=img)
 
             # Set suit of the trick if the card played is the first card
             if len(last_trick.card_set.all()) == 0:
@@ -212,7 +219,8 @@ def ws_play_message(message, table_id):
             # Must check if player can play card of differing suit
             else:
                 # Get player's cards that match the trick's leading suit
-                possible_suit = current_deal.card_set.filter(cardinal_direction=handnum, suit=last_trick.leading_suit)
+                possible_suit = current_deal.card_set.filter(handnum=card.handnum,
+                                                             suit=last_trick.leading_suit)
 
                 # If no such cards exist, player can play the card
                 if len(possible_suit.all()) == 0:
@@ -224,23 +232,39 @@ def ws_play_message(message, table_id):
                     message.content['text'] = "SuitError"
 
                     # Rollback next_player variable, player must choose new card
-                    next_player -= 1
+                    current_deal.next_player -= 1
 
-                    if next_player == -1:
-                        next_player = 3
+                    if current_deal.next_player == -1:
+                        current_deal.next_player = 3
+                    current_deal.save()
+
+            if len(current_deal.card_set.all()) == 0:
+                current_deal.in_play = False
+                current_deal.save()
+
+                populate_table(bridge_table, current_deal.board_number + 1)
 
             # If card played is 4th card in trick, want to evaluate trick and
             # set appropriate next player, also create new trick
-            if len(last_trick.card_set.all()) == 4:
-                next_player = last_trick.evaluate()
+            elif len(last_trick.card_set.all()) == 4:
+                current_deal.next_player = last_trick.evaluate()
+                current_deal.save()
                 current_deal.trick_set.create()
+
+
+
+    cards = bridge_table.deal_set.last().card_set.all()
+    imgs = list()
+    for i in cards:
+        imgs.append(i.img_string)
 
     # Send info back to JS, accessible in playsocket.onmessage
     Group('play-%s' % table_id).send({
         'text': json.dumps({
             'info': message.content['text'],
-            'playing': in_progress,
-            'nextplay': next_player
+            'playing': current_deal.in_play,
+            'nextplay': current_deal.next_player,
+            'nextcards': imgs
         })
     })
 

@@ -1,3 +1,4 @@
+from django.templatetags.static import static
 from .models import Deal, BridgeTable, Card
 
 import numpy as np
@@ -83,4 +84,48 @@ def populate_table(bridge_table, pk):
         hand_string = hand_string + deck[i]
 
     # Create a Deal object that belongs to this single bridge table
-    bridge_table.deal_set.create(hand_string=hand_string, dealer=0, vulnerability=0, board_number=pk)
+    bridge_table.deal_set.create(hand_string=hand_string, dealer=0,
+                                 vulnerability=0, board_number=pk, in_play=False)
+
+    deal = bridge_table.deal_set.last()
+    hands = hand_conversion(hand_string)
+
+    Nhand = list()
+    Ehand = list()
+    Shand = list()
+    Whand = list()
+    allhands = (Nhand, Ehand, Shand, Whand)
+
+    counter = 0
+    for hand in hands:
+        for card in hand:
+            image_string = 'deal/cards/' + card + '.png'
+            suit_value = card.split(" ")
+
+            img = static(image_string)
+
+            c = Card(handnum=counter, suit=suit_value[0],
+                     value=suit_value[1], img_string=img)
+            allhands[counter].append(c)
+        counter +=1
+
+    allcards = hand_sort(allhands[0]) + hand_sort(allhands[1]) \
+    + hand_sort(allhands[2]) + hand_sort(allhands[3])
+
+    for card in allcards:
+        card.deal = deal
+        card.save()
+
+
+def hand_sort(hand):
+    spades = [card for card in hand if card.suit == 'spade']
+    hearts = [card for card in hand if card.suit == 'heart']
+    diamonds = [card for card in hand if card.suit == 'diamond']
+    clubs = [card for card in hand if card.suit == 'club']
+
+    if len(spades) == 0:
+        return hearts + clubs + diamonds
+    elif len(clubs) == 0:
+        return hearts + spades + diamonds
+    else:
+        return spades + hearts + clubs + diamonds
