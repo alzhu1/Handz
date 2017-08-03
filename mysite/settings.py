@@ -23,9 +23,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'polls',
-    'deal.apps.DealConfig',
+    'deal',
     'channels',
-    'storages'
+    'storages',
+    'channels_app'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,8 +101,8 @@ USE_TZ = True
 # STATIC_ROOT = 'static/'
 
 AWS_STORAGE_BUCKET_NAME = 'handz-deal'
-AWS_ACCESS_KEY_ID = 'AKIAI723EJY2BX7K4NIA'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = 'AKIAJ4ASVR5BU6TQ73AQ'
+AWS_SECRET_ACCESS_KEY = ''
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
 # it simple - just use this domain plus the path. (If this isn't set, things get complicated).
 # This controls how the `static` template tag from `staticfiles` gets expanded, if you're using it.
@@ -133,7 +134,7 @@ if 'RDS_HOSTNAME' in os.environ:
                 'hosts': [('handz-redis-aws.dmkkt6.0001.usw1.cache.amazonaws.com', 6379)],
                 # "hosts": [("redis://:theworldisquiethere@pub-redis-10306.us-west-2-1.1.ec2.garantiadata.com:10306/0")],
             },
-            'ROUTING': 'deal.routing.channel_routing',
+            'ROUTING': 'mysite.routing.channel_routing',
         }
     }
 else:
@@ -143,6 +144,6 @@ else:
             'CONFIG': {
                 'hosts': [('localhost', 6379)],
             },
-            'ROUTING': 'deal.routing.channel_routing',
+            'ROUTING': 'mysite.routing.channel_routing',
         }
     }

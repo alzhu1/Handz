@@ -19,7 +19,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [url(r'^', include('deal.urls')),
                url(r'^admin/', admin.site.urls),
-               url(r'^polls/', include('polls.urls'))]
+               url(r'^polls/', include('polls.urls')),
+               url(r'^chat/', include('channels_app.urls', namespace='channels_app')),
+               ]
 
 
 # This enables static files to be served from the Gunicorn server
