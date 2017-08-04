@@ -9,7 +9,7 @@ from django.templatetags.static import static
 
 from django.utils import timezone
 
-from .models import Deal, Card, BridgeTable, UserProfile
+from .models import Deal, Card, BridgeTable
 from .functions import *
 from .forms import SignUpForm
 
@@ -47,8 +47,8 @@ def play_board(request, pk):
     """
 
     user = request.user
-    user.userprofile.hand_position = -1
-    user.userprofile.save()
+    user.hand_position = -1
+    user.save()
 
     # Get table equivalent to pk (from urls.py), will eventually change
     # to using a room name
@@ -119,10 +119,6 @@ class SignupView(CreateView):
         username = form.cleaned_data.get('username')
         raw_password = form.cleaned_data.get('password1')
         user = authenticate(username=username, password=raw_password)
-
-        # Add user_profile to created user
-        user_profile = UserProfile(user=user)
-        user_profile.save()
 
         # Call superclass function to complete form processing
         return super(SignupView, self).form_valid(form)
