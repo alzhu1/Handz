@@ -1,12 +1,12 @@
 import json
 import random
 from channels import Group
+from django.contrib.auth import get_user_model
 from channels.auth import channel_session_user, channel_session_user_from_http
-
-from django.contrib.auth.models import User
 from .models import BridgeTable, UserProfile, Trick, Deal, Card
 from .functions import *
 
+User = get_user_model()
 
 @channel_session_user_from_http
 def ws_connect(message, table_id):

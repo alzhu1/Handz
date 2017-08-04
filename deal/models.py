@@ -1,11 +1,13 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+class MyUser(AbstractUser):
+    pass
 
 class BridgeTable(models.Model):
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
 class Deal(models.Model):
     deal_id = models.AutoField(primary_key=True, blank=True)
@@ -19,7 +21,7 @@ class Deal(models.Model):
     next_player = models.IntegerField(default=-1)
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # country = models.CharField(max_length=30) # replace with list table
     # language = models.CharField(max_length=30) # replace with list table
     hand_position = models.IntegerField(default=-1) # temporary holds
