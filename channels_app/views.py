@@ -16,9 +16,9 @@ def user_list(request):
     Imagine how 100,000 users logging in and out of our app would affect
     the performance of this code!
     """
-    users = User.objects.select_related('logged_in_user')
+    users = User.objects.all()
     for user in users:
-        user.status = 'Online' if hasattr(user, 'logged_in_user') else 'Offline'
+        user.status = 'Online' if user.is_logged_in else 'Offline'
     return render(request, 'channels_app/user_list.html', {'users': users})
 
 

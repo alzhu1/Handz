@@ -8,6 +8,7 @@ class MyUser(AbstractUser):
     Custom User
     '''
     hand_position = models.IntegerField(default=-1)
+    is_logged_in = models.BooleanField(default=False)
 
 class BridgeTable(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL)
