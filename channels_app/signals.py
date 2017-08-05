@@ -1,13 +1,15 @@
-from django.contrib.auth import user_logged_in, user_logged_out
+from django.contrib.auth import get_user_model, user_logged_in, user_logged_out
 from django.dispatch import receiver
-from channels_app.models import LoggedInUser
 
+User = get_user_model()
 
 @receiver(user_logged_in)
-def on_user_login(sender, **kwargs):
-    LoggedInUser.objects.get_or_create(user=kwargs.get('user'))
+def on_user_login(sender, user, **kwargs):
+    user.is_logged_in = True
+    user.save()
 
 
 @receiver(user_logged_out)
-def on_user_logout(sender, **kwargs):
-    LoggedInUser.objects.filter(user=kwargs.get('user')).delete()
+def on_user_logout(sender, user, **kwargs):
+    user.is_logged_in = False
+    user.save()

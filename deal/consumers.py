@@ -1,12 +1,12 @@
 import json
 import random
 from channels import Group
+from django.contrib.auth import get_user_model
 from channels.auth import channel_session_user, channel_session_user_from_http
-
-from django.contrib.auth.models import User
-from .models import BridgeTable, UserProfile, Trick, Deal, Card
+from .models import BridgeTable, Trick, Deal, Card
 from .functions import *
 
+User = get_user_model()
 
 @channel_session_user_from_http
 def ws_connect(message, table_id):
@@ -36,7 +36,7 @@ def ws_connect(message, table_id):
     # the user list, used to show which users have taken specific hands when
     # joining the table
     for user in current_table.users.all():
-        user_handnum_dict[user.username] = user.userprofile.hand_position
+        user_handnum_dict[user.username] = user.hand_position
         user_list.append(user.username)
 
     # Add user to this table specific Group, distinguished from other tables
@@ -83,14 +83,14 @@ def ws_message(message, table_id):
 
             # If anyone's hand number matches the requested hand, prevent that
             # hand from being taken by someone else
-            if u.userprofile.hand_position == int(message.content['text']):
+            if u.hand_position == int(message.content['text']):
                 to_change = False
 
     # If no one occupies the requested hand or the current user wishes to leave
     # their hand, set their hand_position to the message content
     if to_change:
-        user.userprofile.hand_position = message.content['text']
-        user.userprofile.save()
+        user.hand_position = message.content['text']
+        user.save()
 
 
     # Send message back to WebSocket to make real-time updates to web page
@@ -119,8 +119,8 @@ def ws_disconnect(message, table_id):
 
     # Remove user from the current table and reset user's hand position
     current_table.users.remove(user)
-    user.userprofile.hand_position = -1;
-    user.userprofile.save()
+    user.hand_position = -1;
+    user.save()
 
     # Send disconnecting message to WebSocket to update page so any claimed
     # hand by the disconnecting user is reset

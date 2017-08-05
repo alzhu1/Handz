@@ -30,6 +30,8 @@ INSTALLED_APPS = (
     'channels_app',
 )
 
+AUTH_USER_MODEL = 'deal.MyUser'
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
