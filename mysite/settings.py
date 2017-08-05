@@ -28,7 +28,6 @@ INSTALLED_APPS = (
     'channels',
     'storages',
     'channels_app',
-    'reset_migrations'
 )
 
 AUTH_USER_MODEL = 'deal.MyUser'
