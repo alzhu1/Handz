@@ -14,7 +14,7 @@
     <br>
     <div id="hand{{ forloop.counter0 }}">
     {% for card in hand %}
-        <a href="#"><img src="{{ card.img_string }}" data-handnum="{{ forloop.parentloop.counter0 }}" width="80px" /></a>
+        <a href="#" onclick="return false;"><img src="{{ card.img_string }}" width="80px" /></a>
     {% endfor %}
     </div>
     <br>
@@ -35,10 +35,10 @@
         var user = "{{ username }}";
 
         // Create a new WebSocket, connected to hand-claiming
-        var handsocket = new WebSocket("ws://" + window.location.host + "/table/" +
+        var handsocket = new WebSocket("ws://" + window.location.host + "/ws/table/" +
                                         table_id + "/");
 
-        var playsocket = new WebSocket("ws://" + window.location.host + "/table/" +
+        var playsocket = new WebSocket("ws://" + window.location.host + "/ws/table/" +
                                         table_id + "/play/");
         /**
          *  Function listens for successful WebSocket connection; if successful,
@@ -210,7 +210,7 @@
                 // SuitError means wrong suit was played, run code if not the case
                 if( data["info"] != "SuitError" )
                 {
-                    var img_string = data["info"].split(" ")[1];
+                    var img_string = data["info"];
                     // Filter imgs to get matching card, hide it to show played
                     var card = $('img').filter(function() {
                         return $(this).attr("src") == img_string;
@@ -279,7 +279,7 @@
                     {
                         // Send message
                         //playsocket.send(playerHandnum + " " + $(this).attr("data-cardnum"));
-                        playsocket.send(current_player + " " + $(this).attr("src"));
+                        playsocket.send($(this).attr("src"));
                     }
                 }
             }

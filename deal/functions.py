@@ -83,9 +83,14 @@ def populate_table(bridge_table, pk):
     for i in range(0, 52):
         hand_string = hand_string + deck[i]
 
+        # 0 is None, 1 is NS, 2 is EW, 3 is All
+        pre_vul = (pk - 1) % 16
+        final_vul = (int(pre_vul / 4) + (pre_vul % 4)) % 4
+
     # Create a Deal object that belongs to this single bridge table
-    bridge_table.deal_set.create(hand_string=hand_string, dealer=0,
-                                 vulnerability=0, board_number=pk, in_play=False)
+    bridge_table.deal_set.create(hand_string=hand_string, dealer=(pk - 1) % 4,
+                                 vulnerability=final_vul, board_number=pk,
+                                 in_play=False)
 
     deal = bridge_table.deal_set.last()
     hands = hand_conversion(hand_string)

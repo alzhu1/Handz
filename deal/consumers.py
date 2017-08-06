@@ -176,13 +176,12 @@ def ws_play_message(message, table_id):
 
     # Actual play logic here
     else:
-        handnum_and_img = message.content['text'].split(" ")
+        img = message.content['text']
 
-        handnum = int(handnum_and_img[0])
-        img = handnum_and_img[1]
+        card = current_deal.card_set.get(img_string=img)
 
         # Move on to next hand number for player
-        current_deal.next_player = (handnum + 1) % 4
+        current_deal.next_player = (card.handnum + 1) % 4
         current_deal.save()
 
         # Only run for very beginning of game, when first card is played
@@ -192,7 +191,6 @@ def ws_play_message(message, table_id):
             new_trick = current_deal.trick_set.all()[0]
 
             # Get the played card and add to the trick's card set
-            card = current_deal.card_set.get(img_string=img)
             new_trick.card_set.add(card)
 
             # First card sets the trick's leading suit, others follow suit
@@ -204,7 +202,6 @@ def ws_play_message(message, table_id):
         else:
             # Get the last trick/trick currently being played, and played card
             last_trick = current_deal.trick_set.last()
-            card = current_deal.card_set.get(img_string=img)
 
             # Set suit of the trick if the card played is the first card
             if len(last_trick.card_set.all()) == 0:
