@@ -107,3 +107,7 @@ class Card(models.Model):
             return True
         else:
             return False
+
+class Text(models.Model):
+    text = models.CharField(max_length=100)
+    rand_bool = models.BooleanField()

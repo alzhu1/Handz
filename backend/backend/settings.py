@@ -24,6 +24,7 @@ DJANGO_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'channels',
+    'api.apps.ApiConfig',
 ]
 
 PROJECT_APPS = [
