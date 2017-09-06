@@ -1,4 +1,5 @@
 import os
+import asgi_redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,6 +29,7 @@ DJANGO_APPS = [
 
 PROJECT_APPS = [
     'api.apps.ApiConfig',
+    'channels_app.apps.ChannelsAppConfig'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
@@ -115,6 +117,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        },
+        'ROUTING': 'backend.routing.channel_routing',
+    },
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
