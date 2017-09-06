@@ -6,7 +6,9 @@ from channels.auth import channel_session_user, channel_session_user_from_http
 
 from .models import Text
 from .serializers import TextSerializer, UserSerializer
-from django.contrib.auth.models import User
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 @channel_session_user_from_http
 def ws_lobby_connect(message):

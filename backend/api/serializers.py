@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from . import models
 # from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -14,3 +15,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = settings.AUTH_USER_MODEL
         fields = ('username', 'password')
+
+class TextSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Text
+        fields = ('text', 'rand_bool')
