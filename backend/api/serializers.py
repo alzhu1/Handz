@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from . import models
 # from django.contrib.auth.models import User
-from django.conf import settings
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
-        user = settings.AUTH_USER_MODEL(
+        user = User(
             username=validated_data['username']
         )
         user.set_password(validated_data['password'])
@@ -13,11 +14,11 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     class Meta:
-        model = settings.AUTH_USER_MODEL
+        model = User
         fields = ('username', 'password')
 
 class TextSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Text
-        fields = ('text', 'rand_bool')
+        fields = ('text', 'rand_bool', 'pk')
