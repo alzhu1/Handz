@@ -34,7 +34,7 @@ PROJECT_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
 
-AUTH_USER_MODEL = 'api.MyUser'
+AUTH_USER_MODEL = 'api.User'
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

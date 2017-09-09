@@ -7,7 +7,8 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
-class MyUser(AbstractUser):
+
+class User(AbstractUser):
     '''
     Custom User
     '''
