@@ -39,9 +39,9 @@ export default class Signup extends React.Component {
 
     createUser(username, password, password2) {
         if( password === password2 ) {
-            this.sendSocketMessage([username,
-                                    password,
-                                    password2]);
+            this.sendSocketMessage(["Create User",
+                                    username,
+                                    password]);
             this.setRedirect();
         }
         else {

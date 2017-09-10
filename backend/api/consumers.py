@@ -16,33 +16,38 @@ def ws_lobby_connect(message):
 
     Group('lobby').add(message.reply_channel)
 
-    # Group('lobby').send({
-    #     'text': json.dumps({
-    #         'test': False
-    #     })
-    # })
+    print(message.user)
+
+    Group('lobby').send({
+        'text': json.dumps({
+            'login': True
+        })
+    })
 
 @channel_session_user
 def ws_lobby_message(message):
     print(message.content)
 
-    new_text = json.loads(message.content['text'])
+    content = json.loads(message.content['text'])
 
-    test_text = TextSerializer(data={'text':"OASIFBAOSIFB", 'rand_bool':False})
-    test_text.is_valid()
+    if content[0] == "Login":
+        user = User.objects.get(auth_token=content[1])
+        user.is_logged_in = True
+        user.save()
 
-    Group('lobby').send({
-        'text': json.dumps({
-            'text': new_text,
-            'attempt': test_text.data
+    if content[0] == "Logout":
+        user = User.objects.get(auth_token=content[1])
+        user.is_logged_in = False
+        user.save()
+
+    if content[0] == "Created Text":
+        Group('lobby').send({
+            'text': json.dumps({
+                'createText': True,
+                'text': content[1],
+            })
         })
-    })
 
-    Group('signup').send({
-        'text': json.dumps({
-            'cross lobby': True
-        })
-    })
 
 @channel_session_user
 def ws_lobby_disconnect(message):
@@ -69,16 +74,15 @@ def ws_signup_message(message):
 
     new_user = json.loads(message.content["text"])
     data = {
-        'username': new_user[0],
-        'password': new_user[1]
+        'username': new_user[1],
+        'password': new_user[2]
     }
 
-    if len(User.objects.filter(username=new_user[0])) == 0:
+    if len(User.objects.filter(username=new_user[1])) == 0:
         user = UserSerializer(data=data)
         user.is_valid()
         user.save()
 
-    print(User.objects.all())
 
     Group('signup').send({
         'text': json.dumps({

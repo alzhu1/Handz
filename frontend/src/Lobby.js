@@ -45,6 +45,7 @@ export default class Lobby extends React.Component {
     sendSocketMessage(message) {
        // sends message to django
        const socket = this.refs.socket;
+
        socket.state.ws.send(JSON.stringify(message));
     }
 
@@ -52,7 +53,15 @@ export default class Lobby extends React.Component {
         let result = JSON.parse(data);
         console.log(result);
 
-        this.props.add_text(result.text);
+        if(result.createText == true)
+        {
+            this.props.add_text(result.text);
+        }
+
+        if(result.login == true)
+        {
+            this.sendSocketMessage(["Login", this.props.token]);
+        }
     }
 
     render() {
@@ -63,22 +72,25 @@ export default class Lobby extends React.Component {
 
             var allTexts = [];
             this.props.texts.map((text) => {
-                allTexts.push(<li key={text.pk}>{text.text}</li>);
+                allTexts.push(
+                    <li key={text.pk}>
+                        <Link to={'/text/' + text.pk}>
+                            {text.text}
+                        </Link>
+                    </li>
+                );
             });
 
             return (
                 <div>
                     <Websocket ref="socket" url={this.props.socket}
                         onMessage={this.handleData.bind(this)} reconnect={true} />
+
                     <h1>This is the Home page!</h1>
                     <button onClick={() => {
+                        this.sendSocketMessage(["Logout", this.props.token]);
                         this.props.logout();
                     }}>Logout</button>
-
-                    <button onClick={() => {
-                        this.props.login("iaubg8394gijnssdgbu98n4g3430984390ndfgul");
-                        this.props.login("76edbc1f6162804f737e160fff4facbbe9fafd3c");
-                    }}></button>
 
                     <ul>
                         {allTexts}
