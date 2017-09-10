@@ -1,6 +1,4 @@
 import React from 'react';
-//import logo from './logo.svg';
-import './App.css';
 
 import Header from './Header';
 import Main from './Main';
@@ -17,7 +15,9 @@ class App extends React.Component {
         return (
             <div>
                 <Header />
-                <Main lobbySock={this.props.lobbySock} signupSock={this.props.signupSock} />
+                <Main lobbySock={this.props.lobbySock}
+                      signupSock={this.props.signupSock}
+                      chatSock={this.props.chatSock}/>
             </div>
         );
     }
