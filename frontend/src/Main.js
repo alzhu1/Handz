@@ -6,6 +6,7 @@ import Login from './Login';
 import Signup from './Signup';
 import Lobby from './Lobby';
 import CreateText from './CreateText';
+import Chat from './Chat';
 
 class Main extends React.Component {
     render() {
@@ -28,7 +29,11 @@ class Main extends React.Component {
                 )} />
 
                 <Route exact path='/create-text' render={(props) => (
-                    <CreateText {...props} token={this.props.token} socket={this.props.lobbySock} add_text={this.props.add_text} />
+                    <CreateText {...props} token={this.props.token} socket={this.props.lobbySock}  add_text={this.props.add_text} />
+                )}  />
+
+                <Route exact path='/chat' render={(props) => (
+                    <Chat {...props} token={this.props.token} socket={this.props.chatSock} texts={this.props.texts} add_text={this.props.add_text}/>
                 )}  />
 
                 <Route render={() => (<Redirect to='/login' />)} />

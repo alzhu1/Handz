@@ -10,6 +10,7 @@ import {BrowserRouter} from 'react-router-dom';
 
 var lobbySock = "ws://localhost:8000/lobby/";
 var signupSock = "ws://localhost:8000/signup/";
+var chatSock = "ws://localhost:8000/users/";
 
 const token = (state = "", action) => {
     switch(action.type) {
@@ -51,7 +52,7 @@ store.subscribe(() => {
 ReactDOM.render((
     <Provider store={store}>
         <BrowserRouter>
-            <App lobbySock={lobbySock} signupSock={signupSock} />
+            <App lobbySock={lobbySock} signupSock={signupSock} chatSock={chatSock} />
         </BrowserRouter>
     </Provider>
 ), document.getElementById('root'));

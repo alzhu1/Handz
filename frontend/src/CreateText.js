@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Websocket from 'react-websocket';
 
-var axios = require("axios");
 
 export default class CreateText extends React.Component {
     constructor(props) {
