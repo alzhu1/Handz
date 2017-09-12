@@ -2,9 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {Route, Switch, Redirect, withRouter} from 'react-router-dom';
-import Login from './Login';
+import LoginContainer from 'containers/LoginContainer';
 import Signup from './Signup';
-import Lobby from './Lobby';
+import LobbyContainer from 'containers/LobbyContainer';
 import CreateText from './CreateText';
 import Chat from './Chat';
 
@@ -13,7 +13,7 @@ class Main extends React.Component {
         return (
             <Switch>
                 <Route exact path='/' render={() => (this.props.token !== "" ?
-                    (<Lobby logout={this.props.logout} login={this.props.login}
+                    (<LobbyContainer logout={this.props.logout} login={this.props.login}
                         token={this.props.token} socket={this.props.lobbySock}
                         add_text={this.props.add_text} reset_text={this.props.reset_text}
                         texts={this.props.texts} />) :
@@ -21,7 +21,7 @@ class Main extends React.Component {
                     (<Redirect to='/login' />))} />
 
                 <Route exact path='/login' render={(props) => (
-                    <Login {...props} login={this.props.login} />
+                    <LoginContainer {...props} login={this.props.login} />
                 )} />
 
                 <Route exact path='/signup' render={(props) => (

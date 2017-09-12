@@ -1,9 +1,10 @@
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
+import axios from 'axios';
 
-var axios = require("axios");
+import Login from 'components/Login'
 
-export default class Login extends React.Component {
+export default class LoginContainer extends React.Component {
     constructor(props) {
         super(props);
         this.changeName = this.changeName.bind(this);
@@ -50,31 +51,13 @@ export default class Login extends React.Component {
     }
 
     render() {
-        if (this.state.redirect) {
-            return <Redirect to='/' />;
-        }
-
         return (
-            <div>
-                <h1>This is the Login page!</h1>
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    this.login(this.state.username, this.state.password);
-                }}>
-                    <p><label>
-                        Username:
-                        <input type="text" value={this.state.username} onChange={this.changeName} />
-                    </label></p>
-
-                    <p><label>
-                        Password:
-                        <input type="password" value={this.state.password} onChange={this.changePassword} />
-                    </label></p>
-
-                    <input type="submit" value="Login" />
-                </form>
-                <Link to='/signup'>Create account</Link>
-            </div>
+            <Login redirect={this.state.redirect}
+                  username={this.state.username}
+                  password={this.state.password}
+                  changeName={this.changeName.bind(this)}
+                  changePassword={this.changePassword.bind(this)}
+                  login={this.props.login}/>
         );
     }
 }
