@@ -57,7 +57,7 @@ export default class LoginContainer extends React.Component {
                   password={this.state.password}
                   changeName={this.changeName.bind(this)}
                   changePassword={this.changePassword.bind(this)}
-                  login={this.props.login}/>
+                  login={this.login}/>
         );
     }
 }
