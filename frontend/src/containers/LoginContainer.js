@@ -7,8 +7,6 @@ import Login from 'components/Login'
 export default class LoginContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.changeName = this.changeName.bind(this);
-        this.changePassword = this.changePassword.bind(this);
         this.login = this.login.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
 
@@ -42,11 +40,11 @@ export default class LoginContainer extends React.Component {
         this.setState({redirect: true});
     }
 
-    changeName(event) {
+    changeName = (event) => {
         this.setState({username: event.target.value});
     }
 
-    changePassword(event) {
+    changePassword = (event) => {
         this.setState({password: event.target.value});
     }
 
@@ -55,8 +53,8 @@ export default class LoginContainer extends React.Component {
             <Login redirect={this.state.redirect}
                   username={this.state.username}
                   password={this.state.password}
-                  changeName={this.changeName.bind(this)}
-                  changePassword={this.changePassword.bind(this)}
+                  changeName={this.changeName}
+                  changePassword={this.changePassword}
                   login={this.login}/>
         );
     }

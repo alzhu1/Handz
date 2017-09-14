@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import {Route, Switch, Redirect, withRouter} from 'react-router-dom';
 import LoginContainer from 'containers/LoginContainer';
-import Signup from './Signup';
+import SignupContainer from 'containers/SignupContainer';
 import LobbyContainer from 'containers/LobbyContainer';
 import CreateText from './CreateText';
 import Chat from './Chat';
@@ -25,7 +25,7 @@ class Main extends React.Component {
                 )} />
 
                 <Route exact path='/signup' render={(props) => (
-                    <Signup {...props} socket={this.props.signupSock} />
+                    <SignupContainer {...props} socket={this.props.signupSock} />
                 )} />
 
                 <Route exact path='/create-text' render={(props) => (
