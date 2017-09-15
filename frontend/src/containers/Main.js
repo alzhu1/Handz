@@ -8,10 +8,15 @@ import LobbyContainer from 'containers/LobbyContainer';
 import CreateText from './CreateText';
 import Chat from './Chat';
 
+import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+
+
 class Main extends React.Component {
     render() {
         return (
             <Switch>
+            {console.log('token!!!')}
+            {console.log(this.props.login)}
                 <Route exact path='/' render={() => (this.props.token !== "" ?
                     (<LobbyContainer logout={this.props.logout} login={this.props.login}
                         token={this.props.token} socket={this.props.lobbySock}
@@ -42,38 +47,6 @@ class Main extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        token: state.token,
-        texts: state.texts
-    };
-};
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        login: (token) => {
-            dispatch({
-                type: "LOGIN",
-                payload: token
-            });
-        },
-        logout: () => {
-            dispatch({
-                type: "LOGOUT"
-            });
-        },
-        add_text: (text) => {
-            dispatch({
-                type: "ADD_TEXT",
-                payload: text
-            })
-        },
-        reset_text: () => {
-            dispatch({
-                type: "RESET_TEXT"
-            })
-        }
-    };
-};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
