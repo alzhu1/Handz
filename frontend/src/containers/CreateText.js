@@ -54,7 +54,7 @@ export default class CreateText extends React.Component {
         return (
             <div>
                 <Websocket ref="socket" url={this.props.socket}
-                    onMessage={this.handleData.bind(this)} reconnect={true} />
+                    onMessage={() => {}} reconnect={true} />
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     this.createText(this.state.text, this.state.bool);
