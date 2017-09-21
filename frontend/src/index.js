@@ -9,13 +9,24 @@ import {BrowserRouter} from 'react-router-dom';
 
 import {store} from 'redux/reducers/reducers'
 
+import {login, logout, resetText, addText} from 'redux/actions/actions';
+
 var lobbySock = "ws://localhost:8000/lobby/";
 var signupSock = "ws://localhost:8000/signup/";
 var chatSock = "ws://localhost:8000/users/";
 
+
+
 store.subscribe(() => {
     console.log("Update", store.getState());
 });
+
+let unsubscribe = store.subscribe(() =>
+  console.log(store.getState())
+)
+
+store.dispatch(login('abcde'))
+store.dispatch(logout())
 
 ReactDOM.render((
     <Provider store={store}>

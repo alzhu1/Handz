@@ -5,7 +5,10 @@ import axios from 'axios';
 
 import Lobby from 'components/Lobby'
 
-export default class LobbyContainer extends React.Component {
+import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+import {connect} from 'react-redux';
+
+class LobbyContainer extends React.Component {
     constructor(props) {
         super(props);
         // var token = "Token " + this.props.token;
@@ -51,6 +54,7 @@ export default class LobbyContainer extends React.Component {
         if(result.createText == true)
         {
             this.props.add_text(result.text);
+            console.log('added txt')
         }
 
     }
@@ -64,3 +68,5 @@ export default class LobbyContainer extends React.Component {
       )
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(LobbyContainer);

@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^text/$', views.TextView.as_view(), name='text'),
     url(r'^login/$', views.CurrentUserView.as_view()),
     url(r'^users/$', views.UsersView.as_view()),
+    url(r'^test/$', views.testview),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

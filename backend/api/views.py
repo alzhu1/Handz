@@ -26,3 +26,7 @@ class CurrentUserView(APIView):
     def get(self, request):
         # serializer = UserSerializer(request.user)
         return Response({"message": "Successfully logged in"})
+
+
+def testview(request):
+    return render(request, 'test.html', {})

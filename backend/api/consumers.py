@@ -10,6 +10,22 @@ from .serializers import TextSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+from .engine import Engine
+
+@channel_session_user_from_http
+def ws_connect(message):
+    Engine(message).connect()
+
+@channel_session_user
+def ws_message(message):
+    Engine.dispatch(message)
+
+@channel_session_user
+def ws_disconnect(message):
+    Engine(message).disconnect()
+
+
+
 @channel_session_user_from_http
 def ws_lobby_connect(message):
     message.reply_channel.send({"accept": True})
