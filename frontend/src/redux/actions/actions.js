@@ -1,3 +1,22 @@
+import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT} from './actionTypes';
+
+export const login = (token) => ({
+  type: LOGIN,
+  payload: token
+});
+
+export const logout = () => ({
+  type: LOGOUT,
+});
+
+export const addText = (text) => ({
+  type: ADD_TEXT,
+  payload: text
+});
+
+export const resetText = () => ({
+  type: RESET_TEXT,
+});
 
 export const mapStateToProps = (state) => {
     return {
@@ -8,27 +27,17 @@ export const mapStateToProps = (state) => {
 
 export const mapDispatchToProps = (dispatch) => {
     return {
-        login: (token) => {
-            dispatch({
-                type: "LOGIN",
-                payload: token
-            });
-        },
-        logout: () => {
-            dispatch({
-                type: "LOGOUT"
-            });
-        },
-        add_text: (text) => {
-            dispatch({
-                type: "ADD_TEXT",
-                payload: text
-            })
-        },
-        reset_text: () => {
-            dispatch({
-                type: "RESET_TEXT"
-            })
-        }
-    };
+      login: (token) => {
+        dispatch(login(token))
+      },
+      logout: () =>{
+        dispatch(logout())
+      },
+      add_text: (text) => {
+        dispatch(addText(text))
+      },
+      reset_text: () => {
+        dispatch(resetText())
+      }
+    }
 };

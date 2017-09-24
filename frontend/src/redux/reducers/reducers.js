@@ -1,11 +1,12 @@
 import {createStore, combineReducers} from "redux";
+import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT} from 'redux/actions/actionTypes';
 
 const token = (state = "", action) => {
     switch(action.type) {
-        case "LOGIN":
+        case LOGIN:
             return action.payload;
 
-        case "LOGOUT":
+        case LOGOUT:
             return "";
 
         default:
@@ -16,10 +17,10 @@ const token = (state = "", action) => {
 
 const texts = (state = [], action) => {
     switch(action.type) {
-        case "RESET_TEXT":
+        case RESET_TEXT:
             return [];
 
-        case "ADD_TEXT":
+        case ADD_TEXT:
             return [
                 ...state,
                 action.payload
@@ -31,4 +32,8 @@ const texts = (state = [], action) => {
     return state;
 }
 
-export const store = createStore(combineReducers({token, texts}), {token: "", texts: []});
+const allReducers = combineReducers({token, texts});
+
+const initialState = {token: "", texts: []} ;
+
+export const store = createStore(allReducers, initialState);

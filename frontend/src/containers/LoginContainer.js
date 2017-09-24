@@ -4,7 +4,10 @@ import axios from 'axios';
 
 import Login from 'components/Login'
 
-export default class LoginContainer extends React.Component {
+import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+import {connect} from 'react-redux';
+
+export class LoginContainer extends React.Component {
     constructor(props) {
         super(props);
         this.login = this.login.bind(this);
@@ -59,3 +62,6 @@ export default class LoginContainer extends React.Component {
         );
     }
 }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);

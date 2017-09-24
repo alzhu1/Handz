@@ -15,19 +15,13 @@ class Main extends React.Component {
     render() {
         return (
             <Switch>
-            {console.log('token!!!')}
-            {console.log(this.props.login)}
                 <Route exact path='/' render={() => (this.props.token !== "" ?
-                    (<LobbyContainer logout={this.props.logout} login={this.props.login}
-                        token={this.props.token} socket={this.props.lobbySock}
-                        add_text={this.props.add_text} reset_text={this.props.reset_text}
-                        texts={this.props.texts} />) :
-
+                    (<LobbyContainer  socket={this.props.lobbySock}/>) :
                     (<Redirect to='/login' />))} />
 
-                <Route exact path='/login' render={(props) => (
-                    <LoginContainer {...props} login={this.props.login} />
-                )} />
+
+                <Route exact path='/login' component={LoginContainer} />
+
 
                 <Route exact path='/signup' render={(props) => (
                     <SignupContainer {...props} socket={this.props.signupSock} />
