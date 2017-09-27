@@ -49,12 +49,12 @@ class LobbyContainer extends React.Component {
 
     handleData(data) {
         let result = JSON.parse(data);
-        console.log(result);
+        // console.log(result);
 
         if(result.createText == true)
         {
             this.props.add_text(result.text);
-            console.log('added txt')
+            // console.log('added txt')
         }
 
     }

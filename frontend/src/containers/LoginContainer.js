@@ -4,16 +4,17 @@ import axios from 'axios';
 
 import Login from 'components/Login'
 
-import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 import {connect} from 'react-redux';
 
-export class LoginContainer extends React.Component {
+import * as actions from 'redux/actions/actions'
+
+import {mapStateToProps} from 'redux/actions/actions';
+
+class LoginContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.login = this.login.bind(this);
-        this.setRedirect = this.setRedirect.bind(this);
-
         this.state = {username: "", password: "", redirect: false};
+        this.login = this.login.bind(this);
     }
 
     componentDidMount() {
@@ -30,8 +31,8 @@ export class LoginContainer extends React.Component {
         .then(function(response) {
             // localStorage.setItem("token", response.data.token);
             console.log("Test in login, redirect");
+            console.log(response.data.token);
             self.props.login(response.data.token);
-            self.setRedirect();
         })
         .catch(function(error) {
             console.log(error);
@@ -39,9 +40,6 @@ export class LoginContainer extends React.Component {
 
     }
 
-    setRedirect() {
-        this.setState({redirect: true});
-    }
 
     changeName = (event) => {
         this.setState({username: event.target.value});
@@ -53,15 +51,31 @@ export class LoginContainer extends React.Component {
 
     render() {
         return (
-            <Login redirect={this.state.redirect}
+
+            <Login
                   username={this.state.username}
                   password={this.state.password}
                   changeName={this.changeName}
                   changePassword={this.changePassword}
-                  login={this.login}/>
+                  login={this.login}
+                  token={this.props.token}/>
         );
     }
 }
+
+
+
+
+export const mapDispatchToProps = (dispatch) => {
+    return {
+      login: (token) => {
+        dispatch(actions.login(token))
+      },
+      // api_login: (username,password) => {
+      //   dispatch(actions.apiLogin(username,password))
+      // }
+    }
+};
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
