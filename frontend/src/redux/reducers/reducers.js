@@ -1,10 +1,10 @@
 
-import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT} from 'redux/actions/actionTypes';
+import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT, GET_USERNAME} from 'redux/actions/actionTypes';
 
 export const token = (state = "", action) => {
     switch(action.type) {
         case LOGIN:
-            return action.payload;
+            return action.token;
 
         case LOGOUT:
             return "";
@@ -23,9 +23,19 @@ export const texts = (state = [], action) => {
         case ADD_TEXT:
             return [
                 ...state,
-                action.payload
+                action.text
             ];
 
+        default:
+            break;
+    }
+    return state;
+}
+
+export const username = (state = '', action) => {
+    switch(action.type) {
+        case GET_USERNAME:
+            return action.username;
         default:
             break;
     }

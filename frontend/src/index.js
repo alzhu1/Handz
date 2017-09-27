@@ -7,13 +7,13 @@ import registerServiceWorker from './registerServiceWorker';
 import {Provider} from "react-redux";
 import {BrowserRouter} from 'react-router-dom';
 
-import {login, logout, resetText, addText, apiLogin} from 'redux/actions/actions';
+import {login, logout, resetText, addText, apiLogin, getUsername} from 'redux/actions/actions';
 
-import {token, texts} from 'redux/reducers/reducers';
+import {token, texts, username} from 'redux/reducers/reducers';
 import {createStore, combineReducers,applyMiddleware} from "redux";
 
 import thunkMiddleware from 'redux-thunk'
-import { createLogger } from 'redux-logger'
+import {createLogger} from 'redux-logger'
 
 import axios from 'axios';
 
@@ -24,12 +24,13 @@ var chatSock = "ws://localhost:8000/users/";
 
 const rootReducer = combineReducers({
                     token,
-                    texts
+                    texts,
+                    username,
                     });
 
 const initialState = {token: '',
-                      texts: [],}
-                      // username: '',
+                      texts: [],
+                      username: '',}
                       // password: '',}
                       // redirect: false} ;
 
@@ -51,6 +52,12 @@ const store = createStore(rootReducer, initialState,
 // store
 //   .dispatch(apiLogin('william','william123'))
 //   .then(() => console.log(store.getState()));
+
+// console.log(getUsername('william'));
+
+// store.dispatch(getUsername('william'));
+// store.dispatch(username('',getUsername('william')));
+// console.log(store.getState());
 
 
 ReactDOM.render((
