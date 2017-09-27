@@ -22,7 +22,7 @@ var lobbySock = "ws://localhost:8000/lobby/";
 var signupSock = "ws://localhost:8000/signup/";
 var chatSock = "ws://localhost:8000/users/";
 
-const allReducers = combineReducers({
+const rootReducer = combineReducers({
                     token,
                     texts
                     });
@@ -35,7 +35,7 @@ const initialState = {token: '',
 
 const loggerMiddleware = createLogger()
 
-const store = createStore(allReducers, initialState,
+const store = createStore(rootReducer, initialState,
   applyMiddleware(
     thunkMiddleware,
     loggerMiddleware
@@ -47,11 +47,7 @@ const store = createStore(allReducers, initialState,
 //     username: 'william',
 //     password: 'william123'
 // })
-// console.log(temp);
-// // store.dispatch(login(temp.data.token));
-//
-// console.log('api test');
-// // console.log(apiLogin('william','william123'));
+
 // store
 //   .dispatch(apiLogin('william','william123'))
 //   .then(() => console.log(store.getState()));

@@ -34,13 +34,11 @@ export function apiLogin(username, password) {
         username: username,
         password: password
     })
-      .then(
-        function(response) {
-            // localStorage.setItem("token", response.data.token);
-            console.log("thunk api login");
+      .then((response) => {
             console.log(response.data.token);
-            login(response.data.token);
-        },
+            dispatch(login(response.data.token));
+            return response;
+          },
         error => console.log('An error occured.', error)
       )
   }

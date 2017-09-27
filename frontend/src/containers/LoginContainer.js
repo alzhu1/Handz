@@ -14,32 +14,11 @@ class LoginContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {username: "", password: "", redirect: false};
-        this.login = this.login.bind(this);
     }
 
     componentDidMount() {
         console.log("Login mounted");
     }
-
-    login(username, password) {
-        // alert();
-        var self = this;
-        axios.post("/api/auth/", {
-            username: username,
-            password: password
-        })
-        .then(function(response) {
-            // localStorage.setItem("token", response.data.token);
-            console.log("Test in login, redirect");
-            console.log(response.data.token);
-            self.props.login(response.data.token);
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
-
-    }
-
 
     changeName = (event) => {
         this.setState({username: event.target.value});
@@ -57,7 +36,7 @@ class LoginContainer extends React.Component {
                   password={this.state.password}
                   changeName={this.changeName}
                   changePassword={this.changePassword}
-                  login={this.login}
+                  login={this.props.api_login}
                   token={this.props.token}/>
         );
     }
@@ -68,12 +47,9 @@ class LoginContainer extends React.Component {
 
 export const mapDispatchToProps = (dispatch) => {
     return {
-      login: (token) => {
-        dispatch(actions.login(token))
-      },
-      // api_login: (username,password) => {
-      //   dispatch(actions.apiLogin(username,password))
-      // }
+      api_login: (username,password) => {
+        dispatch(actions.apiLogin(username,password))
+      }
     }
 };
 
