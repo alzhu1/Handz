@@ -7,26 +7,58 @@ import registerServiceWorker from './registerServiceWorker';
 import {Provider} from "react-redux";
 import {BrowserRouter} from 'react-router-dom';
 
-import {store} from 'redux/reducers/reducers'
+import {login, logout, resetText, addText, apiLogin, getUsername} from 'redux/actions/actions';
 
-import {login, logout, resetText, addText} from 'redux/actions/actions';
+import {token, texts, username} from 'redux/reducers/reducers';
+import {createStore, combineReducers,applyMiddleware} from "redux";
+
+import thunkMiddleware from 'redux-thunk'
+import {createLogger} from 'redux-logger'
+
+import axios from 'axios';
+
 
 var lobbySock = "ws://localhost:8000/lobby/";
 var signupSock = "ws://localhost:8000/signup/";
 var chatSock = "ws://localhost:8000/users/";
 
+const rootReducer = combineReducers({
+                    token,
+                    texts,
+                    username,
+                    });
+
+const initialState = {token: '',
+                      texts: [],
+                      username: '',}
+                      // password: '',}
+                      // redirect: false} ;
+
+const loggerMiddleware = createLogger()
+
+const store = createStore(rootReducer, initialState,
+  applyMiddleware(
+    thunkMiddleware,
+    loggerMiddleware
+  ));
 
 
-store.subscribe(() => {
-    console.log("Update", store.getState());
-});
+// console.log('test login')
+// var temp = axios.post("/api/auth/", {
+//     username: 'william',
+//     password: 'william123'
+// })
 
-let unsubscribe = store.subscribe(() =>
-  console.log(store.getState())
-)
+// store
+//   .dispatch(apiLogin('william','william123'))
+//   .then(() => console.log(store.getState()));
 
-store.dispatch(login('abcde'))
-store.dispatch(logout())
+// console.log(getUsername('william'));
+
+// store.dispatch(getUsername('william'));
+// store.dispatch(username('',getUsername('william')));
+// console.log(store.getState());
+
 
 ReactDOM.render((
     <Provider store={store}>

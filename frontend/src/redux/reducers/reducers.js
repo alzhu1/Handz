@@ -1,10 +1,10 @@
-import {createStore, combineReducers} from "redux";
-import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT} from 'redux/actions/actionTypes';
 
-const token = (state = "", action) => {
+import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT, GET_USERNAME} from 'redux/actions/actionTypes';
+
+export const token = (state = "", action) => {
     switch(action.type) {
         case LOGIN:
-            return action.payload;
+            return action.token;
 
         case LOGOUT:
             return "";
@@ -15,7 +15,7 @@ const token = (state = "", action) => {
     return state;
 }
 
-const texts = (state = [], action) => {
+export const texts = (state = [], action) => {
     switch(action.type) {
         case RESET_TEXT:
             return [];
@@ -23,7 +23,7 @@ const texts = (state = [], action) => {
         case ADD_TEXT:
             return [
                 ...state,
-                action.payload
+                action.text
             ];
 
         default:
@@ -32,8 +32,12 @@ const texts = (state = [], action) => {
     return state;
 }
 
-const allReducers = combineReducers({token, texts});
-
-const initialState = {token: "", texts: []} ;
-
-export const store = createStore(allReducers, initialState);
+export const username = (state = '', action) => {
+    switch(action.type) {
+        case GET_USERNAME:
+            return action.username;
+        default:
+            break;
+    }
+    return state;
+}

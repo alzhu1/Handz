@@ -1,8 +1,10 @@
-import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT} from './actionTypes';
+import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT, GET_USERNAME} from './actionTypes';
+import axios from 'axios';
+
 
 export const login = (token) => ({
   type: LOGIN,
-  payload: token
+  token
 });
 
 export const logout = () => ({
@@ -11,17 +13,44 @@ export const logout = () => ({
 
 export const addText = (text) => ({
   type: ADD_TEXT,
-  payload: text
+  text
 });
 
 export const resetText = () => ({
   type: RESET_TEXT,
 });
 
+export const getUsername = (username) => ({
+  type: GET_USERNAME,
+  username
+});
+
+
+export function apiLogin(username, password) {
+  return function (dispatch) {
+    return axios.post("/api/auth/", {
+        username: username,
+        password: password
+    })
+      .then((response) => {
+            dispatch(login(response.data.token));
+            return response;
+          }
+      )
+      .then((response) => {
+            dispatch(getUsername(username));
+            return response;
+          },
+          error => console.log('An error occured.', error)
+      )
+  }
+}
+
 export const mapStateToProps = (state) => {
     return {
         token: state.token,
-        texts: state.texts
+        texts: state.texts,
+        username: state.username,
     };
 };
 
@@ -38,6 +67,6 @@ export const mapDispatchToProps = (dispatch) => {
       },
       reset_text: () => {
         dispatch(resetText())
-      }
+      },
     }
 };

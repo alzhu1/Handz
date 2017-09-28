@@ -8,8 +8,8 @@ export default class Lobby extends React.Component {
     render() {
         if(this.props.loaded) {
 
-            console.log("render");
-            console.log(this.props.texts);
+            // console.log("render");
+            // console.log(this.props.texts);
 
             var allTexts = [];
             this.props.texts.map((text) => {
