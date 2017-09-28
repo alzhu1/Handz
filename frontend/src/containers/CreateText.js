@@ -37,7 +37,10 @@ export default class CreateText extends React.Component {
         });
 
         console.log("Post success");
-        this.sendSocketMessage(["Created Text", test.data]);
+        this.sendSocketMessage({
+                    type: "CREATE_TEXT",
+                    payload: test.data
+                });
     }
 
     sendSocketMessage(message) {
