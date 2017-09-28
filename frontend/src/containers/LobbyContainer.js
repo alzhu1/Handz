@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import Websocket from 'react-websocket';
 import axios from 'axios';
 
-import Lobby from 'components/Lobby'
+import Lobby from 'components/Lobby';
+import LobbyWebsocket from 'websockets/LobbyWebsocket';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 import {connect} from 'react-redux';
@@ -17,6 +18,8 @@ class LobbyContainer extends React.Component {
         console.log("Mount");
 
         // this.sendSocketMessage = this.sendSocketMessage.bind(this);
+        LobbyWebsocket.connect(this.props.socket);
+        LobbyWebsocket.listen(this);
     }
 
     async componentWillMount() {
@@ -46,24 +49,15 @@ class LobbyContainer extends React.Component {
         this.setState({loaded: true});
     }
 
-
-    handleData(data) {
-        let result = JSON.parse(data);
-        // console.log(result);
-
-        if(result.createText == true)
-        {
-            this.props.add_text(result.text);
-            // console.log('added txt')
-        }
-
+    componentWillUnmount() {
+        LobbyWebsocket.disconnect();
     }
 
     render() {
       return(
         <Lobby loaded={this.state.loaded} texts={this.props.texts}
         socket={this.props.socket} token={this.props.token}
-        logout={this.props.logout} handleData={this.handleData.bind(this)}
+        logout={this.props.logout}
         />
       )
     }

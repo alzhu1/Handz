@@ -24,8 +24,6 @@ export default class Lobby extends React.Component {
 
             return (
                 <div>
-                    <Websocket ref="socket" url={this.props.socket}
-                          onMessage={this.props.handleData} reconnect={true} />
                     <h1>This is the Home page!</h1>
                     <button onClick={() => {
                         this.props.logout();
