@@ -37,6 +37,11 @@ export function apiLogin(username, password) {
             return response;
           }
       )
+      .then(()=>{
+            axios.post("/api/login/", {
+              username: username
+            })}
+      )
       .then((response) => {
             dispatch(getUsername(username));
             return response;

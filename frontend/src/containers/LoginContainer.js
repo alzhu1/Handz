@@ -49,9 +49,6 @@ export const mapDispatchToProps = (dispatch) => {
     return {
       api_login: (username, password) => {
         dispatch(actions.apiLogin(username,password));
-        axios.post("/api/login/", {
-                username: username
-            });
       }
     }
 };

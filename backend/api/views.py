@@ -26,7 +26,7 @@ class LoginView(APIView):
         user = User.objects.get(username=request.data["username"])
         user.is_logged_in = True
         user.save()
-
+        print(user.username)
         return Response({"message": "Success"})
 
 class LogoutView(APIView):
