@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Websocket from 'react-websocket';
 
-
+import axios from 'axios';
 
 export default class Lobby extends React.Component {
     render() {
@@ -29,6 +29,10 @@ export default class Lobby extends React.Component {
                     <h1>This is the Home page!</h1>
                     <button onClick={() => {
                         this.props.logout();
+                        var token = this.props.token;
+                        axios.post("/api/logout/", {
+                                token: token
+                            });
                     }}>Logout</button>
 
                     <ul>
