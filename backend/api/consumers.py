@@ -10,19 +10,19 @@ from .serializers import TextSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from .engine import Engine
+from .engine.lobby import LobbyEngine
 
 @channel_session_user_from_http
-def ws_connect(message):
-    Engine(message).connect()
+def ws_lobby_connect(message):
+    LobbyEngine(message).connect()
 
 @channel_session_user
-def ws_message(message):
-    Engine.dispatch(message)
+def ws_lobby_message(message):
+    LobbyEngine.dispatch(message)
 
 @channel_session_user
-def ws_disconnect(message):
-    Engine(message).disconnect()
+def ws_lobby_disconnect(message):
+    LobbyEngine(message).disconnect()
 
 
 

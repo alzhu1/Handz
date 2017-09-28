@@ -21,11 +21,21 @@ class UsersView(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     # permission_classes = (IsAuthenticated,)
 
-class CurrentUserView(APIView):
+class LoginView(APIView):
+    def post(self, request):
+        user = User.objects.get(username=request.data["username"])
+        user.is_logged_in = True
+        user.save()
 
-    def get(self, request):
-        # serializer = UserSerializer(request.user)
-        return Response({"message": "Successfully logged in"})
+        return Response({"message": "Success"})
+
+class LogoutView(APIView):
+    def post(self, request):
+        user = User.objects.get(auth_token=request.data["token"])
+        user.is_logged_in = False
+        user.save()
+
+        return Response({"message": "Success"})
 
 
 def testview(request):

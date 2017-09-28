@@ -6,7 +6,8 @@ from rest_framework.authtoken import views as drf_views
 urlpatterns = [
     url(r'^auth/$', drf_views.obtain_auth_token, name='auth'),
     url(r'^text/$', views.TextView.as_view(), name='text'),
-    url(r'^login/$', views.CurrentUserView.as_view()),
+    url(r'^login/$', views.LoginView.as_view()),
+    url(r'^logout/$', views.LogoutView.as_view()),
     url(r'^users/$', views.UsersView.as_view()),
     url(r'^test/$', views.testview),
 ]

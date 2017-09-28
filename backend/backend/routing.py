@@ -7,10 +7,6 @@ channel_routing = [
     route('websocket.connect', chat.ws_connect, path =r'/users/$'),
     route('websocket.disconnect', chat.ws_disconnect, path =r'/users/$'),
 
-    route('websocket.connect', api.ws_connect, path=r'/test/$'),
-    route('websocket.receive', api.ws_message, path=r'/test/$'),
-    route('websocket.disconnect', api.ws_disconnect, path=r'/test/$'),
-
     # route('websocket.connect', api.ws_connect, path=r'/lobby/$'),
     route('websocket.connect', api.ws_lobby_connect, path=r'/lobby/$'),
     route('websocket.receive', api.ws_lobby_message, path=r'/lobby/$'),
