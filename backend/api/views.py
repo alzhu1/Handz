@@ -8,7 +8,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 User = get_user_model()
 
 class TextView(generics.ListCreateAPIView):
@@ -23,7 +23,8 @@ class UsersView(generics.ListCreateAPIView):
 
 class LoginView(APIView):
     def post(self, request):
-        user = User.objects.get(username=request.data["username"])
+        user = authenticate(username=request.data['username'],
+                password=request.data['password'])
         user.is_logged_in = True
         user.save()
         print(user.username)
