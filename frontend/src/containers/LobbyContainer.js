@@ -4,7 +4,9 @@ import Websocket from 'react-websocket';
 import axios from 'axios';
 
 import Lobby from 'components/Lobby';
+import Chat from 'components/Chat';
 import LobbyWebsocket from 'websockets/LobbyWebsocket';
+import ChatWebsocket from 'websockets/ChatWebsocket';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 import {connect} from 'react-redux';
@@ -20,6 +22,9 @@ class LobbyContainer extends React.Component {
         // this.sendSocketMessage = this.sendSocketMessage.bind(this);
         LobbyWebsocket.connect(this.props.socket);
         LobbyWebsocket.listen(this);
+
+        // ChatWebsocket.connect(this.props.socket);
+        // ChatWebsocket.listen(this);
     }
 
     async componentWillMount() {
@@ -55,10 +60,13 @@ class LobbyContainer extends React.Component {
 
     render() {
       return(
-        <Lobby loaded={this.state.loaded} texts={this.props.texts}
-        socket={this.props.socket} token={this.props.token}
-        logout={this.props.logout}
-        />
+        <div>
+          <Lobby loaded={this.state.loaded} texts={this.props.texts}
+          socket={this.props.socket} token={this.props.token}
+          logout={this.props.logout}
+          />
+          <Chat />
+        </div>
       )
     }
 }

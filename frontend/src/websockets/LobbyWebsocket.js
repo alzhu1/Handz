@@ -7,6 +7,7 @@ const LobbyWebsocket = {
 
     listen: (self) => {
         socket.onmessage = (event) => {
+            console.log('lobby websocket')
             console.log(event.data);
             var data = JSON.parse(event.data);
 

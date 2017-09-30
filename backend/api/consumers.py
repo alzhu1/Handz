@@ -42,28 +42,15 @@ def ws_lobby_connect(message):
 
 @channel_session_user
 def ws_lobby_message(message):
-    print(message.content)
-
     content = json.loads(message.content['text'])
 
-    if content[0] == "Login":
-        user = User.objects.get(auth_token=content[1])
-        user.is_logged_in = True
-        user.save()
-
-    if content[0] == "Logout":
-        user = User.objects.get(auth_token=content[1])
-        user.is_logged_in = False
-        user.save()
-
-    if content[0] == "Created Text":
+    if content['type'] == "CREATE_TEXT":
         Group('lobby').send({
             'text': json.dumps({
                 'createText': True,
-                'text': content[1],
+                'text': content['payload'],
             })
         })
-
 
 @channel_session_user
 def ws_lobby_disconnect(message):
