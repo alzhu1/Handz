@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Websocket from 'react-websocket';
 
 import axios from 'axios';
 

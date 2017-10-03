@@ -4,9 +4,9 @@ import Websocket from 'react-websocket';
 import axios from 'axios';
 
 import Lobby from 'components/Lobby';
-import Chat from 'components/Chat';
 import LobbyWebsocket from 'websockets/LobbyWebsocket';
-import ChatWebsocket from 'websockets/ChatWebsocket';
+
+import ChatContainer from 'containers/ChatContainer';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 import {connect} from 'react-redux';
@@ -16,15 +16,12 @@ class LobbyContainer extends React.Component {
         super(props);
         // var token = "Token " + this.props.token;
 
-        this.state = {loaded: false};
-        console.log("Mount");
+        this.state = {loaded: false, chat: 'default'};
 
         // this.sendSocketMessage = this.sendSocketMessage.bind(this);
         LobbyWebsocket.connect(this.props.socket);
         LobbyWebsocket.listen(this);
 
-        // ChatWebsocket.connect(this.props.socket);
-        // ChatWebsocket.listen(this);
     }
 
     async componentWillMount() {
@@ -58,14 +55,23 @@ class LobbyContainer extends React.Component {
         LobbyWebsocket.disconnect();
     }
 
+    // handleClick(e) {
+    //   e.preventDefault();
+    //   LobbyWebsocket.send(this);
+    // }
+
     render() {
       return(
         <div>
-          <Lobby loaded={this.state.loaded} texts={this.props.texts}
-          socket={this.props.socket} token={this.props.token}
+          <Lobby loaded={this.state.loaded}
+          texts={this.props.texts}
+          token={this.props.token}
           logout={this.props.logout}
+          reset_text={this.props.reset_text}
           />
-          <Chat />
+          {this.state.chat}
+          <ChatContainer />
+
         </div>
       )
     }

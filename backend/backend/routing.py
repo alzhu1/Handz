@@ -12,7 +12,11 @@ channel_routing = [
     route('websocket.receive', api.ws_lobby_message, path=r'/lobby/$'),
     route('websocket.disconnect', api.ws_lobby_disconnect, path=r'/lobby/$'),
 
-    route('websocket.connect', api.ws_signup_connect, path=r'/signup/$'),
+    route('websocket.connect', api.ws_chat_connect, path=r'/chat/$'),
+    route('websocket.receive', api.ws_chat_message, path=r'/chat/$'),
+    route('websocket.disconnect', api.ws_chat_disconnect, path=r'/chat/$'),
+
+        route('websocket.connect', api.ws_signup_connect, path=r'/signup/$'),
     route('websocket.receive', api.ws_signup_message, path=r'/signup/$'),
     route('websocket.disconnect', api.ws_signup_disconnect, path=r'/signup/$'),
 ]

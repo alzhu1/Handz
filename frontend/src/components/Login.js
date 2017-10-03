@@ -7,8 +7,6 @@ export default class Login extends React.Component {
     render() {
 
         if (this.props.token!=='') {
-            console.log('no redirect')
-            console.log(this.props.token)
             return <Redirect to='/' />;
         }
 

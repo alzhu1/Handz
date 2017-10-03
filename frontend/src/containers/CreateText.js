@@ -45,7 +45,8 @@ export default class CreateText extends React.Component {
 
     sendSocketMessage(message) {
         const socket = this.refs.socket;
-        console.log('json message')
+        console.log('json stringify message')
+        console.log(socket)
         console.log(JSON.stringify(message))
         socket.state.ws.send(JSON.stringify(message));
     }

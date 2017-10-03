@@ -24,40 +24,22 @@ def ws_lobby_message(message):
 def ws_lobby_disconnect(message):
     LobbyEngine(message).disconnect()
 
-
-
 @channel_session_user_from_http
-def ws_lobby_connect(message):
+def ws_chat_connect(message):
     message.reply_channel.send({"accept": True})
+    Group('test').add(message.reply_channel)
 
-    Group('lobby').add(message.reply_channel)
-
-    print(message.user)
-
-    Group('lobby').send({
-        'text': json.dumps({
-            'login': True
-        })
+@channel_session_user
+def ws_chat_message(message):
+    Group('test').send({
+        'text': json.dumps(message.content['text'])
     })
 
 @channel_session_user
-def ws_lobby_message(message):
-    content = json.loads(message.content['text'])
+def ws_chat_disconnect(message):
+    Group('test').discard(message.reply_channel)
 
-    if content['type'] == "CREATE_TEXT":
-        Group('lobby').send({
-            'text': json.dumps({
-                'createText': True,
-                'text': content['payload'],
-            })
-        })
-
-@channel_session_user
-def ws_lobby_disconnect(message):
-    Group('lobby').discard(message.reply_channel)
-
-
-
+#to be deprecated
 @channel_session_user_from_http
 def ws_signup_connect(message):
     message.reply_channel.send({"accept": True})
