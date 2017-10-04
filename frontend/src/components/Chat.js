@@ -18,9 +18,10 @@ export default class Chat extends React.Component {
           <div style={styles}></div>
           <form onSubmit={(e) => {
               e.preventDefault();
-              this.props.sendMessage('testy message');}
+              this.props.sendMessage(this.props.message);}
             }>
-              <input name="usermsg" type="text" size="63" />
+              <input name="usermsg" type="text" size="63"
+              onChange={this.props.changeMessage}/>
               <input name="submitmsg" type="submit" value="Send" />
           </form>
         </div>

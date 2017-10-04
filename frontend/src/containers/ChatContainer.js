@@ -30,6 +30,14 @@ class ChatContainer extends React.Component {
     ChatWebsocket.disconnect();
   }
 
+  sendMessage(message) {
+    ChatWebsocket.send(this, message);
+  }
+
+  changeMessage(event) {
+    this.setState({message: event.target.value});
+  }
+
   handleClick(e) {
     e.preventDefault();
     ChatWebsocket.send(this, 'hi');
@@ -41,21 +49,15 @@ class ChatContainer extends React.Component {
           <button onClick={this.handleClick}>
             Activate Lasers
           </button>
-
-          <form onSubmit={(e) => {
-              e.preventDefault();
-              ChatWebsocket.send(this, this.state.message);
-            }}>
-              <input name="usermsg" type="text" size="63"
-              onChange={(e) => {this.setState({message: e.target.value})}}/>
-              <input name="submitmsg" type="submit" value="Send" />
-          </form>
-
+          {this.props.chats}
+          <Chat message={this.state.message}
+                sendMessage= {(e) => this.sendMessage(e)}
+                changeMessage= {(e) => this.changeMessage(e)}
+          />
 
       </div>
     )
   }
 }
 
-// <Chat sendMessage={this.sendSocketMessage}/>
 export default connect(mapStateToProps, mapDispatchToProps)(ChatContainer);

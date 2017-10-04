@@ -19,10 +19,7 @@ const ChatWebsocket = {
 
     send: (self, message) => {
         console.log('websocket send');
-        var action = '{type: "CHAT_MESSAGE", message: message};'
-        console.log(action);
-        socket.send(action);
-
+        socket.send(message);
     },
 
 
