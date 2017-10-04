@@ -69,7 +69,7 @@ class LobbyContainer extends React.Component {
           logout={this.props.logout}
           reset_text={this.props.reset_text}
           />
-          {this.state.chat}
+          {this.props.chats}
           <ChatContainer />
 
         </div>

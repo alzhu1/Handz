@@ -1,12 +1,11 @@
-
-import {LOGIN, LOGOUT, RESET_TEXT, ADD_TEXT, GET_USERNAME} from 'redux/actions/actionTypes';
+import * as a from 'redux/actions/actionTypes';
 
 export const token = (state = "", action) => {
     switch(action.type) {
-        case LOGIN:
+        case a.LOGIN:
             return action.token;
 
-        case LOGOUT:
+        case a.LOGOUT:
             return "";
 
         default:
@@ -17,10 +16,10 @@ export const token = (state = "", action) => {
 
 export const texts = (state = [], action) => {
     switch(action.type) {
-        case RESET_TEXT:
+        case a.RESET_TEXT:
             return [];
 
-        case ADD_TEXT:
+        case a.ADD_TEXT:
             return [
                 ...state,
                 action.text
@@ -34,8 +33,19 @@ export const texts = (state = [], action) => {
 
 export const username = (state = '', action) => {
     switch(action.type) {
-        case GET_USERNAME:
+        case a.GET_USERNAME:
             return action.username;
+        default:
+            break;
+    }
+    return state;
+}
+
+export const chats = (state = [], action) => {
+    switch(action.type) {
+        case a.CHAT_MESSAGE:
+            return [...state,
+                action.message];
         default:
             break;
     }

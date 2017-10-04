@@ -15,7 +15,7 @@ const LobbyWebsocket = {
             if(data.createText == true)
             {
                 self.props.add_text(data.text);
-                self.setState({chat: data.text.text});
+                // self.setState({chat: data.text.text});
             }
         };
 

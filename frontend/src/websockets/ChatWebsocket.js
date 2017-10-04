@@ -7,13 +7,9 @@ const ChatWebsocket = {
 
     listen: (self) => {
         socket.onmessage = (event) => {
-            console.log('chat websocket');
-            console.log(event.data);
             var data = JSON.parse(event.data);
-
-            console.log('received');
             console.log(data);
-
+            self.props.chat_message(data);
         };
 
         socket.onopen = () => {
@@ -21,15 +17,12 @@ const ChatWebsocket = {
         }
     },
 
-    send: (self) => {
-        console.log('websocket send')
-        // self.setState({chat: 'hi!'});
-        socket.send('Hello Server!');
-        // socket.addEventListener('open', (event) => {
-        //     socket.send('Hello Server!');
-        //     console.log('message sent')
-        //
-        // });
+    send: (self, message) => {
+        console.log('websocket send');
+        var action = '{type: "CHAT_MESSAGE", message: message};'
+        console.log(action);
+        socket.send(action);
+
     },
 
 
