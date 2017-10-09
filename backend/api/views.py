@@ -27,7 +27,6 @@ class LoginView(APIView):
                 password=request.data['password'])
         user.is_logged_in = True
         user.save()
-        print(user.username)
         return Response({"message": "Success"})
 
 class LogoutView(APIView):
@@ -36,7 +35,7 @@ class LogoutView(APIView):
         user.is_logged_in = False
         user.save()
         Text.objects.all().delete()
-        
+
         return Response({"message": "Success"})
 
 

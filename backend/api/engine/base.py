@@ -47,5 +47,7 @@ class ActionEngine(object):
             'text': json.dumps(action),
         })
 
-    def send_to_group(self, group, action):
+    def send_to_group(self, group='blank', action='blank2'):
+        print(group)
+        print(action)
         self.send(action, to=Group(group))

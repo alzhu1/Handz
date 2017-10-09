@@ -7,8 +7,8 @@ const ChatWebsocket = {
 
     listen: (self) => {
         socket.onmessage = (event) => {
-            var data = JSON.parse(event.data);
-            console.log(data);
+            console.log(event);
+            var data = event.data;
             self.props.chat_message(data);
         };
 
@@ -17,9 +17,13 @@ const ChatWebsocket = {
         }
     },
 
-    send: (self, message) => {
+    send: (self, message, username) => {
         console.log('websocket send');
+        console.log(message);
         socket.send(message);
+        // socket.send({'message':message});
+        // socket.send({'username':username,
+        //               'message':message});
     },
 
 

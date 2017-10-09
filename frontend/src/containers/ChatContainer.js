@@ -17,43 +17,26 @@ class ChatContainer extends React.Component {
     ChatWebsocket.listen(this);
   }
 
-  // sendSocketMessage(message) {
-  //     const socket = this.refs.socket;
-  //     console.log('json stringify message');
-  //     console.log(socket);
-  //     console.log(JSON.stringify(message));
-  //     socket.state.ws.send(JSON.stringify(message));
-  //     console.log('sent!');
-  // }
-
   componentWillUnmount() {
     ChatWebsocket.disconnect();
   }
 
-  sendMessage(message) {
-    ChatWebsocket.send(this, message);
+  sendMessage(message,username) {
+    ChatWebsocket.send(this, message, username);
   }
 
   changeMessage(event) {
     this.setState({message: event.target.value});
   }
 
-  handleClick(e) {
-    e.preventDefault();
-    ChatWebsocket.send(this, 'hi');
-  }
-
   render() {
     return (
       <div>
-          <button onClick={this.handleClick}>
-            Activate Lasers
-          </button>
-          {this.props.chats}
-          <Chat message={this.state.message}
+          <Chat username={this.props.username}
+                message={this.state.message}
+                chats={this.props.chats}
                 sendMessage= {(e) => this.sendMessage(e)}
-                changeMessage= {(e) => this.changeMessage(e)}
-          />
+                changeMessage= {(e) => this.changeMessage(e)}/>
 
       </div>
     )

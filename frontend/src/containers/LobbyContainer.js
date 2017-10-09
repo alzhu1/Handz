@@ -55,11 +55,6 @@ class LobbyContainer extends React.Component {
         LobbyWebsocket.disconnect();
     }
 
-    // handleClick(e) {
-    //   e.preventDefault();
-    //   LobbyWebsocket.send(this);
-    // }
-
     render() {
       return(
         <div>
