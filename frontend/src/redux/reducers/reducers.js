@@ -45,7 +45,7 @@ export const chats = (state = [], action) => {
     switch(action.type) {
         case a.CHAT_MESSAGE:
             return [...state,
-                action.message];
+                action.chat];
         default:
             break;
     }

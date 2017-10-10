@@ -13,7 +13,7 @@ User = get_user_model()
 from .engine.lobby import LobbyEngine
 from .engine.ChatEngine import ChatEngine
 
-from channels.generic.websockets import WebsocketConsumer
+from channels.generic.websockets import JsonWebsocketConsumer
 
 @channel_session_user_from_http
 def ws_lobby_connect(message):
@@ -49,7 +49,7 @@ def ws_chat_message(message):
 def ws_chat_disconnect(message):
     ChatEngine(message).disconnect()
 
-class ChatConsumer(WebsocketConsumer):
+class ChatConsumer(JsonWebsocketConsumer):
     http_user = True
     strict_ordering = False
 
@@ -57,18 +57,17 @@ class ChatConsumer(WebsocketConsumer):
         return ["test"]
 
     def connect(self, message, **kwargs):
-        # print(self.message['headers'])
+        print(self.message['headers'])
         # print(self.message.user)
         # print(self.message.channel_session.__dict__)
         self.message.reply_channel.send({"accept": True})
         Group('chat').add(self.message.reply_channel)
 
-    def receive(self, text=None, bytes=None, **kwargs):
-        print(text)
-        print(bytes)
-        print(self.message.content)
-        # print(self.message.channel_session['_auth_user_id'])
-        Group('chat').send({'text':text})
+    def receive(self, content, **kwargs):
+        print(content)
+        Group('chat').send({
+            'text': json.dumps(content)
+        })
 
     def disconnect(self, message, **kwargs):
         Group("chat").discard(self.message.reply_channel)

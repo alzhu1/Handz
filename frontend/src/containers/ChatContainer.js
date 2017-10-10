@@ -21,8 +21,8 @@ class ChatContainer extends React.Component {
     ChatWebsocket.disconnect();
   }
 
-  sendMessage(message,username) {
-    ChatWebsocket.send(this, message, username);
+  sendMessage(message) {
+    ChatWebsocket.send(this, message, this.props.username);
   }
 
   changeMessage(event) {
@@ -32,8 +32,7 @@ class ChatContainer extends React.Component {
   render() {
     return (
       <div>
-          <Chat username={this.props.username}
-                message={this.state.message}
+          <Chat message={this.state.message}
                 chats={this.props.chats}
                 sendMessage= {(e) => this.sendMessage(e)}
                 changeMessage= {(e) => this.changeMessage(e)}/>

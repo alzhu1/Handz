@@ -25,10 +25,15 @@ export const getUsername = (username) => ({
   username
 });
 
-export const chatMessage = (message) => ({
-  type: a.CHAT_MESSAGE,
-  message
-});
+export const chatMessage = (text) => {
+    let username = JSON.parse(text).username;
+    let message = JSON.parse(text).message;
+
+  return({
+    type: a.CHAT_MESSAGE,
+    'chat': username + ': ' + message
+  })
+}
 
 
 export function apiLogin(username, password) {
