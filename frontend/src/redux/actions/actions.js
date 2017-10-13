@@ -29,12 +29,16 @@ export const chatMessage = (text) => {
     let username = JSON.parse(text).username;
     let message = JSON.parse(text).message;
 
-  return({
-    type: a.CHAT_MESSAGE,
-    'chat': username + ': ' + message
-  })
+    return({
+      type: a.CHAT_MESSAGE,
+      'chat': username + ': ' + message
+    })
 }
 
+export const loggedIn = (bool) => ({
+  type: a.LOGGED_IN,
+  bool
+});
 
 export function apiLogin(username, password) {
   return function (dispatch) {
@@ -56,6 +60,10 @@ export function apiLogin(username, password) {
       .then((response) => {
             dispatch(getUsername(username));
             return response;
+          })
+      .then((response) => {
+            dispatch(loggedIn(true));
+            return response;
           },
           error => console.log('An error occured.', error)
       )
@@ -68,6 +76,7 @@ export const mapStateToProps = (state) => {
         texts: state.texts,
         username: state.username,
         chats: state.chats,
+        logged_in: state.logged_in,
     };
 };
 
@@ -87,6 +96,9 @@ export const mapDispatchToProps = (dispatch) => {
       },
       chat_message: (message) => {
         dispatch(chatMessage(message))
+      },
+      loggedIn: (bool) => {
+        dispatch(loggedIn(bool))
       },
     }
 };

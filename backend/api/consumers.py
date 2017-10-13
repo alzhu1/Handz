@@ -11,9 +11,9 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from .engine.lobby import LobbyEngine
-from .engine.ChatEngine import ChatEngine
 
 from channels.generic.websockets import JsonWebsocketConsumer
+from urllib.parse import parse_qs
 
 @channel_session_user_from_http
 def ws_lobby_connect(message):
@@ -27,28 +27,6 @@ def ws_lobby_message(message):
 def ws_lobby_disconnect(message):
     LobbyEngine(message).disconnect()
 
-
-@channel_session_user_from_http
-def ws_chat_connect(message):
-    print(1)
-    print(message['headers'])
-    print(message.user)
-    ChatEngine(message).connect()
-
-@channel_session_user
-def ws_chat_message(message):
-    # ChatEngine.send_to_group(ChatEngine,'chat',{'text': json.dumps(message.content['text'])})
-    print(message.user)
-    # username = message.user.username
-    Group('chat').send({
-        'text': json.dumps(message.content['text']),
-        # 'user': json.dumps(username)
-    })
-
-@channel_session_user
-def ws_chat_disconnect(message):
-    ChatEngine(message).disconnect()
-
 class ChatConsumer(JsonWebsocketConsumer):
     http_user = True
     strict_ordering = False
@@ -57,20 +35,42 @@ class ChatConsumer(JsonWebsocketConsumer):
         return ["test"]
 
     def connect(self, message, **kwargs):
-        print(self.message['headers'])
+        # print(self.message['headers'])
         # print(self.message.user)
+        # print(self.message.reply_channel)
+        # print(self.message.channel_session)
+        # print(parse_qs(self.message.content["query_string"]))
+        # print('get user')
+        # print(self.message.channel_session.get('user'))
         # print(self.message.channel_session.__dict__)
         self.message.reply_channel.send({"accept": True})
         Group('chat').add(self.message.reply_channel)
-
-    def receive(self, content, **kwargs):
-        print(content)
-        Group('chat').send({
-            'text': json.dumps(content)
+        Group('users').add(self.message.reply_channel)
+        Group('users').send({
+            'text': json.dumps({
+                'username': self.message.user.username,
+            })
         })
 
+    def getUsername(self, username):
+        self.message.channel_session['user'] = username
+
+    def receive(self, content, **kwargs):
+        if content['action']=='chat':
+            print(json.dumps(content))
+            Group('chat').send({
+                'text': json.dumps(content)
+            })
+
     def disconnect(self, message, **kwargs):
+        Group('users').send({
+            'text': json.dumps({
+                'username': self.message.user.username,
+            })
+        })
+
         Group("chat").discard(self.message.reply_channel)
+        Group("users").discard(self.message.reply_channel)
 
 #to be deprecated
 @channel_session_user_from_http

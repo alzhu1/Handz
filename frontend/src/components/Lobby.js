@@ -27,6 +27,7 @@ export default class Lobby extends React.Component {
                         axios.post("/api/logout/", {
                                 token: token
                             });
+                        this.props.loggedIn(false);
                     }}>Logout</button>
 
                     <ul>

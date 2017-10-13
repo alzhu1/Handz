@@ -9,7 +9,7 @@ import {BrowserRouter} from 'react-router-dom';
 
 import {login, logout, resetText, addText, apiLogin, getUsername} from 'redux/actions/actions';
 
-import {token, texts, username, chats} from 'redux/reducers/reducers';
+import {token, texts, username, chats, logged_in} from 'redux/reducers/reducers';
 import {createStore, combineReducers,applyMiddleware} from "redux";
 
 import thunkMiddleware from 'redux-thunk'
@@ -20,23 +20,24 @@ import axios from 'axios';
 
 var lobbySock = "ws://localhost:8000/lobby/";
 var signupSock = "ws://localhost:8000/signup/";
-var chatSock = "ws://localhost:8000/users/";
 
 const rootReducer = combineReducers({
                     token,
                     texts,
                     username,
-                    chats
+                    chats,
+                    logged_in
                     });
 
 const initialState = {token: '',
                       texts: [],
                       username: '',
-                      chats: []}
+                      chats: [],
+                      logged_in: false}
 
 const loggerMiddleware = createLogger()
 
-const store = createStore(rootReducer, initialState,
+export const store = createStore(rootReducer, initialState,
   applyMiddleware(
     thunkMiddleware,
     loggerMiddleware
@@ -63,7 +64,7 @@ const store = createStore(rootReducer, initialState,
 ReactDOM.render((
     <Provider store={store}>
         <BrowserRouter>
-            <App lobbySock={lobbySock} signupSock={signupSock} chatSock={chatSock} />
+            <App lobbySock={lobbySock} signupSock={signupSock} />
         </BrowserRouter>
     </Provider>
 ), document.getElementById('root'));

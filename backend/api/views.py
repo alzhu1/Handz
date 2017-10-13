@@ -35,7 +35,6 @@ class LogoutView(APIView):
         user.is_logged_in = False
         user.save()
         Text.objects.all().delete()
-
         return Response({"message": "Success"})
 
 

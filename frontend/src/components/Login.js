@@ -5,8 +5,8 @@ import { Redirect, Link } from 'react-router-dom';
 export default class Login extends React.Component {
 
     render() {
-
-        if (this.props.token!=='') {
+        
+        if (this.props.logged_in===true) {
             return <Redirect to='/' />;
         }
 

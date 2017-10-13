@@ -51,3 +51,13 @@ export const chats = (state = [], action) => {
     }
     return state;
 }
+
+export const logged_in = (state = false, action) => {
+    switch(action.type) {
+        case a.LOGGED_IN:
+            return action.bool;
+        default:
+            break;
+    }
+    return state;
+}

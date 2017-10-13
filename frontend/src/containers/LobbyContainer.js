@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Websocket from 'react-websocket';
 import axios from 'axios';
 
 import Lobby from 'components/Lobby';
@@ -56,18 +54,24 @@ class LobbyContainer extends React.Component {
     }
 
     render() {
-      return(
-        <div>
-          <Lobby loaded={this.state.loaded}
-          texts={this.props.texts}
-          token={this.props.token}
-          logout={this.props.logout}
-          reset_text={this.props.reset_text}
-          />
-          <ChatContainer />
+      if (this.props.logged_in === false) {
+          return <div> Loading </div>
+      }
+      else {
+          return(
+            <div>
+              <Lobby loaded={this.state.loaded}
+              texts={this.props.texts}
+              token={this.props.token}
+              logout={this.props.logout}
+              reset_text={this.props.reset_text}
+              loggedIn={this.props.loggedIn}
+              />
+              <ChatContainer />
 
-        </div>
-      )
+            </div>
+          )
+      }
     }
 }
 

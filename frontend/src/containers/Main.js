@@ -16,7 +16,7 @@ class Main extends React.Component {
         return (
             <Switch>
                 <Route exact path='/'
-                render={() => (this.props.token !== "" ?
+                render={() => (this.props.logged_in === true ?
                     (<LobbyContainer  socket={this.props.lobbySock}/>) :
                     (<Redirect to='/login' />))} />
 
@@ -38,7 +38,6 @@ class Main extends React.Component {
 
                 <Route exact path='/chat' render={(props) => (
                     <Chat {...props} token={this.props.token}
-                    socket={this.props.chatSock}
                     texts={this.props.texts}
                     add_text={this.props.add_text}/>
                 )}  />

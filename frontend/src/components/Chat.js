@@ -16,7 +16,7 @@ export default class Chat extends React.Component {
       var allChats = []
         this.props.chats.map((chat) => {
             allChats.push(
-                <div >
+                <div>
                   {chat}
                 </div>
             );

@@ -2,19 +2,21 @@ import React from 'react';
 
 import Chat from 'components/Chat';
 import ChatWebsocket from 'websockets/ChatWebsocket';
+import UserList from 'components/UserList';
 
-import Websocket from 'react-websocket';
 import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 import {connect} from 'react-redux';
+import {store} from 'index';
 
 class ChatContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {chatSock: "ws://localhost:8000/chat/",
-                  message: ''};
+  constructor() {
+    super();
+    this.state = {message: ''};
+  }
 
-    ChatWebsocket.connect(this.state.chatSock);
-    ChatWebsocket.listen(this);
+  componentDidMount() {
+    ChatWebsocket.connect();
+    ChatWebsocket.listen(this, store);
   }
 
   componentWillUnmount() {
@@ -22,7 +24,7 @@ class ChatContainer extends React.Component {
   }
 
   sendMessage(message) {
-    ChatWebsocket.send(this, message, this.props.username);
+    ChatWebsocket.send(this, "chat", message, this.props.username);
   }
 
   changeMessage(event) {
@@ -36,6 +38,7 @@ class ChatContainer extends React.Component {
                 chats={this.props.chats}
                 sendMessage= {(e) => this.sendMessage(e)}
                 changeMessage= {(e) => this.changeMessage(e)}/>
+          <UserList />
 
       </div>
     )

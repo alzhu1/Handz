@@ -11,13 +11,9 @@ import * as actions from 'redux/actions/actions'
 import {mapStateToProps} from 'redux/actions/actions';
 
 class LoginContainer extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {username: "", password: "", redirect: false};
-    }
-
-    componentDidMount() {
-        console.log("Login mounted");
     }
 
     changeName = (event) => {
@@ -30,14 +26,14 @@ class LoginContainer extends React.Component {
 
     render() {
         return (
-
             <Login
                   username={this.state.username}
                   password={this.state.password}
                   changeName={this.changeName}
                   changePassword={this.changePassword}
                   login={this.props.api_login}
-                  token={this.props.token}/>
+                  token={this.props.token}
+                  logged_in={this.props.logged_in}/>
         );
     }
 }

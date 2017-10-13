@@ -1,39 +1,55 @@
-let socket = null;
+import ReconnectingWebSocket from 'shopify-reconnecting-websocket';
+
+let _socket = null;
 
 const ChatWebsocket = {
-    connect: (url) => {
-        socket = new WebSocket(url);
+    connect: () => {
+        // "ws://"+ window.location.host + "/chat/"
+        var url = "ws://localhost:8000/chat/";
+        _socket = new ReconnectingWebSocket(url);
+        // let text = JSON.stringify({
+        //   "action":"chat",
+        //   "message":"hiii",
+        //   "username":username
+        // });
+        // console.log(text);
+        // socket.send(text);
     },
 
-    listen: (self) => {
-        socket.onmessage = (event) => {
-            console.log(event);
-            var data = event.data;
-            console.log(event.data);
-            self.props.chat_message(data);
+    listen: (self, store) => {
+        _socket.onmessage = (event) => {
+            let data = event.data;
+            if (JSON.parse(data).action === "chat") {
+              self.props.chat_message(data);
+            }
         };
 
-        socket.onopen = () => {
-            console.log("Web");
+        _socket.onopen = () => {
+            const state = store.getState();
+            let text = JSON.stringify({
+              "action":"chat",
+              "message":"hiii",
+              "username":state.username
+            });
+            console.log(text);
+            _socket.send(text);
         }
+
     },
 
-    send: (self, message, username) => {
-        console.log('websocket send');
+    send: (self, action, message, username) => {
         var text = JSON.stringify({
+          "action":action,
           "message":message,
           "username":username
         });
         console.log(text);
-        socket.send(text);
-        // socket.send({'message':message});
-        // socket.send({'username':username,
-        //               'message':message});
+        _socket.send(text);
     },
 
 
     disconnect: () => {
-        socket.close();
+        _socket.close();
     }
 }
 
