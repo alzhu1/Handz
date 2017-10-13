@@ -61,3 +61,17 @@ export const logged_in = (state = false, action) => {
     }
     return state;
 }
+
+export const userlist = (state = [], action) => {
+    switch(action.logged_in) {
+        case true:
+            return [...state,action.username];
+        case false:
+            let temp = state;
+            temp.splice(temp.indexOf(action.username),1);
+            return temp;
+        default:
+            break;
+    }
+    return state;
+}

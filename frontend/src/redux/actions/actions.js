@@ -35,6 +35,14 @@ export const chatMessage = (text) => {
     })
 }
 
+export const modifyUserList = (logged_in, username) => {
+    return({
+      type: a.MODIFY_USER_LIST,
+      logged_in,
+      username,
+    })
+}
+
 export const loggedIn = (bool) => ({
   type: a.LOGGED_IN,
   bool
@@ -77,6 +85,7 @@ export const mapStateToProps = (state) => {
         username: state.username,
         chats: state.chats,
         logged_in: state.logged_in,
+        userlist: state.userlist,
     };
 };
 
@@ -99,6 +108,9 @@ export const mapDispatchToProps = (dispatch) => {
       },
       loggedIn: (bool) => {
         dispatch(loggedIn(bool))
+      },
+      modifyUserList: (logged_in,username) => {
+        dispatch(modifyUserList(logged_in,username))
       },
     }
 };

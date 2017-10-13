@@ -9,7 +9,7 @@ import {BrowserRouter} from 'react-router-dom';
 
 import {login, logout, resetText, addText, apiLogin, getUsername} from 'redux/actions/actions';
 
-import {token, texts, username, chats, logged_in} from 'redux/reducers/reducers';
+import {token, texts, username, chats, logged_in, userlist} from 'redux/reducers/reducers';
 import {createStore, combineReducers,applyMiddleware} from "redux";
 
 import thunkMiddleware from 'redux-thunk'
@@ -26,14 +26,11 @@ const rootReducer = combineReducers({
                     texts,
                     username,
                     chats,
-                    logged_in
+                    logged_in,
+                    userlist,
                     });
 
-const initialState = {token: '',
-                      texts: [],
-                      username: '',
-                      chats: [],
-                      logged_in: false}
+const initialState = {}
 
 const loggerMiddleware = createLogger()
 

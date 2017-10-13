@@ -68,7 +68,6 @@ class LobbyContainer extends React.Component {
               loggedIn={this.props.loggedIn}
               />
               <ChatContainer />
-
             </div>
           )
       }

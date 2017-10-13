@@ -45,32 +45,15 @@ class ChatConsumer(JsonWebsocketConsumer):
         # print(self.message.channel_session.__dict__)
         self.message.reply_channel.send({"accept": True})
         Group('chat').add(self.message.reply_channel)
-        Group('users').add(self.message.reply_channel)
-        Group('users').send({
-            'text': json.dumps({
-                'username': self.message.user.username,
-            })
-        })
-
-    def getUsername(self, username):
-        self.message.channel_session['user'] = username
 
     def receive(self, content, **kwargs):
-        if content['action']=='chat':
-            print(json.dumps(content))
-            Group('chat').send({
-                'text': json.dumps(content)
-            })
-
-    def disconnect(self, message, **kwargs):
-        Group('users').send({
-            'text': json.dumps({
-                'username': self.message.user.username,
-            })
+        print(json.dumps(content))
+        Group('chat').send({
+            'text': json.dumps(content)
         })
-
+        
+    def disconnect(self, message, **kwargs):
         Group("chat").discard(self.message.reply_channel)
-        Group("users").discard(self.message.reply_channel)
 
 #to be deprecated
 @channel_session_user_from_http

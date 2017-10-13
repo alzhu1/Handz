@@ -20,7 +20,7 @@ class ChatContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    ChatWebsocket.disconnect();
+    ChatWebsocket.disconnect(store);
   }
 
   sendMessage(message) {
@@ -34,12 +34,11 @@ class ChatContainer extends React.Component {
   render() {
     return (
       <div>
+          <UserList userlist={this.props.userlist}/>
           <Chat message={this.state.message}
                 chats={this.props.chats}
                 sendMessage= {(e) => this.sendMessage(e)}
                 changeMessage= {(e) => this.changeMessage(e)}/>
-          <UserList />
-
       </div>
     )
   }

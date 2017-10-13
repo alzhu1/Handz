@@ -40,7 +40,6 @@ export default class Lobby extends React.Component {
         }
 
         else {
-            console.log("false");
             return <div>Loading</div>;
         }
     }
