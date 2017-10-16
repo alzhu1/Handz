@@ -18,10 +18,10 @@ export default class LoginContainer extends React.Component {
     render() {
         return (
             <Login
-                  name={this.state.name}
-                  password={this.state.password}
-                  changeName={this.changeName}
-                  changePassword={this.changePassword}/>
+                name={this.state.name}
+                password={this.state.password}
+                changeName={this.changeName}
+                changePassword={this.changePassword}/>
         );
     }
 }

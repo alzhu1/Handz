@@ -9,10 +9,11 @@ import ChatContainer from 'containers/ChatContainer';
 import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 import {connect} from 'react-redux';
 
+
 class LobbyContainer extends React.Component {
     constructor() {
         super();
-        this.state = {loaded: false, chat: 'default'};
+        this.state = {loaded: false};
         LobbyWebsocket.connect();
         LobbyWebsocket.listen(this);
     }
@@ -23,7 +24,7 @@ class LobbyContainer extends React.Component {
 
         var next = "/api/text/";
 
-        this.props.reset_text();
+        this.props.resetText();
         while(next != null)
         {
             var test = await axios({
@@ -36,7 +37,7 @@ class LobbyContainer extends React.Component {
             console.log(test);
 
             test.data.results.map((text) => {
-                self.props.add_text(text);
+                self.props.addText(text);
             })
 
             next = test.data.next;
@@ -49,24 +50,15 @@ class LobbyContainer extends React.Component {
     }
 
     render() {
-      if (!this.props.is_logged_in) {
-          return <div> Loading </div>
-      }
-      else {
-          return(
-            <div>
-              <Lobby loaded={this.state.loaded}
-              texts={this.props.texts}
-              token={this.props.token}
-              getToken={this.props.getToken}
-              reset_text={this.props.reset_text}
-              isLoggedIn={this.props.isLoggedIn}
-              />
-              <ChatContainer />
-            </div>
-          )
-      }
+        return(
+          <div>
+            <Lobby loaded={this.state.loaded}/>
+            <ChatContainer />
+          </div>
+        )
+
     }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(LobbyContainer);

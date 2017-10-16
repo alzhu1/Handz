@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import axios from 'axios';
+import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+import {connect} from 'react-redux';
 
-export default class Lobby extends React.Component {
+class Lobby extends React.Component {
     render() {
-        if(this.props.loaded) {
-
             var allTexts = [];
             this.props.texts.map((text) => {
                 allTexts.push(
@@ -21,15 +20,8 @@ export default class Lobby extends React.Component {
             return (
                 <div>
                     <h1>This is the Home page!</h1>
-                    <button onClick={() => {
-                        this.props.getToken("");
-                        var token = this.props.token;
-                        axios.post("/api/logout/", {
-                                token: token
-                            });
-                        this.props.isLoggedIn(false);
-                    }}>Logout</button>
-
+                    <button onClick={() =>
+                        {this.props.logout(this.props.token)}}>Logout</button>
                     <ul>
                         {allTexts}
                     </ul>
@@ -37,10 +29,7 @@ export default class Lobby extends React.Component {
                     <Link to='/create-text'>Create text</Link>
                 </div>
             );
-        }
-
-        else {
-            return <div>Loading</div>;
-        }
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Lobby);

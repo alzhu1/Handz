@@ -15,7 +15,7 @@ const ChatWebsocket = {
             console.log('receive data')
             console.log(JSON.parse(data));
             if (JSON.parse(data).action === "chat") {
-              self.props.chat_message(data);
+              self.props.chatMessage(data);
             }
             if (JSON.parse(data).action === "user") {
               self.props.modifyUserList(JSON.parse(data).logged_in,JSON.parse(data).username);

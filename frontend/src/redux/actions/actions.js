@@ -44,56 +44,49 @@ export const isLoggedIn = (bool) => ({
   bool
 });
 
-export function apiLogin(username, password) {
-  return function (dispatch) {
-    return axios.post("/api/auth/", {
-        username: username,
-        password: password
-    })
-      .then((response) => {
-            dispatch(getToken(response.data.token));
-            return response;
-          }
-      )
-      .then(()=>{
-            axios.post("/api/login/", {
-              username: username,
-              password: password
-            })}
-      )
-      .then((response) => {
-            dispatch(getUsername(username));
-            return response;
-          })
-      .then((response) => {
-            dispatch(isLoggedIn(true));
-            return response;
-          },
-          error => console.log('An error occured.', error)
-      )
-  }
+export function login(username, password) {
+    return function (dispatch) {
+        return axios.post("/api/auth/", {username:username, password:password})
+        .then((response) => {
+              dispatch(getToken(response.data.token));
+              return response;
+            }
+        )
+        .then(()=>{
+              axios.post("/api/login/", {
+                username: username,
+                password: password
+              })}
+        )
+        .then((response) => {
+              dispatch(getUsername(username));
+              return response;
+            })
+        .then((response) => {
+              dispatch(isLoggedIn(true));
+              return response;
+            },
+            error => console.log('An error occured.', error)
+        )
+    }
 }
 
 
-// export function apiLogin(username, password) {
-//   return function (dispatch) {
-//     return axios.post("/api/auth/", {
-//         username: username,
-//         password: password
-//     })
-//       .then((response) => {
-//             dispatch(login(response.data.token));
-//             return response;
-//           }
-//       )
-//       .then((response) => {
-//             dispatch(loggedIn(true));
-//             return response;
-//           },
-//           error => console.log('An error occured.', error)
-//       )
-//   }
-// }
+export function logout(token) {
+    return function (dispatch) {
+        return axios.post("/api/logout/", {token: token})
+        .then((response) => {
+              dispatch(getToken(''));
+              return response;
+            })
+        .then((response) => {
+              dispatch(isLoggedIn(false));
+              return response;
+            },
+            error => console.log('An error occured.', error)
+        )
+    }
+}
 
 export const mapStateToProps = (state) => {
     return {
@@ -111,13 +104,13 @@ export const mapDispatchToProps = (dispatch) => {
       getToken: (token) => {
         dispatch(getToken(token))
       },
-      add_text: (text) => {
+      addText: (text) => {
         dispatch(addText(text))
       },
-      reset_text: () => {
+      resetText: () => {
         dispatch(resetText())
       },
-      chat_message: (message) => {
+      chatMessage: (message) => {
         dispatch(chatMessage(message))
       },
       isLoggedIn: (bool) => {
@@ -126,8 +119,11 @@ export const mapDispatchToProps = (dispatch) => {
       modifyUserList: (logged_in,username) => {
         dispatch(modifyUserList(logged_in,username))
       },
-      apiLogin: (username, password) => {
-        dispatch(apiLogin(username,password));
+      login: (username, password) => {
+        dispatch(login(username,password));
+      },
+      logout: (token) => {
+        dispatch(logout(token));
       },
     }
 };
