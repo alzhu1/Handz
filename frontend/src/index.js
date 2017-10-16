@@ -13,9 +13,6 @@ import {createStore, combineReducers,applyMiddleware} from "redux";
 import thunkMiddleware from 'redux-thunk'
 import {createLogger} from 'redux-logger'
 
-
-var signupSock = "ws://localhost:8000/signup/";
-
 const rootReducer = combineReducers({
                     token,
                     texts,
@@ -56,7 +53,7 @@ export const store = createStore(rootReducer, initialState,
 ReactDOM.render((
     <Provider store={store}>
         <BrowserRouter>
-            <App signupSock={signupSock} />
+            <App/>
         </BrowserRouter>
     </Provider>
 ), document.getElementById('root'));

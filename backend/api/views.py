@@ -37,6 +37,13 @@ class LogoutView(APIView):
         Text.objects.all().delete()
         return Response({"message": "Success"})
 
+class SignupView(APIView):
+    def post(self, request):
+        user = User.objects.create_user(username=request.data['username'],
+                                 password=request.data['password'])
+        user.save()
+        return Response({"message": "Success"})
+
 
 def testview(request):
     return render(request, 'test.html', {})

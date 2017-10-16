@@ -6,3 +6,4 @@ export const GET_USERNAME = 'GET_USERNAME';
 export const CHAT_MESSAGE = 'CHAT_MESSAGE';
 export const IS_LOGGED_IN = 'IS_LOGGED_IN';
 export const MODIFY_USER_LIST = 'MODIFY_USER_LIST';
+export const CREATE_USER = 'CREATE_USER';

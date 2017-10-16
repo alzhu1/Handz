@@ -22,8 +22,7 @@ class Main extends React.Component {
                 <Route exact path='/login' component={LoginContainer} />
 
                 <Route exact path='/signup' render={(props) => (
-                    <SignupContainer {...props}
-                    socket={this.props.signupSock} />
+                    <SignupContainer {...props} />
                 )} />
 
                 <Route exact path='/create-text' render={(props) => (

@@ -88,6 +88,17 @@ export function logout(token) {
     }
 }
 
+export function createUser(username, password) {
+    return function (dispatch) {
+        return axios.post("/api/signup/", {username:username, password:password})
+        .then(() => {
+            console.log('sign up success');
+        },
+            error => console.log('An error occured.', error)
+        )
+    }
+}
+
 export const mapStateToProps = (state) => {
     return {
         token: state.token,
@@ -124,6 +135,9 @@ export const mapDispatchToProps = (dispatch) => {
       },
       logout: (token) => {
         dispatch(logout(token));
+      },
+      createUser: (username, password) => {
+        dispatch(createUser(username,password));
       },
     }
 };

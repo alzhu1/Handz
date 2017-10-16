@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^text/$', views.TextView.as_view(), name='text'),
     url(r'^login/$', views.LoginView.as_view()),
     url(r'^logout/$', views.LogoutView.as_view()),
+    url(r'^signup/$', views.SignupView.as_view()),
     url(r'^users/$', views.UsersView.as_view()),
     url(r'^test/$', views.testview),
 ]

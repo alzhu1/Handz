@@ -51,46 +51,6 @@ class ChatConsumer(JsonWebsocketConsumer):
         Group('chat').send({
             'text': json.dumps(content)
         })
-        
+
     def disconnect(self, message, **kwargs):
         Group("chat").discard(self.message.reply_channel)
-
-#to be deprecated
-@channel_session_user_from_http
-def ws_signup_connect(message):
-    message.reply_channel.send({"accept": True})
-
-    Group('signup').add(message.reply_channel)
-
-    # Sends first message to WebSocket, handled in socket.onmessage in JS
-    Group('signup').send({
-        'text': json.dumps({
-            'test': False
-        })
-    })
-
-@channel_session_user
-def ws_signup_message(message):
-    print(json.loads(message.content["text"]))
-
-    new_user = json.loads(message.content["text"])
-    data = {
-        'username': new_user[1],
-        'password': new_user[2]
-    }
-
-    if len(User.objects.filter(username=new_user[1])) == 0:
-        user = UserSerializer(data=data)
-        user.is_valid()
-        user.save()
-
-
-    Group('signup').send({
-        'text': json.dumps({
-            'text': "success"
-        })
-    })
-
-@channel_session_user
-def ws_signup_disconnect(message):
-    Group('signup').discard(message.reply_channel)
