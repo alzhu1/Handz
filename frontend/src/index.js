@@ -7,18 +7,13 @@ import registerServiceWorker from './registerServiceWorker';
 import {Provider} from "react-redux";
 import {BrowserRouter} from 'react-router-dom';
 
-import {login, logout, resetText, addText, apiLogin, getUsername} from 'redux/actions/actions';
-
-import {token, texts, username, chats, logged_in, userlist} from 'redux/reducers/reducers';
+import {token, texts, username, chats, is_logged_in, userlist} from 'redux/reducers/reducers';
 import {createStore, combineReducers,applyMiddleware} from "redux";
 
 import thunkMiddleware from 'redux-thunk'
 import {createLogger} from 'redux-logger'
 
-import axios from 'axios';
 
-
-var lobbySock = "ws://localhost:8000/lobby/";
 var signupSock = "ws://localhost:8000/signup/";
 
 const rootReducer = combineReducers({
@@ -26,7 +21,7 @@ const rootReducer = combineReducers({
                     texts,
                     username,
                     chats,
-                    logged_in,
+                    is_logged_in,
                     userlist,
                     });
 
@@ -61,7 +56,7 @@ export const store = createStore(rootReducer, initialState,
 ReactDOM.render((
     <Provider store={store}>
         <BrowserRouter>
-            <App lobbySock={lobbySock} signupSock={signupSock} />
+            <App signupSock={signupSock} />
         </BrowserRouter>
     </Provider>
 ), document.getElementById('root'));

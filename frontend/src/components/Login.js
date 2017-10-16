@@ -1,25 +1,24 @@
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 
+import {connect} from 'react-redux';
+import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 
-export default class Login extends React.Component {
-
+class Login extends React.Component {
     render() {
-        
-        if (this.props.logged_in===true) {
+        if (this.props.is_logged_in) {
             return <Redirect to='/' />;
         }
-
         return (
             <div>
                 <h1>This is the Login page!</h1>
                 <form onSubmit={(e) => {
                     e.preventDefault();
-                    this.props.login(this.props.username, this.props.password);
+                    this.props.apiLogin(this.props.name, this.props.password);
                 }}>
                     <p><label>
                         Username:
-                        <input type="text" value={this.props.username}
+                        <input type="text"
                         onChange={this.props.changeName} />
                     </label></p>
 
@@ -36,3 +35,5 @@ export default class Login extends React.Component {
         );
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

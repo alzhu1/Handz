@@ -10,16 +10,11 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 import {connect} from 'react-redux';
 
 class LobbyContainer extends React.Component {
-    constructor(props) {
-        super(props);
-        // var token = "Token " + this.props.token;
-
+    constructor() {
+        super();
         this.state = {loaded: false, chat: 'default'};
-
-        // this.sendSocketMessage = this.sendSocketMessage.bind(this);
-        LobbyWebsocket.connect(this.props.socket);
+        LobbyWebsocket.connect();
         LobbyWebsocket.listen(this);
-
     }
 
     async componentWillMount() {
@@ -54,7 +49,7 @@ class LobbyContainer extends React.Component {
     }
 
     render() {
-      if (this.props.logged_in === false) {
+      if (!this.props.is_logged_in) {
           return <div> Loading </div>
       }
       else {
@@ -63,9 +58,9 @@ class LobbyContainer extends React.Component {
               <Lobby loaded={this.state.loaded}
               texts={this.props.texts}
               token={this.props.token}
-              logout={this.props.logout}
+              getToken={this.props.getToken}
               reset_text={this.props.reset_text}
-              loggedIn={this.props.loggedIn}
+              isLoggedIn={this.props.isLoggedIn}
               />
               <ChatContainer />
             </div>

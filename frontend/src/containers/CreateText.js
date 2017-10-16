@@ -59,7 +59,7 @@ export default class CreateText extends React.Component {
     render() {
         return (
             <div>
-                <Websocket ref="socket" url={this.props.socket}
+                <Websocket ref="socket" url={'ws://localhost:8000/lobby/'}
                     onMessage={() => {}} reconnect={true} />
                 <form onSubmit={(e) => {
                     e.preventDefault();

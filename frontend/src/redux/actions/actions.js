@@ -2,13 +2,9 @@ import * as a from './actionTypes';
 import axios from 'axios';
 
 
-export const login = (token) => ({
-  type: a.LOGIN,
+export const getToken = (token) => ({
+  type: a.GET_TOKEN,
   token
-});
-
-export const logout = () => ({
-  type: a.LOGOUT,
 });
 
 export const addText = (text) => ({
@@ -35,16 +31,16 @@ export const chatMessage = (text) => {
     })
 }
 
-export const modifyUserList = (logged_in, username) => {
+export const modifyUserList = (is_logged_in, username) => {
     return({
       type: a.MODIFY_USER_LIST,
-      logged_in,
+      is_logged_in,
       username,
     })
 }
 
-export const loggedIn = (bool) => ({
-  type: a.LOGGED_IN,
+export const isLoggedIn = (bool) => ({
+  type: a.IS_LOGGED_IN,
   bool
 });
 
@@ -55,7 +51,7 @@ export function apiLogin(username, password) {
         password: password
     })
       .then((response) => {
-            dispatch(login(response.data.token));
+            dispatch(getToken(response.data.token));
             return response;
           }
       )
@@ -70,7 +66,7 @@ export function apiLogin(username, password) {
             return response;
           })
       .then((response) => {
-            dispatch(loggedIn(true));
+            dispatch(isLoggedIn(true));
             return response;
           },
           error => console.log('An error occured.', error)
@@ -78,24 +74,42 @@ export function apiLogin(username, password) {
   }
 }
 
+
+// export function apiLogin(username, password) {
+//   return function (dispatch) {
+//     return axios.post("/api/auth/", {
+//         username: username,
+//         password: password
+//     })
+//       .then((response) => {
+//             dispatch(login(response.data.token));
+//             return response;
+//           }
+//       )
+//       .then((response) => {
+//             dispatch(loggedIn(true));
+//             return response;
+//           },
+//           error => console.log('An error occured.', error)
+//       )
+//   }
+// }
+
 export const mapStateToProps = (state) => {
     return {
         token: state.token,
         texts: state.texts,
         username: state.username,
         chats: state.chats,
-        logged_in: state.logged_in,
+        is_logged_in: state.is_logged_in,
         userlist: state.userlist,
     };
 };
 
 export const mapDispatchToProps = (dispatch) => {
     return {
-      login: (token) => {
-        dispatch(login(token))
-      },
-      logout: () =>{
-        dispatch(logout())
+      getToken: (token) => {
+        dispatch(getToken(token))
       },
       add_text: (text) => {
         dispatch(addText(text))
@@ -106,11 +120,14 @@ export const mapDispatchToProps = (dispatch) => {
       chat_message: (message) => {
         dispatch(chatMessage(message))
       },
-      loggedIn: (bool) => {
-        dispatch(loggedIn(bool))
+      isLoggedIn: (bool) => {
+        dispatch(isLoggedIn(bool))
       },
       modifyUserList: (logged_in,username) => {
         dispatch(modifyUserList(logged_in,username))
+      },
+      apiLogin: (username, password) => {
+        dispatch(apiLogin(username,password));
       },
     }
 };

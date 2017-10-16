@@ -1,23 +1,14 @@
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
-import axios from 'axios';
-
 import Login from 'components/Login'
 
-import {connect} from 'react-redux';
-
-import * as actions from 'redux/actions/actions'
-
-import {mapStateToProps} from 'redux/actions/actions';
-
-class LoginContainer extends React.Component {
+export default class LoginContainer extends React.Component {
     constructor() {
         super();
-        this.state = {username: "", password: "", redirect: false};
+        this.state = {name: "", password: ""};
     }
 
     changeName = (event) => {
-        this.setState({username: event.target.value});
+        this.setState({name: event.target.value});
     }
 
     changePassword = (event) => {
@@ -27,27 +18,10 @@ class LoginContainer extends React.Component {
     render() {
         return (
             <Login
-                  username={this.state.username}
+                  name={this.state.name}
                   password={this.state.password}
                   changeName={this.changeName}
-                  changePassword={this.changePassword}
-                  login={this.props.api_login}
-                  token={this.props.token}
-                  logged_in={this.props.logged_in}/>
+                  changePassword={this.changePassword}/>
         );
     }
 }
-
-
-
-
-export const mapDispatchToProps = (dispatch) => {
-    return {
-      api_login: (username, password) => {
-        dispatch(actions.apiLogin(username,password));
-      }
-    }
-};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);

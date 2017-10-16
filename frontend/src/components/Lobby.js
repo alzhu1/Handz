@@ -22,12 +22,12 @@ export default class Lobby extends React.Component {
                 <div>
                     <h1>This is the Home page!</h1>
                     <button onClick={() => {
-                        this.props.logout();
+                        this.props.getToken("");
                         var token = this.props.token;
                         axios.post("/api/logout/", {
                                 token: token
                             });
-                        this.props.loggedIn(false);
+                        this.props.isLoggedIn(false);
                     }}>Logout</button>
 
                     <ul>

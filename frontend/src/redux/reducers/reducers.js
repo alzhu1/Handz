@@ -2,12 +2,8 @@ import * as a from 'redux/actions/actionTypes';
 
 export const token = (state = "", action) => {
     switch(action.type) {
-        case a.LOGIN:
+        case a.GET_TOKEN:
             return action.token;
-
-        case a.LOGOUT:
-            return "";
-
         default:
             break;
     }
@@ -52,9 +48,9 @@ export const chats = (state = [], action) => {
     return state;
 }
 
-export const logged_in = (state = false, action) => {
+export const is_logged_in = (state = false, action) => {
     switch(action.type) {
-        case a.LOGGED_IN:
+        case a.IS_LOGGED_IN:
             return action.bool;
         default:
             break;
@@ -63,7 +59,7 @@ export const logged_in = (state = false, action) => {
 }
 
 export const userlist = (state = [], action) => {
-    switch(action.logged_in) {
+    switch(action.is_logged_in) {
         case true:
             return [...state,action.username];
         case false:

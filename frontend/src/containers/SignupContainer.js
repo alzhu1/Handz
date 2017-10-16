@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
 import Websocket from 'react-websocket';
 import Signup from 'components/Signup'
 

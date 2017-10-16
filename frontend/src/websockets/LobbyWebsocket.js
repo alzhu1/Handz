@@ -1,7 +1,8 @@
 let socket = null;
 
 const LobbyWebsocket = {
-    connect: (url) => {
+    connect: () => {
+        let url = 'ws://localhost:8000/lobby/';
         socket = new WebSocket(url);
     },
 
@@ -12,7 +13,7 @@ const LobbyWebsocket = {
             console.log(event.data);
             var data = JSON.parse(event.data);
 
-            if(data.createText == true)
+            if(data.createText === true)
             {
                 self.props.add_text(data.text);
                 // self.setState({chat: data.text.text});
