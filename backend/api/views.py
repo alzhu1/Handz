@@ -43,7 +43,3 @@ class SignupView(APIView):
                                  password=request.data['password'])
         user.save()
         return Response({"message": "Success"})
-
-
-def testview(request):
-    return render(request, 'test.html', {})

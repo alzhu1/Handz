@@ -29,7 +29,6 @@ DJANGO_APPS = [
 
 PROJECT_APPS = [
     'api.apps.ApiConfig',
-    'channels_app.apps.ChannelsAppConfig'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS

@@ -2,7 +2,6 @@ from django.conf.urls import url, include
 
 urlpatterns = [
     url(r'^api/', include('api.urls')),
-    url(r'^chat/', include('channels_app.urls', namespace='channels_app')),
 ]
 
 urlpatterns += [
