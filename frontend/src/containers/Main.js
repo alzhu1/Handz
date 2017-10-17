@@ -5,7 +5,6 @@ import {Route, Switch, Redirect, withRouter} from 'react-router-dom';
 import LoginContainer from 'containers/LoginContainer';
 import SignupContainer from 'containers/SignupContainer';
 import LobbyContainer from 'containers/LobbyContainer';
-import CreateText from './CreateText';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
 
@@ -21,15 +20,7 @@ class Main extends React.Component {
 
                 <Route exact path='/login' component={LoginContainer} />
 
-                <Route exact path='/signup' render={(props) => (
-                    <SignupContainer {...props} />
-                )} />
-
-                <Route exact path='/create-text' render={(props) => (
-                    <CreateText {...props}
-                    token={this.props.token}
-                    add_text={this.props.add_text} />
-                )}  />
+                <Route exact path='/signup' component={SignupContainer} />
 
                 <Route render={() => (<Redirect to='/login' />)} />
             </Switch>

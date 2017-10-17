@@ -16,9 +16,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'password', 'hand_position', 'is_logged_in')
-
-class TextSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.Text
-        fields = ('text', 'rand_bool', 'pk')

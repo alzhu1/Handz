@@ -1,20 +1,14 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from api.serializers import TextSerializer, UserSerializer
+from api.serializers import UserSerializer
 from rest_framework.views import APIView
 
-from .models import Text
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 
 from django.contrib.auth import get_user_model, authenticate
 User = get_user_model()
-
-class TextView(generics.ListCreateAPIView):
-    queryset = Text.objects.all()
-    serializer_class = TextSerializer
-    permission_classes = (IsAuthenticated,)
 
 class UsersView(generics.ListCreateAPIView):
     queryset = User.objects.all()

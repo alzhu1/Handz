@@ -4,28 +4,13 @@ from channels import Group
 from django.contrib.auth import get_user_model
 from channels.auth import channel_session_user, channel_session_user_from_http
 
-from .models import Text
-from .serializers import TextSerializer, UserSerializer
+from .serializers import UserSerializer
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from .engine.lobby import LobbyEngine
-
 from channels.generic.websockets import JsonWebsocketConsumer
 from urllib.parse import parse_qs
-
-@channel_session_user_from_http
-def ws_lobby_connect(message):
-    LobbyEngine(message).connect()
-
-@channel_session_user
-def ws_lobby_message(message):
-    LobbyEngine.dispatch(message)
-
-@channel_session_user
-def ws_lobby_disconnect(message):
-    LobbyEngine(message).disconnect()
 
 class ChatConsumer(JsonWebsocketConsumer):
     http_user = True
