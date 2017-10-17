@@ -10,23 +10,6 @@ export const token = (state = "", action) => {
     return state;
 }
 
-export const texts = (state = [], action) => {
-    switch(action.type) {
-        case a.RESET_TEXT:
-            return [];
-
-        case a.ADD_TEXT:
-            return [
-                ...state,
-                action.text
-            ];
-
-        default:
-            break;
-    }
-    return state;
-}
-
 export const username = (state = '', action) => {
     switch(action.type) {
         case a.GET_USERNAME:

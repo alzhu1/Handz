@@ -7,7 +7,7 @@ import registerServiceWorker from './registerServiceWorker';
 import {Provider} from "react-redux";
 import {BrowserRouter} from 'react-router-dom';
 
-import {token, texts, username, chats, is_logged_in, userlist} from 'redux/reducers/reducers';
+import {token, username, chats, is_logged_in, userlist} from 'redux/reducers/reducers';
 import {createStore, combineReducers,applyMiddleware} from "redux";
 
 import thunkMiddleware from 'redux-thunk'
@@ -15,7 +15,6 @@ import {createLogger} from 'redux-logger'
 
 const rootReducer = combineReducers({
                     token,
-                    texts,
                     username,
                     chats,
                     is_logged_in,

@@ -7,15 +7,6 @@ export const getToken = (token) => ({
   token
 });
 
-export const addText = (text) => ({
-  type: a.ADD_TEXT,
-  text
-});
-
-export const resetText = () => ({
-  type: a.RESET_TEXT,
-});
-
 export const getUsername = (username) => ({
   type: a.GET_USERNAME,
   username
@@ -102,7 +93,6 @@ export function createUser(username, password) {
 export const mapStateToProps = (state) => {
     return {
         token: state.token,
-        texts: state.texts,
         username: state.username,
         chats: state.chats,
         is_logged_in: state.is_logged_in,
@@ -114,12 +104,6 @@ export const mapDispatchToProps = (dispatch) => {
     return {
       getToken: (token) => {
         dispatch(getToken(token))
-      },
-      addText: (text) => {
-        dispatch(addText(text))
-      },
-      resetText: () => {
-        dispatch(resetText())
       },
       chatMessage: (message) => {
         dispatch(chatMessage(message))
