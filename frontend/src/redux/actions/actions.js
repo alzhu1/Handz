@@ -13,6 +13,7 @@ export const getUsername = (username) => ({
 });
 
 export const chatMessage = (text) => {
+    console.log(text);
     let username = JSON.parse(text).username;
     let message = JSON.parse(text).message;
 
@@ -36,7 +37,7 @@ export const isLoggedIn = (bool) => ({
 });
 
 export function login(username, password) {
-    return function (dispatch) {
+    return function (dispatch, getState, emit) {
         return axios.post("/api/auth/", {username:username, password:password})
         .then((response) => {
               dispatch(getToken(response.data.token));
@@ -54,6 +55,10 @@ export function login(username, password) {
               return response;
             })
         .then((response) => {
+              emit(socketOpen(username));
+              return response
+            })
+        .then((response) => {
               dispatch(isLoggedIn(true));
               return response;
             },
@@ -62,6 +67,37 @@ export function login(username, password) {
     }
 }
 
+
+export function socketOpen(username) {
+    let text = JSON.stringify({
+      "action":"user",
+      "logged_in":true,
+      "username":username
+    });
+    return text;
+}
+
+// export function socketOpen(username) {
+//   return function (dispatch, getState, emit) {
+//       let text = JSON.stringify({
+//         "action":"user",
+//         "logged_in":true,
+//         "username":username
+//       });
+//       return(emit(text));
+//   }
+// }
+
+export const sendMessage = (message) => {
+    return function (dispatch, getState, emit) {
+        let text = JSON.stringify({
+            "action":"chat",
+            "message":message,
+            "username": getState().username
+        });
+        return(emit(text));
+    }
+}
 
 export function logout(token) {
     return function (dispatch) {
@@ -90,6 +126,8 @@ export function createUser(username, password) {
     }
 }
 
+
+
 export const mapStateToProps = (state) => {
     return {
         token: state.token,
@@ -100,7 +138,7 @@ export const mapStateToProps = (state) => {
     };
 };
 
-export const mapDispatchToProps = (dispatch) => {
+export const mapDispatchToProps = (dispatch,emit) => {
     return {
       getToken: (token) => {
         dispatch(getToken(token))
@@ -122,6 +160,9 @@ export const mapDispatchToProps = (dispatch) => {
       },
       createUser: (username, password) => {
         dispatch(createUser(username,password));
+      },
+      sendMessage: (message) => {
+        dispatch(sendMessage(message));
       },
     }
 };

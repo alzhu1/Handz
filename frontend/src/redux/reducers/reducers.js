@@ -23,6 +23,7 @@ export const username = (state = '', action) => {
 export const chats = (state = [], action) => {
     switch(action.type) {
         case a.CHAT_MESSAGE:
+            // console.log(Object.assign({}, action.chat))
             return [...state,
                 action.chat];
         default:
@@ -42,13 +43,18 @@ export const is_logged_in = (state = false, action) => {
 }
 
 export const userlist = (state = [], action) => {
-    switch(action.is_logged_in) {
-        case true:
-            return [...state,action.username];
-        case false:
-            let temp = state;
-            temp.splice(temp.indexOf(action.username),1);
-            return temp;
+    switch(action.type) {
+        case a.IS_LOGGED_IN:
+            switch(action.is_logged_in) {
+                case true:
+                    return [...state,action.username];
+                case false:
+                    let temp = state;
+                    temp.splice(temp.indexOf(action.username),1);
+                    return temp;
+                default:
+                    break;
+            }
         default:
             break;
     }

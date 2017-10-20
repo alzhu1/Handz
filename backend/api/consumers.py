@@ -28,6 +28,7 @@ class ChatConsumer(JsonWebsocketConsumer):
         # print('get user')
         # print(self.message.channel_session.get('user'))
         # print(self.message.channel_session.__dict__)
+        print('connected')
         self.message.reply_channel.send({"accept": True})
         Group('chat').add(self.message.reply_channel)
 
@@ -38,4 +39,5 @@ class ChatConsumer(JsonWebsocketConsumer):
         })
 
     def disconnect(self, message, **kwargs):
+        print('disconnected')
         Group("chat").discard(self.message.reply_channel)
