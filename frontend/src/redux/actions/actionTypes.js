@@ -10,11 +10,3 @@ export const CREATE_USER = 'CREATE_USER';
 // websocket actions
 export const CHAT_MESSAGE = 'CHAT_MESSAGE';
 export const MODIFY_USER_LIST = 'MODIFY_USER_LIST';
-
-// export const messageTypes = [
-//   CHAT_MESSAGE,
-//   MODIFY_USER_LIST,
-// ].reduce((accum, msg) => {
-//   accum[ msg ] = msg
-//   return accum
-// }, {})

@@ -1,5 +1,6 @@
 import * as a from './actions/actions';
 import * as ws from './actions/wsActions';
+import * as th from './actions/thunks';
 
 export const mapStateToProps = (state) => {
     return {
@@ -26,13 +27,13 @@ export const mapDispatchToProps = (dispatch,emit) => {
         dispatch(ws.modifyUserList(logged_in,username))
       },
       login: (username, password) => {
-        dispatch(a.login(username,password));
+        dispatch(th.login(username,password));
       },
       logout: (token) => {
-        dispatch(a.logout(token));
+        dispatch(th.logout(token));
       },
       createUser: (username, password) => {
-        dispatch(a.createUser(username,password));
+        dispatch(th.createUser(username,password));
       },
       sendMessage: (message) => {
         dispatch(ws.sendMessage(message));

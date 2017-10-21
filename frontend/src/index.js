@@ -31,12 +31,8 @@ const loggerMiddleware = createLogger();
 var sock = new WebSocket('ws://localhost:8000/chat/');
 
 const websocketInit = (store) => {
-
-    // Object.keys(messageTypes).forEach(type => console.log(type))
-
     sock.onmessage = (payload) => {
         let data = JSON.parse(payload.data);
-        console.log(data)
         store.dispatch(data)
     }
 }
