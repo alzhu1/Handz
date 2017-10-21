@@ -13,7 +13,8 @@ import {createStore, combineReducers,applyMiddleware} from "redux";
 import thunk from 'redux-thunk';
 import {createLogger} from 'redux-logger';
 
-import {chatMessage,modifyUserList} from 'redux/actions/actions';
+import {chatMessage} from 'redux/actions/wsActions';
+import {messageTypes} from 'redux/actions/actionTypes'
 
 const rootReducer = combineReducers({
                     token,
@@ -30,18 +31,17 @@ const loggerMiddleware = createLogger();
 var sock = new WebSocket('ws://localhost:8000/chat/');
 
 const websocketInit = (store) => {
+
+    // Object.keys(messageTypes).forEach(type => console.log(type))
+
     sock.onmessage = (payload) => {
         let data = JSON.parse(payload.data);
-        if (data.action=='chat') {
-            store.dispatch(chatMessage(payload.data));
-        }
-        else {
-            store.dispatch(modifyUserList(payload.data));
-        }
+        console.log(data)
+        store.dispatch(data)
     }
 }
 
-const emit = (message) => sock.send(message);
+const emit = (message) => sock.send(JSON.stringify(message));
 
 export const store = createStore(rootReducer, initialState,
   applyMiddleware(

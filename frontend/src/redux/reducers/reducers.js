@@ -23,9 +23,8 @@ export const username = (state = '', action) => {
 export const chats = (state = [], action) => {
     switch(action.type) {
         case a.CHAT_MESSAGE:
-            // console.log(Object.assign({}, action.chat))
-            return [...state,
-                action.chat];
+            let chat = action.username + ': ' + action.message
+            return [...state, chat];
         default:
             break;
     }
@@ -44,7 +43,7 @@ export const is_logged_in = (state = false, action) => {
 
 export const userlist = (state = [], action) => {
     switch(action.type) {
-        case a.IS_LOGGED_IN:
+        case a.MODIFY_USER_LIST:
             switch(action.is_logged_in) {
                 case true:
                     return [...state,action.username];

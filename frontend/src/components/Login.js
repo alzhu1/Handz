@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 
 import {connect} from 'react-redux';
-import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
 class Login extends React.Component {
     render() {

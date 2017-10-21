@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
 class Lobby extends React.Component {

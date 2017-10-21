@@ -3,7 +3,7 @@ import React from 'react';
 import Chat from 'components/Chat';
 import UserList from 'components/UserList';
 
-import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import {store} from 'index';
 

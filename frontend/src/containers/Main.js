@@ -6,7 +6,7 @@ import LoginContainer from 'containers/LoginContainer';
 import SignupContainer from 'containers/SignupContainer';
 import LobbyContainer from 'containers/LobbyContainer';
 
-import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
 
 class Main extends React.Component {

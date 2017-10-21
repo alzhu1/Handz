@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import {mapStateToProps, mapDispatchToProps} from 'redux/actions/actions';
+import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
 class Signup extends React.Component {
