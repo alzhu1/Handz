@@ -20,14 +20,14 @@ class ChatConsumer(JsonWebsocketConsumer):
         return ["test"]
 
     def connect(self, message, **kwargs):
-        # print(self.message['headers'])
-        # print(self.message.user)
-        # print(self.message.reply_channel)
-        # print(self.message.channel_session)
-        # print(parse_qs(self.message.content["query_string"]))
-        # print('get user')
-        # print(self.message.channel_session.get('user'))
-        # print(self.message.channel_session.__dict__)
+        print(self.message['headers'])
+        print(self.message.user)
+        print(self.message.reply_channel)
+        print(self.message.channel_session)
+        print(parse_qs(self.message.content["query_string"]))
+        print('get user')
+        print(self.message.channel_session.get('user'))
+        print(self.message.channel_session.__dict__)
         print('connected')
         self.message.reply_channel.send({"accept": True})
         Group('chat').add(self.message.reply_channel)

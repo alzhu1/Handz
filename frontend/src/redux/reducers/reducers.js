@@ -48,7 +48,8 @@ export const userlist = (state = [], action) => {
                 case true:
                     return [...state,action.username];
                 case false:
-                    let temp = state;
+                    let temp = Object.assign([],state);
+                    console.log(temp)
                     temp.splice(temp.indexOf(action.username),1);
                     return temp;
                 default:

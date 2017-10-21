@@ -13,8 +13,7 @@ import {createStore, combineReducers,applyMiddleware} from "redux";
 import thunk from 'redux-thunk';
 import {createLogger} from 'redux-logger';
 
-import {chatMessage} from 'redux/actions/wsActions';
-import {messageTypes} from 'redux/actions/actionTypes'
+import {WebSocketBridge} from 'django-channels'
 
 const rootReducer = combineReducers({
                     token,
@@ -28,24 +27,21 @@ const initialState = {};
 
 const loggerMiddleware = createLogger();
 
-var sock = new WebSocket('ws://localhost:8000/chat/');
+const sock = new WebSocketBridge();
+sock.connect('ws://localhost:8000/chat/');
+sock.listen((payload, stream) => {
+    store.dispatch(payload)
+});
 
-const websocketInit = (store) => {
-    sock.onmessage = (payload) => {
-        let data = JSON.parse(payload.data);
-        store.dispatch(data)
-    }
-}
-
-const emit = (message) => sock.send(JSON.stringify(message));
+const emit = (message) => sock.send(message);
 
 export const store = createStore(rootReducer, initialState,
   applyMiddleware(
     thunk.withExtraArgument(emit),
     loggerMiddleware,
-  ));
+));
 
-websocketInit(store);
+
 
 // console.log('test login')
 // var temp = axios.post("/api/auth/", {
