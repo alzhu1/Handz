@@ -15,10 +15,6 @@ import {createLogger} from 'redux-logger';
 
 import {WebSocketBridge} from 'django-channels'
 
-
-
-
-
 const loggerMiddleware = createLogger();
 
 let sock = new WebSocketBridge();

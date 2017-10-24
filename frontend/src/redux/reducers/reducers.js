@@ -49,9 +49,9 @@ export const userlist = (state = [], action) => {
         case a.MODIFY_USER_LIST:
             switch(action.is_logged_in) {
                 case true:
-                    console.log(state)
-                    console.log(action.users)
-                    console.log(state.length)
+                    // console.log(state)
+                    // console.log(action.users)
+                    // console.log(state.length)
                     if (state.length === 0) {
                         return action.users;
                     }

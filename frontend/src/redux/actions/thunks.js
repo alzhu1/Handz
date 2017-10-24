@@ -51,7 +51,6 @@ export function logoutThunk(token) {
         dispatch(a.isLoggedIn(false))
         dispatch(ws.logout())
         emit(ws.logout(token))
-        emit(ws.modifyUserList(false,getState().username))
     }
 }
 

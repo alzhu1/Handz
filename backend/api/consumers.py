@@ -49,18 +49,13 @@ class SockConsumer(JsonWebsocketConsumer):
         Group('global').add(self.message.reply_channel)
         self.message.reply_channel.send({"accept": True})
 
+        # get logged in users and dispatch
         user_list = []
         for x in User.objects.filter(is_logged_in=True):
             user_list.append(x.username)
-        print(user_list)
-        Group('global').send({
-            'text': json.dumps({
-                      'type': 'MODIFY_USER_LIST',
-                      'is_logged_in': True,
-                      'username': username,
-                      'users': user_list,
-                    })
-        })
+
+        self.MODIFY_USER_LIST(None, True, username, user_list)
+
 
 
     def LOGOUT(self, content):
@@ -70,24 +65,26 @@ class SockConsumer(JsonWebsocketConsumer):
         user.is_logged_in = False
         user.save()
 
-        username = user.username
+        self.MODIFY_USER_LIST(None, False, user.username)
 
-        Group('global').send({
-            'text': json.dumps({
-                      'type': 'MODIFY_USER_LIST',
-                      'is_logged_in': False,
-                      'username': username,
-                    })
-        })
-
-    def MODIFY_USER_LIST(self, content):
-        pass
-        # print('MODIFY_USER_LIST')
-        # print(self.message.channel_session.get('user'))
-        # print(content)
-        # Group('global').send({
-        #     'text': json.dumps(content)
-        # })
+    def MODIFY_USER_LIST(self, content, is_logged_in=True, username=None, user_list=[]):
+        print('MODIFY_USER_LIST')
+        if username == None:
+            Group('global').send({
+                'text': json.dumps(content)
+            })
+        else:
+            # print(is_logged_in)
+            # print(username)
+            # print(user_list)
+            Group('global').send({
+                'text': json.dumps({
+                          'type': 'MODIFY_USER_LIST',
+                          'is_logged_in': is_logged_in,
+                          'username': username,
+                          'users': user_list,
+                        })
+            })
 
     def CHAT_MESSAGE(self, content):
         print(self.message.channel_session.get('user'))

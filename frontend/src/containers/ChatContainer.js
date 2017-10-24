@@ -5,7 +5,6 @@ import UserList from 'components/UserList';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
-import {store} from 'index';
 
 class ChatContainer extends React.Component {
   constructor() {
