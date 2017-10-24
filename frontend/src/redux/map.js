@@ -26,17 +26,17 @@ export const mapDispatchToProps = (dispatch,emit) => {
       modifyUserList: (logged_in,username) => {
         dispatch(ws.modifyUserList(logged_in,username))
       },
-      login: (username, password) => {
-        dispatch(th.login(username,password));
+      loginThunk: (username, password) => {
+        dispatch(th.loginThunk(username,password));
       },
-      logout: (token) => {
-        dispatch(th.logout(token));
+      logoutThunk: (token) => {
+        dispatch(th.logoutThunk(token));
       },
       createUser: (username, password) => {
         dispatch(th.createUser(username,password));
       },
-      sendMessage: (message) => {
-        dispatch(ws.sendMessage(message));
+      chatThunk: (message) => {
+        dispatch(ws.chatThunk(message));
       },
     }
 };

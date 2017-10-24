@@ -1,4 +1,7 @@
 import * as a from 'redux/actions/actionTypes';
+import {combineReducers} from "redux";
+
+export const initialState = {};
 
 export const token = (state = "", action) => {
     switch(action.type) {
@@ -46,7 +49,15 @@ export const userlist = (state = [], action) => {
         case a.MODIFY_USER_LIST:
             switch(action.is_logged_in) {
                 case true:
-                    return [...state,action.username];
+                    console.log(state)
+                    console.log(action.users)
+                    console.log(state.length)
+                    if (state.length === 0) {
+                        return action.users;
+                    }
+                    else {
+                      return [...state, action.username]
+                    }
                 case false:
                     let temp = Object.assign([],state);
                     console.log(temp)
@@ -59,4 +70,19 @@ export const userlist = (state = [], action) => {
             break;
     }
     return state;
+}
+
+export const appReducer = combineReducers({
+                    token,
+                    username,
+                    chats,
+                    is_logged_in,
+                    userlist,
+                    });
+
+export const rootReducer = (state, action) => {
+    if (action.type === 'LOGOUT') {
+        state = undefined
+    }
+    return appReducer(state, action)
 }

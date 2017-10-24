@@ -23,7 +23,7 @@ class ChatContainer extends React.Component {
           <UserList userlist={this.props.userlist}/>
           <Chat message={this.state.message}
                 chats={this.props.chats}
-                sendMessage= {(e) => this.props.sendMessage(e)}
+                sendMessage= {(e) => this.props.chatThunk(e)}
                 changeMessage= {(e) => this.changeMessage(e)}/>
       </div>
     )
