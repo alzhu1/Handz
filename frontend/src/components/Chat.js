@@ -13,25 +13,20 @@ const styles = {
 
 export default class Chat extends React.Component {
     render() {
-      var allChats = []
-        this.props.chats.map((chat) => {
-            allChats.push(
-                <div>
-                  {chat}
-                </div>
-            );
-        });
+      const chats = this.props.chats.map((chat) =>
+        <li>{chat}</li>)
+
       return (
         <div>
           <div style={styles}>
-            {allChats}
+            {chats}
           </div>
           <form onSubmit={(e) => {
               e.preventDefault();
-              this.props.sendMessage(this.props.message);
+              this.props.sendMessage(this.props.message, this.props.receiver);
               }
             }>
-              <input name="usermsg" type="text" size="63"
+              <input placeholder={this.props.receiver} type="text" size="63"
               onChange={this.props.changeMessage}/>
               <input name="submitmsg" type="submit" value="Send" />
           </form>

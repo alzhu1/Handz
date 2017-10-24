@@ -17,9 +17,9 @@ export const mapDispatchToProps = (dispatch,emit) => {
       getToken: (token) => {
         dispatch(a.getToken(token))
       },
-      chatMessage: (message) => {
-        dispatch(ws.chatMessage(message))
-      },
+      // chatMessage: (message) => {
+      //   dispatch(ws.chatMessage(message))
+      // },
       isLoggedIn: (bool) => {
         dispatch(a.isLoggedIn(bool))
       },
@@ -35,8 +35,8 @@ export const mapDispatchToProps = (dispatch,emit) => {
       createUser: (username, password) => {
         dispatch(th.createUser(username,password));
       },
-      chatThunk: (message) => {
-        dispatch(ws.chatThunk(message));
+      chatThunk: (message, receiver) => {
+        dispatch(ws.chatThunk(message, receiver));
       },
     }
 };

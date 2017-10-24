@@ -1,9 +1,10 @@
 import * as a from './actionTypes';
 
-export const chatMessage = (message, username) => ({
+export const chatMessage = (message, username, receiver) => ({
     type: a.CHAT_MESSAGE,
     message: message,
-    username: username
+    username: username,
+    receiver: receiver
 })
 
 export const login = (username, password) => ({
@@ -17,10 +18,10 @@ export const logout = (token) => ({
     token
 })
 
-export const chatThunk = (message) => (
+export const chatThunk = (message, receiver) => (
     function (dispatch, getState, emit) {
         let username = getState().username
-        let send = chatMessage(message, username)
+        let send = chatMessage(message, username, receiver)
         return(emit(send));
     }
 )

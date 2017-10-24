@@ -9,21 +9,29 @@ import {connect} from 'react-redux';
 class ChatContainer extends React.Component {
   constructor() {
     super();
-    this.state = {message: ''};
+    this.state = {message: '', receiver: 'all'};
   }
 
   changeMessage(event) {
     this.setState({message: event.target.value});
   }
 
+  changeReceiver(name) {
+    this.setState({receiver: name});
+    console.log(name);
+  }
+
   render() {
     return (
       <div>
-          <UserList userlist={this.props.userlist}/>
+          <UserList userlist={this.props.userlist}
+                    changeReceiver= {(e) => this.changeReceiver(e)}/>
           <Chat message={this.state.message}
+                receiver={this.state.receiver}
                 chats={this.props.chats}
-                sendMessage= {(e) => this.props.chatThunk(e)}
-                changeMessage= {(e) => this.changeMessage(e)}/>
+                sendMessage= {(a,b) => this.props.chatThunk(a,b)}
+                changeMessage= {(e) => this.changeMessage(e)}
+                changeReceiver= {(e) => this.changeReceiver(e)}/>
       </div>
     )
   }

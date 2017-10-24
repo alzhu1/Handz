@@ -21,7 +21,7 @@ class SockConsumer(JsonWebsocketConsumer):
         # control channel
         if user is None:
             user = self.message.channel_session['user']
-        return 'control.{0}'.format(user)
+        return '{0}'.format(user)
 
     def engine(self, message):
         action_type = message['type'].upper()
@@ -46,7 +46,7 @@ class SockConsumer(JsonWebsocketConsumer):
         control = self.get_control_channel()
         Group(control).add(self.message.reply_channel)
 
-        Group('global').add(self.message.reply_channel)
+        Group('all').add(self.message.reply_channel)
         self.message.reply_channel.send({"accept": True})
 
         # get logged in users and dispatch
@@ -70,14 +70,15 @@ class SockConsumer(JsonWebsocketConsumer):
     def MODIFY_USER_LIST(self, content, is_logged_in=True, username=None, user_list=[]):
         print('MODIFY_USER_LIST')
         if username == None:
-            Group('global').send({
+            Group('all').send({
                 'text': json.dumps(content)
             })
+
         else:
             # print(is_logged_in)
             # print(username)
             # print(user_list)
-            Group('global').send({
+            Group('all').send({
                 'text': json.dumps({
                           'type': 'MODIFY_USER_LIST',
                           'is_logged_in': is_logged_in,
@@ -87,10 +88,17 @@ class SockConsumer(JsonWebsocketConsumer):
             })
 
     def CHAT_MESSAGE(self, content):
-        print(self.message.channel_session.get('user'))
-        Group('global').send({
+        receiver = content['receiver']
+        username = content['username']
+        print(content)
+        Group(receiver).send({
             'text': json.dumps(content)
         })
+        if receiver != 'all':
+            Group(username).send({
+                'text': json.dumps(content)
+            })
+
 
     def connection_groups(self, **kwargs):
         return ["test"]

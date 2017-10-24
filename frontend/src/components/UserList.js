@@ -1,17 +1,16 @@
 import React from 'react';
 
 export default class Chat extends React.Component {
+
+
     render() {
-      // var userlist = [];
-      // this.props.userlist.map((name) => {
-      //     userlist.push(
-      //        <li>{name}</li>
-      //      );
-      //   });
+      const names = this.props.userlist.map((name) => {
+        return <li onClick={()=> this.props.changeReceiver(name)}>{name}</li>
+      })
 
       return (
         <div>
-            {this.props.userlist}
+            {names}
         </div>
       )
     }
