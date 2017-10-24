@@ -17,8 +17,10 @@ class ChatContainer extends React.Component {
   }
 
   changeReceiver(name) {
+    if (name === this.props.username) {
+      name = 'all'
+    }
     this.setState({receiver: name});
-    console.log(name);
   }
 
   render() {

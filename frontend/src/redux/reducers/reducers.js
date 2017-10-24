@@ -26,7 +26,7 @@ export const username = (state = '', action) => {
 export const chats = (state = [], action) => {
     switch(action.type) {
         case a.CHAT_MESSAGE:
-            let chat = action.username + ': ' + action.message
+            let chat = action.message
             return [...state, chat];
         default:
             break;

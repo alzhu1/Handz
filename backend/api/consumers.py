@@ -91,10 +91,18 @@ class SockConsumer(JsonWebsocketConsumer):
         receiver = content['receiver']
         username = content['username']
         print(content)
-        Group(receiver).send({
-            'text': json.dumps(content)
-        })
-        if receiver != 'all':
+        if receiver == 'all':
+            content['message'] = username + ': ' + content['message']
+            Group(receiver).send({
+                'text': json.dumps(content)
+            })
+        else:
+            message = content['message']
+            content['message'] = 'from ' + username + ': '  + message
+            Group(receiver).send({
+                'text': json.dumps(content)
+            })
+            content['message'] = 'to ' + receiver + ': '  + message
             Group(username).send({
                 'text': json.dumps(content)
             })
