@@ -22,7 +22,6 @@ class Main extends React.Component {
 
                 <Route exact path='/signup' component={SignupContainer} />
 
-                <Route render={() => (<Redirect to='/login' />)} />
             </Switch>
         );
     }

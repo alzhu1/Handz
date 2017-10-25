@@ -1,5 +1,5 @@
 import React from 'react';
-
+var _ = require('lodash');
 
 const styles = {
   margin:0,
@@ -14,7 +14,7 @@ const styles = {
 export default class Chat extends React.Component {
     render() {
       const chats = this.props.chats.map((chat) =>
-        <li>{chat}</li>)
+        <li key={_.uniqueId()}>{chat}</li>)
 
       return (
         <div>

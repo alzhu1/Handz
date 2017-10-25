@@ -13,9 +13,14 @@ export const login = (username, password) => ({
     password: password
 })
 
-export const logout = (token) => ({
-    type: a.LOGOUT,
-    token
+export const logout = () => ({
+    type: a.LOGOUT
+})
+
+export const signUp = (username,password) => ({
+    type: a.SIGN_UP,
+    username,
+    password
 })
 
 export const chatThunk = (message, receiver) => (

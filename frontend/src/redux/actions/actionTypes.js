@@ -11,3 +11,4 @@ export const CHAT_MESSAGE = 'CHAT_MESSAGE';
 export const MODIFY_USER_LIST = 'MODIFY_USER_LIST';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const SIGN_UP = 'SIGN_UP';
