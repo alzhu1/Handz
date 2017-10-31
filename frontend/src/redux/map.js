@@ -1,5 +1,4 @@
 import * as a from './actions/actions';
-import * as ws from './actions/wsActions';
 import * as th from './actions/thunks';
 
 export const mapStateToProps = (state) => {
@@ -9,22 +8,20 @@ export const mapStateToProps = (state) => {
         chats: state.chats,
         is_logged_in: state.is_logged_in,
         userlist: state.userlist,
+        tablelist: state.tablelist,
+        hand: state.hand,
+        seat: state.seat,
+        table_id: state.table_id,
     };
 };
 
 export const mapDispatchToProps = (dispatch,emit) => {
     return {
-      getToken: (token) => {
-        dispatch(a.getToken(token))
-      },
-      // chatMessage: (message) => {
-      //   dispatch(ws.chatMessage(message))
-      // },
       isLoggedIn: (bool) => {
         dispatch(a.isLoggedIn(bool))
       },
       modifyUserList: (logged_in,username) => {
-        dispatch(ws.modifyUserList(logged_in,username))
+        dispatch(a.modifyUserList(logged_in,username))
       },
       loginThunk: (username, password) => {
         dispatch(th.loginThunk(username,password));
@@ -36,7 +33,16 @@ export const mapDispatchToProps = (dispatch,emit) => {
         dispatch(th.createUser(username,password));
       },
       chatThunk: (message, receiver) => {
-        dispatch(ws.chatThunk(message, receiver));
+        dispatch(th.chatThunk(message, receiver));
+      },
+      createTableThunk: () => {
+        dispatch(th.createTableThunk());
+      },
+      joinTableThunk: (table_id) => {
+        dispatch(th.joinTableThunk(table_id));
+      },
+      takeSeatThunk: (seat, table_id) => {
+        dispatch(th.takeSeatThunk(seat, table_id));
       },
     }
 };

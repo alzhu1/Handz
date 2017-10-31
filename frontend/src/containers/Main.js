@@ -5,6 +5,7 @@ import {Route, Switch, Redirect, withRouter} from 'react-router-dom';
 import LoginContainer from 'containers/LoginContainer';
 import SignupContainer from 'containers/SignupContainer';
 import LobbyContainer from 'containers/LobbyContainer';
+import TableContainer from 'containers/TableContainer';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
@@ -21,6 +22,8 @@ class Main extends React.Component {
                 <Route exact path='/login' component={LoginContainer} />
 
                 <Route exact path='/signup' component={SignupContainer} />
+
+                <Route path='/table' component={TableContainer} />
 
             </Switch>
         );

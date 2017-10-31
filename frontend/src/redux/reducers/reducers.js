@@ -72,12 +72,58 @@ export const userlist = (state = [], action) => {
     return state;
 }
 
+export const tablelist = (state = [], action) => {
+    switch(action.type) {
+        case a.CREATE_TABLE:
+            return [...state,action.id];
+        case a.GET_TABLES:
+            return action.tablelist;
+        default:
+            break;
+    }
+    return state;
+}
+
+export const hand = (state = '', action) => {
+    switch(action.type) {
+        case a.GET_HAND:
+            return action.hand;
+        default:
+            break;
+    }
+    return state;
+}
+
+export const seat = (state = '', action) => {
+    switch(action.type) {
+        case a.TAKE_SEAT:
+            return action.seat;
+        default:
+            break;
+    }
+    return state;
+}
+
+export const table_id = (state = '', action) => {
+    switch(action.type) {
+        case a.JOIN_TABLE:
+            return action.table_id;
+        default:
+            break;
+    }
+    return state;
+}
+
 export const appReducer = combineReducers({
                     token,
                     username,
                     chats,
                     is_logged_in,
                     userlist,
+                    tablelist,
+                    table_id,
+                    hand,
+                    seat
                     });
 
 export const rootReducer = (state, action) => {

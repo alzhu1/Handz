@@ -9,7 +9,7 @@ class Lobby extends React.Component {
                 <div>
                     <h1>This is the Home page!</h1>
                     <button onClick={() =>
-                        {this.props.logoutThunk(this.props.token)}}>Logout</button>
+                        {this.props.logoutThunk()}}>Logout</button>
                 </div>
             );
     }

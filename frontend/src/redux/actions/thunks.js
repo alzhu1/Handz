@@ -1,26 +1,58 @@
 import * as a from './actions';
-import * as ws from './wsActions';
-import axios from 'axios';
 
 export function loginThunk(username, password) {
     return function (dispatch, getState, emit) {
-        emit(ws.login(username,password))
+        emit(a.login(username,password))
         dispatch(a.getUsername(username))
         dispatch(a.isLoggedIn(true))
     }
 }
 
-export function logoutThunk(token) {
+export function logoutThunk() {
     return function (dispatch, getState, emit) {
-        dispatch(a.getToken(''))
+        // dispatch(a.getToken(''))
         dispatch(a.isLoggedIn(false))
-        dispatch(ws.logout())
-        emit(ws.logout())
+        dispatch(a.logout())
+        emit(a.logout())
     }
 }
 
 export function createUser(username, password, password2) {
     return function (dispatch, getState, emit) {
-        emit(ws.signUp(username, password))
+        emit(a.signUp(username, password))
     }
 }
+
+export const joinTableThunk = (table_id) => (
+    function (dispatch, getState, emit) {
+        return(emit(a.joinTable(table_id)));
+    }
+)
+
+export const createTableThunk = () => (
+    function (dispatch, getState, emit) {
+        return(emit(a.createTable()));
+    }
+)
+
+export const chatThunk = (message, receiver) => (
+    function (dispatch, getState, emit) {
+        let username = getState().username
+        let send = a.chatMessage(message, username, receiver)
+        return(emit(send));
+    }
+)
+
+export const takeSeatThunk = (seat, table_id) => (
+    function (dispatch, getState, emit) {
+        return(emit(a.takeSeat(seat,table_id)));
+    }
+)
+
+// export const chatThunk = (message, receiver) => (
+//     function (dispatch, getState, emit) {
+//         let username = getState().username
+//         let send = a.chatMessage(message, username, receiver)
+//         return(emit(send));
+//     }
+// )
