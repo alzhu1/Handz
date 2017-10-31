@@ -21,11 +21,26 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 class Hand(object):
+    def sort_key(self, s):
+        if s == 'A':
+            return 14
+        elif s == 'K':
+            return 13
+        elif s == 'Q':
+            return 12
+        elif s == 'J':
+            return 11
+        elif s == 'T':
+            return 10
+        else:
+            return int(s)
+
     def __init__(self, spades, hearts, diamonds, clubs):
-        self.spades = spades
-        self.hearts = hearts
-        self.diamonds = diamonds
-        self.clubs = clubs
+        self.spades = ''.join(sorted(spades, key=self.sort_key, reverse=True))
+        self.hearts = ''.join(sorted(hearts, key=self.sort_key, reverse=True))
+        self.diamonds = ''.join(sorted(diamonds, key=self.sort_key, reverse=True))
+        self.clubs = ''.join(sorted(clubs, key=self.sort_key, reverse=True))
+        print(self.spades)
 
 def construct_hand(hand_int_list):
 
