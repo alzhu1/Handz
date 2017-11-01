@@ -44,5 +44,14 @@ export const mapDispatchToProps = (dispatch,emit) => {
       takeSeatThunk: (seat, table_id) => {
         dispatch(th.takeSeatThunk(seat, table_id));
       },
+      leaveTableThunk: (seat, table_id) => {
+        dispatch(th.leaveTableThunk(seat, table_id));
+      },
+      leaveSeatThunk: (seat, table_id) => {
+        dispatch(th.leaveSeatThunk(seat, table_id));
+      },
+      getHand: (hand) => {
+        dispatch(a.getHand(hand));
+      },
     }
 };

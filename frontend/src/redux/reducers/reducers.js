@@ -98,6 +98,8 @@ export const seat = (state = '', action) => {
     switch(action.type) {
         case a.TAKE_SEAT:
             return action.seat;
+        case a.LEAVE_SEAT:
+            return '';
         default:
             break;
     }
@@ -108,6 +110,8 @@ export const table_id = (state = '', action) => {
     switch(action.type) {
         case a.JOIN_TABLE:
             return action.table_id;
+        case a.LEAVE_TABLE:
+            return '';
         default:
             break;
     }

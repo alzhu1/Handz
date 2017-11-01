@@ -7,9 +7,6 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
 class TableContainer extends React.Component {
-    constructor() {
-      super();
-    }
 
     render() {
       return (

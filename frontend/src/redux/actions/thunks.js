@@ -29,6 +29,12 @@ export const joinTableThunk = (table_id) => (
     }
 )
 
+export const leaveTableThunk = (table_id) => (
+    function (dispatch, getState, emit) {
+        return(emit(a.leaveTable(table_id)));
+    }
+)
+
 export const createTableThunk = () => (
     function (dispatch, getState, emit) {
         return(emit(a.createTable()));
@@ -49,10 +55,8 @@ export const takeSeatThunk = (seat, table_id) => (
     }
 )
 
-// export const chatThunk = (message, receiver) => (
-//     function (dispatch, getState, emit) {
-//         let username = getState().username
-//         let send = a.chatMessage(message, username, receiver)
-//         return(emit(send));
-//     }
-// )
+export const leaveSeatThunk = (seat, table_id) => (
+    function (dispatch, getState, emit) {
+        return(emit(a.leaveSeat(seat,table_id)));
+    }
+)

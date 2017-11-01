@@ -109,6 +109,17 @@ class SockConsumer(ReduxConsumer):
                       'table_id': table_id
                       })
 
+    @action('LEAVE_TABLE')
+    def LEAVE_TABLE(self, action):
+        print('LEAVE_TABLE')
+        username = self.message.channel_session['user']
+        table_id = action['table_id']
+
+        self.send_to_group(username, {
+                      'type': 'LEAVE_TABLE',
+                      'table_id': table_id
+                      })
+
     @action('GET_HAND')
     def GET_HAND(self, hand):
         print('GET_HAND')
@@ -133,7 +144,8 @@ class SockConsumer(ReduxConsumer):
         hand = deal.direction(seat)
         self.send_to_group(username, {
                       'type': 'TAKE_SEAT',
-                      'seat': seat
+                      'seat': seat,
+                      'table_id': table_id
                       })
         # print(hand.spades)
         # print(hand.hearts)
@@ -141,6 +153,19 @@ class SockConsumer(ReduxConsumer):
         # print(hand.clubs)
 
         self.GET_HAND(hand)
+
+    @action('LEAVE_SEAT')
+    def LEAVE_SEAT(self, action):
+        print('LEAVE_SEAT')
+        username = self.message.channel_session['user']
+        seat = action['seat']
+        table_id = action['table_id']
+        self.send_to_group(username, {
+                      'type': 'LEAVE_SEAT',
+                      'seat': seat,
+                      'table_id': table_id
+                      })
+
 
 
     @action('MODIFY_USER_LIST')
