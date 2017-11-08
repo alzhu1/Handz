@@ -28,6 +28,9 @@ class ReduxConsumer(JsonWebsocketConsumer):
     def add(self, group):
         Group(group).add(self.message.reply_channel)
 
+    def remove(self, group):
+        Group(group).discard(self.message.reply_channel)
+
     def send(self, action, to=None):
         if to is None:
             to = self.message.reply_channel

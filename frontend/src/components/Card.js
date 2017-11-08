@@ -4,10 +4,12 @@ export default class Card extends React.Component {
   render() {
     let src = require('../images/acbl/' + this.props.card + '.png')
     let defaults = {
-      height: 75,
-      width: 50,
-      backgroundColor: 'white'
+      height: '50px',
+      width: '30px',
+      backgroundColor: 'clear',
+      // position:'relative',
+      // left:this.props.left
     };
-    return <img src={src} style={{...defaults}}/>
+    return <img src={src} style={defaults}/>
   }
 }

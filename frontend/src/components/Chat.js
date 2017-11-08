@@ -1,15 +1,6 @@
 import React from 'react';
 var _ = require('lodash');
 
-const styles = {
-  margin:0,
-  marginbottom:25,
-  padding:10,
-  height:270,
-  width:430,
-  border:1,
-  overflow:'auto'
-};
 
 export default class Chat extends React.Component {
     render() {
@@ -18,7 +9,7 @@ export default class Chat extends React.Component {
 
       return (
         <div>
-          <div style={styles}>
+          <div>
             {chats}
           </div>
           <form onSubmit={(e) => {

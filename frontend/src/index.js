@@ -15,6 +15,10 @@ import {createLogger} from 'redux-logger';
 
 import {WebSocketBridge} from 'django-channels'
 
+import 'css/index.css'
+
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+
 const loggerMiddleware = createLogger();
 
 let sock = new WebSocketBridge();
@@ -48,12 +52,14 @@ export const store = createStore(rootReducer, initialState,
 // store.dispatch(getUsername('william'));
 // store.dispatch(username('',getUsername('william')));
 // console.log(store.getState());
-
+const theme = createMuiTheme();
 
 ReactDOM.render((
     <Provider store={store}>
         <BrowserRouter>
-            <App/>
+          <MuiThemeProvider theme={theme}>
+            <App />
+          </MuiThemeProvider>
         </BrowserRouter>
     </Provider>
 ), document.getElementById('root'));

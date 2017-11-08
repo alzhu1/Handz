@@ -9,7 +9,6 @@ import TableContainer from 'containers/TableContainer';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
-
 class Main extends React.Component {
     render() {
         return (

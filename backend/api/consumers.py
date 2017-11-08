@@ -104,10 +104,16 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         table_id = action['table_id']
 
+        # add self to table channels group
+        # remove self from all group
+        self.add(str(table_id))
+        self.remove('all')
+
         self.send_to_group(username, {
                       'type': 'JOIN_TABLE',
                       'table_id': table_id
                       })
+
 
     @action('LEAVE_TABLE')
     def LEAVE_TABLE(self, action):
@@ -119,6 +125,11 @@ class SockConsumer(ReduxConsumer):
                       'type': 'LEAVE_TABLE',
                       'table_id': table_id
                       })
+
+        # remove self from table channels group
+        # add self to all group
+        self.remove(str(table_id))
+        self.add('all')
 
     @action('GET_HAND')
     def GET_HAND(self, hand):
@@ -187,7 +198,7 @@ class SockConsumer(ReduxConsumer):
     def CHAT_MESSAGE(self, content):
         receiver = content['receiver']
         username = content['username']
-        if receiver == 'all':
+        if receiver == 'all' or receiver.isdigit():
             content['message'] = username + ': ' + content['message']
             self.send_to_group(receiver,content)
         else:

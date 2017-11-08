@@ -5,8 +5,10 @@
   "proxy": "http://localhost:8000",
   "dependencies": {
     "axios": "^0.16.2",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "jquery": "^3.2.1",
+    "material-ui": "^1.0.0-beta.19",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -22,6 +24,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "check-dependencies": "^1.1.0",
     "django-channels": "^1.1.8",
     "shopify-reconnecting-websocket": "^0.1.0"
   }

@@ -1,0 +1,32 @@
+
+
+.Table {
+  height: 500px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+
+.HandTop {
+  display: flex;
+  align-self: center;
+}
+
+.HandRight {
+  display: flex;
+  align-self: flex-end;
+  transform: rotate(90deg);
+}
+
+.HandLeft {
+  display: flex;
+  transform: rotate(270deg);
+}
+
+.HandBottom{
+  display: flex;
+  align-self: flex-end;
+  align-self: center;
+}

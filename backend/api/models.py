@@ -74,12 +74,13 @@ def construct_hand(hand_int_list):
 
 class Deal(object):
 
-    def __init__(self, hand_string, north, south, east, west):
+    def __init__(self, hand_string, north, south, east, west, dealer):
         self.hand_string = hand_string
         self.north = north
         self.east = east
         self.south = south
         self.west = west
+        self.dealer = dealer
 
     def direction(self, seat):
         if seat == 'north':
@@ -109,7 +110,8 @@ def parse_deal(hand_string):
             north=construct_hand(north),
             south=construct_hand(south),
             east=construct_hand(east),
-            west=construct_hand(west))
+            west=construct_hand(west),
+            dealer='north')
 
     return deal
 
@@ -117,7 +119,6 @@ def construct_deal():
     l = list('NNNNNNNNNNNNNEEEEEEEEEEEEESSSSSSSSSSSSSWWWWWWWWWWWWW')
     random.shuffle(l)
     hand_string = ''.join(l)
-
     deal = parse_deal(hand_string)
 
     return deal
