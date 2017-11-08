@@ -40,7 +40,6 @@ class Hand(object):
         self.hearts = ''.join(sorted(hearts, key=self.sort_key, reverse=True))
         self.diamonds = ''.join(sorted(diamonds, key=self.sort_key, reverse=True))
         self.clubs = ''.join(sorted(clubs, key=self.sort_key, reverse=True))
-        print(self.spades)
 
 def construct_hand(hand_int_list):
 

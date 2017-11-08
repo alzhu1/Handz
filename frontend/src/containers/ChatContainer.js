@@ -12,14 +12,6 @@ class ChatContainer extends React.Component {
     this.state = {message: '', receiver: 'all'};
   }
 
-  componentWillUnmount(){
-    console.log('tet!')
-    if (this.props.table_id !== "") {
-      console.log(this.props.table_id)
-      this.setState({receiver: this.props.table_id});
-    }
-  }
-
   changeMessage(event) {
     this.setState({message: event.target.value});
   }

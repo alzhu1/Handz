@@ -158,10 +158,6 @@ class SockConsumer(ReduxConsumer):
                       'seat': seat,
                       'table_id': table_id
                       })
-        # print(hand.spades)
-        # print(hand.hearts)
-        # print(hand.diamonds)
-        # print(hand.clubs)
 
         self.GET_HAND(hand)
 
