@@ -92,6 +92,14 @@ class Deal(object):
             return self.west
 
 
+def construct_deal():
+    l = list('NNNNNNNNNNNNNEEEEEEEEEEEEESSSSSSSSSSSSSWWWWWWWWWWWWW')
+    random.shuffle(l)
+    hand_string = ''.join(l)
+    deal = parse_deal(hand_string)
+
+    return deal
+
 def parse_deal(hand_string):
 
     north, south, east, west = [], [], [], []
@@ -113,15 +121,6 @@ def parse_deal(hand_string):
             dealer='north')
 
     return deal
-
-def construct_deal():
-    l = list('NNNNNNNNNNNNNEEEEEEEEEEEEESSSSSSSSSSSSSWWWWWWWWWWWWW')
-    random.shuffle(l)
-    hand_string = ''.join(l)
-    deal = parse_deal(hand_string)
-
-    return deal
-
 
 class DealField(models.Field):
 
@@ -169,14 +168,73 @@ class DealField(models.Field):
         return self.get_prep_value(value)
 
 
+# class Auction(object):
+#
+#     def __init__(self, auction_list):
+#         self.auction_list = auction_list
+#
+#
+# def parse_auction(auction_string):
+#
+#     auction_list = list(auction_string)
+#
+#     auction = Auction(auction_list=auction_list)
+#
+#     return auction
+#
+#
+# class AuctionField(models.Field):
+#
+#     def db_type(self, connection):
+#         return 'auction'
+#
+#     def from_db_value(self, value, expression, connection, context):
+#         if value is None:
+#             return value
+#         return parse_auction(value)
+#
+#     def to_python(self, value):
+#         if isinstance(value, Auction):
+#             return value
+#
+#         if value is None:
+#             return value
+#
+#         return parse_auction(value)
+#
+#     def get_prep_value(self, value):
+#         return value.auction_list
+#
+#     def formfield(self, **kwargs):
+#         # This is a fairly standard way to set up some defaults
+#         # while letting the caller override them.
+#         defaults = {'form_class': MyFormField}
+#         defaults.update(kwargs)
+#         return super(AuctionField, self).formfield(**defaults)
+#
+#     def get_internal_type(self):
+#         return 'CharField'
+#
+#     def value_to_string(self, obj):
+#         value = self.value_from_object(obj)
+#         return self.get_prep_value(value)
+
 class BridgeTableManager(models.Manager):
     def create_deal(self):
-        table = self.create(deal=construct_deal())
+        deal = construct_deal()
+        # auction = parse_auction('')
+        table = self.create(
+            deal=deal,
+            direction_to_bid=deal.dealer
+            )
         return table
 
 class BridgeTable(models.Model):
     # users = models.ManyToManyField(settings.AUTH_USER_MODEL)
     deal = DealField()
+    direction_to_bid = models.CharField(max_length=5,default='')
+    # auction = AuctionField()
+    auction = models.CharField(max_length=100,default='')
     objects = BridgeTableManager()
     # deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
 

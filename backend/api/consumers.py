@@ -92,7 +92,6 @@ class SockConsumer(ReduxConsumer):
         for x in BridgeTable.objects.all():
             tablelist.append(x.pk)
 
-        print(tablelist)
         self.send_to_group(username, {
                       'type': 'GET_TABLES',
                       'tablelist': tablelist
@@ -103,6 +102,7 @@ class SockConsumer(ReduxConsumer):
         print('JOIN_TABLE')
         username = self.message.channel_session['user']
         table_id = action['table_id']
+        self.message.channel_session['table_id'] = table_id
 
         # add self to table channels group
         # remove self from all group
@@ -114,6 +114,19 @@ class SockConsumer(ReduxConsumer):
                       'table_id': table_id
                       })
 
+        # get dealer
+        dealer = BridgeTable.objects.get(pk=table_id).deal.dealer
+        self.send_to_group(username, {
+                      'type': 'GET_DEALER',
+                      'dealer': dealer
+                      })
+
+        # get auction
+        auction = BridgeTable.objects.get(pk=table_id).auction
+        self.send_to_group(username, {
+                      'type': 'GET_AUCTION',
+                      'auction': list(auction)
+                      })
 
     @action('LEAVE_TABLE')
     def LEAVE_TABLE(self, action):
@@ -127,9 +140,11 @@ class SockConsumer(ReduxConsumer):
                       })
 
         # remove self from table channels group
-        # add self to all group
         self.remove(str(table_id))
+        # add self to all group
         self.add('all')
+        # remove table_id
+        self.message.channel_session['table_id'] = ''
 
     @action('GET_HAND')
     def GET_HAND(self, hand):
@@ -167,13 +182,26 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         seat = action['seat']
         table_id = action['table_id']
+
         self.send_to_group(username, {
                       'type': 'LEAVE_SEAT',
                       'seat': seat,
                       'table_id': table_id
                       })
 
-
+    @action('MAKE_BID')
+    def MAKE_BID(self, action):
+        print('MAKE_BID')
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        bid = action['bid']
+        table = BridgeTable.objects.get(pk=table_id)
+        table.auction = table.auction + bid
+        table.save()
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_AUCTION',
+                      'auction': list(table.auction)
+                      })
 
     @action('MODIFY_USER_LIST')
     def MODIFY_USER_LIST(self, content, is_logged_in=True, username=None, user_list=[]):

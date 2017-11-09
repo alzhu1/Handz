@@ -10,19 +10,26 @@ class BiddingBox extends React.Component {
       alignSelf: 'center'
     };
 
-    return (
-          <div style={styles}>
-              <ButtonBase>
-                  Pass
-              </ ButtonBase>
-              <ButtonBase>
-                  1
-              </ ButtonBase>
-              <ButtonBase>
-                  2
-              </ ButtonBase>
-           </ div>
-         )
+    if (this.props.dealer === this.props.seat) {
+      return (
+            <div style={styles}>
+                <ButtonBase onClick={() =>
+                    {this.props.makeBidThunk('P', this.props.table_id)}}>
+                    Pass
+                </ ButtonBase>
+                <ButtonBase>
+                    1
+                </ ButtonBase>
+                <ButtonBase>
+                    2
+                </ ButtonBase>
+             </div>
+           )
+    }
+    else {
+      return <div />
+    }
+
   }
 }
 

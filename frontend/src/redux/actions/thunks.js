@@ -60,3 +60,9 @@ export const leaveSeatThunk = (seat, table_id) => (
         return(emit(a.leaveSeat(seat,table_id)));
     }
 )
+
+export const makeBidThunk = (bid) => (
+    function (dispatch, getState, emit) {
+        return(emit(a.makeBid(bid)));
+    }
+)

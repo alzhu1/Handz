@@ -12,6 +12,8 @@ export const mapStateToProps = (state) => {
         hand: state.hand,
         seat: state.seat,
         table_id: state.table_id,
+        dealer: state.dealer,
+        auction: state.auction,
     };
 };
 
@@ -50,8 +52,8 @@ export const mapDispatchToProps = (dispatch,emit) => {
       leaveSeatThunk: (seat, table_id) => {
         dispatch(th.leaveSeatThunk(seat, table_id));
       },
-      getHand: (hand) => {
-        dispatch(a.getHand(hand));
+      makeBidThunk: (bid) => {
+        dispatch(th.makeBidThunk(bid));
       },
     }
 };

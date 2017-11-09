@@ -19,3 +19,6 @@ export const LEAVE_TABLE = 'LEAVE_TABLE';
 export const GET_HAND = 'GET_HAND';
 export const TAKE_SEAT = 'TAKE_SEAT';
 export const LEAVE_SEAT = 'LEAVE_SEAT';
+export const GET_DEALER = 'GET_DEALER';
+export const GET_AUCTION = 'GET_AUCTION';
+export const MAKE_BID = 'MAKE_BID';

@@ -84,3 +84,18 @@ export const leaveSeat = (seat, table_id) => ({
     seat,
     table_id
 })
+
+export const getDealer = (dealer) => ({
+    type: a.GET_DEALER,
+    dealer
+})
+
+export const getAuction = (auction) => ({
+    type: a.GET_AUCTION,
+    auction
+})
+
+export const makeBid = (bid) => ({
+    type: a.MAKE_BID,
+    bid
+})

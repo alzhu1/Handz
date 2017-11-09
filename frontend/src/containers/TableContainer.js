@@ -17,7 +17,6 @@ class TableContainer extends React.Component {
   componentWillUnmount() {
       this.props.leaveSeatThunk(this.props.seat, this.props.table_id)
       this.props.leaveTableThunk(this.props.table_id)
-      this.props.getHand('')
   }
 
   render() {
