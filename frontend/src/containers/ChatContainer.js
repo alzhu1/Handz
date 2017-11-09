@@ -26,12 +26,12 @@ class ChatContainer extends React.Component {
   render() {
 
     // if in table, set up table receiver
-    if (this.props.table_id != '') {
-      this.state.receiver = JSON.stringify(this.props.table_id)
-    }
-    else{
-        this.state.receiver = 'all'
-    }
+    // if (this.props.table_id != '') {
+    //   this.state.receiver = JSON.stringify(this.props.table_id)
+    // }
+    // else{
+    //     this.state.receiver = 'all'
+    // }
 
     return (
       <div>

@@ -33,6 +33,7 @@ class SockConsumer(ReduxConsumer):
         user.save()
 
         self.message.channel_session['user'] = username
+        self.message.channel_session['table_id'] = ''
 
         control = self.get_control_channel()
         self.add(control)
@@ -132,7 +133,7 @@ class SockConsumer(ReduxConsumer):
     def LEAVE_TABLE(self, action):
         print('LEAVE_TABLE')
         username = self.message.channel_session['user']
-        table_id = action['table_id']
+        table_id = self.message.channel_session['table_id']
 
         self.send_to_group(username, {
                       'type': 'LEAVE_TABLE',
@@ -165,7 +166,7 @@ class SockConsumer(ReduxConsumer):
         print('TAKE_SEAT')
         username = self.message.channel_session['user']
         seat = action['seat']
-        table_id = action['table_id']
+        table_id = self.message.channel_session['table_id']
         deal = BridgeTable.objects.get(pk=table_id).deal
         hand = deal.direction(seat)
         self.send_to_group(username, {
@@ -181,7 +182,7 @@ class SockConsumer(ReduxConsumer):
         print('LEAVE_SEAT')
         username = self.message.channel_session['user']
         seat = action['seat']
-        table_id = action['table_id']
+        table_id = self.message.channel_session['table_id']
 
         self.send_to_group(username, {
                       'type': 'LEAVE_SEAT',
@@ -220,11 +221,18 @@ class SockConsumer(ReduxConsumer):
     # chat actions
     @action('CHAT_MESSAGE')
     def CHAT_MESSAGE(self, content):
+        print('CHAT_MESSAGE')
         receiver = content['receiver']
         username = content['username']
-        if receiver == 'all' or receiver.isdigit():
+        table_id = self.message.channel_session['table_id']
+        # global chat or table chat
+        if receiver == 'all':
             content['message'] = username + ': ' + content['message']
-            self.send_to_group(receiver,content)
+            if not table_id:
+                self.send_to_group(receiver,content)
+            else:
+                self.send_to_group(str(table_id),content)
+        # direct message
         else:
             message = content['message']
             content['message'] = 'from ' + username + ': '  + message
