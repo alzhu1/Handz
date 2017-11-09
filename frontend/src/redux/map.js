@@ -43,14 +43,14 @@ export const mapDispatchToProps = (dispatch,emit) => {
       joinTableThunk: (table_id) => {
         dispatch(th.joinTableThunk(table_id));
       },
-      takeSeatThunk: (seat, table_id) => {
-        dispatch(th.takeSeatThunk(seat, table_id));
+      takeSeatThunk: (seat) => {
+        dispatch(th.takeSeatThunk(seat));
       },
-      leaveTableThunk: (seat, table_id) => {
-        dispatch(th.leaveTableThunk(seat, table_id));
+      leaveTableThunk: (seat) => {
+        dispatch(th.leaveTableThunk(seat));
       },
-      leaveSeatThunk: (seat, table_id) => {
-        dispatch(th.leaveSeatThunk(seat, table_id));
+      leaveSeatThunk: (seat) => {
+        dispatch(th.leaveSeatThunk(seat));
       },
       makeBidThunk: (bid) => {
         dispatch(th.makeBidThunk(bid));

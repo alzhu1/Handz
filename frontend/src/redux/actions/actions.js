@@ -62,9 +62,8 @@ export const joinTable = (table_id) => ({
     table_id
 })
 
-export const leaveTable = (table_id) => ({
-    type: a.LEAVE_TABLE,
-    table_id
+export const leaveTable = () => ({
+    type: a.LEAVE_TABLE
 })
 
 export const getHand = (hand) => ({
@@ -73,16 +72,14 @@ export const getHand = (hand) => ({
 })
 
 
-export const takeSeat = (seat, table_id) => ({
+export const takeSeat = (seat) => ({
     type: a.TAKE_SEAT,
-    seat,
-    table_id
+    seat
 })
 
-export const leaveSeat = (seat, table_id) => ({
+export const leaveSeat = (seat) => ({
     type: a.LEAVE_SEAT,
-    seat,
-    table_id
+    seat
 })
 
 export const getDealer = (dealer) => ({
