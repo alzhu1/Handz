@@ -116,10 +116,10 @@ class SockConsumer(ReduxConsumer):
                       })
 
         # get dealer
-        dealer = BridgeTable.objects.get(pk=table_id).deal.dealer
+        bidder = BridgeTable.objects.get(pk=table_id).direction_to_bid
         self.send_to_group(username, {
-                      'type': 'GET_DEALER',
-                      'dealer': dealer
+                      'type': 'GET_BIDDER',
+                      'bidder': bidder
                       })
 
         # get auction
@@ -197,12 +197,33 @@ class SockConsumer(ReduxConsumer):
         table_id = self.message.channel_session['table_id']
         bid = action['bid']
         table = BridgeTable.objects.get(pk=table_id)
-        table.auction = table.auction + bid
-        table.save()
+
+        # set next bidder
+        table.next_bidder()
+        bidder = table.direction_to_bid
+
+        # update auction
+        table.update_auction(bid)
+
+        # set contract if auction is over, otherwise it does nothing
+        table.set_contract()
+
         self.send_to_group(str(table_id), {
                       'type': 'GET_AUCTION',
                       'auction': list(table.auction)
                       })
+
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_BIDDER',
+                      'bidder': bidder
+                      })
+
+        # if contract is set, send contract
+        if table.contract != None:
+            self.send_to_group(str(table_id), {
+                          'type': 'GET_CONTRACT',
+                          'contract': table.contract
+                          })
 
     @action('MODIFY_USER_LIST')
     def MODIFY_USER_LIST(self, content, is_logged_in=True, username=None, user_list=[]):

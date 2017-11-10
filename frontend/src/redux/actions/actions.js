@@ -82,9 +82,9 @@ export const leaveSeat = (seat) => ({
     seat
 })
 
-export const getDealer = (dealer) => ({
-    type: a.GET_DEALER,
-    dealer
+export const getBidder = (bidder) => ({
+    type: a.GET_BIDDER,
+    bidder
 })
 
 export const getAuction = (auction) => ({
@@ -95,4 +95,9 @@ export const getAuction = (auction) => ({
 export const makeBid = (bid) => ({
     type: a.MAKE_BID,
     bid
+})
+
+export const getContract = (contract) => ({
+    type: a.GET_CONTRACT,
+    contract
 })

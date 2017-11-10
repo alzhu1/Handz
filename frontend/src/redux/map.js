@@ -11,9 +11,9 @@ export const mapStateToProps = (state) => {
         tablelist: state.tablelist,
         hand: state.hand,
         seat: state.seat,
-        table_id: state.table_id,
-        dealer: state.dealer,
+        bidder: state.bidder,
         auction: state.auction,
+        contract: state.contract,
     };
 };
 

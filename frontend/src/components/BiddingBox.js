@@ -10,18 +10,40 @@ class BiddingBox extends React.Component {
       alignSelf: 'center'
     };
 
-    if (this.props.dealer === this.props.seat) {
+    if (this.props.bidder === this.props.seat) {
       return (
             <div style={styles}>
                 <ButtonBase onClick={() =>
-                    {this.props.makeBidThunk('P', this.props.table_id)}}>
+                    {this.props.makeBidThunk('P')}}>
                     Pass
                 </ ButtonBase>
-                <ButtonBase>
+                <ButtonBase onClick={() =>
+                    {this.props.makeBidThunk('1')}}>
                     1
                 </ ButtonBase>
-                <ButtonBase>
+                <ButtonBase onClick={() =>
+                    {this.props.makeBidThunk('2')}}>
                     2
+                </ ButtonBase>
+                <ButtonBase onClick={() =>
+                    {this.props.makeBidThunk('3')}}>
+                    3
+                </ ButtonBase>
+                <ButtonBase onClick={() =>
+                    {this.props.makeBidThunk('4')}}>
+                    4
+                </ ButtonBase>
+                <ButtonBase onClick={() =>
+                    {this.props.makeBidThunk('5')}}>
+                    5
+                </ ButtonBase>
+                <ButtonBase onClick={() =>
+                    {this.props.makeBidThunk('6')}}>
+                    6
+                </ ButtonBase>
+                <ButtonBase onClick={() =>
+                    {this.props.makeBidThunk('7')}}>
+                    7
                 </ ButtonBase>
              </div>
            )

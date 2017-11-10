@@ -108,22 +108,10 @@ export const seat = (state = '', action) => {
     return state;
 }
 
-export const table_id = (state = '', action) => {
+export const bidder = (state = '', action) => {
     switch(action.type) {
-        case a.JOIN_TABLE:
-            return action.table_id;
-        case a.LEAVE_TABLE:
-            return '';
-        default:
-            break;
-    }
-    return state;
-}
-
-export const dealer = (state = '', action) => {
-    switch(action.type) {
-        case a.GET_DEALER:
-          return action.dealer;
+        case a.GET_BIDDER:
+          return action.bidder;
         case a.LEAVE_TABLE:
             return '';
         default:
@@ -144,6 +132,18 @@ export const auction = (state = [], action) => {
     return state;
 }
 
+export const contract = (state = '', action) => {
+    switch(action.type) {
+        case a.GET_CONTRACT:
+          return action.contract;
+        case a.LEAVE_TABLE:
+            return '';
+        default:
+            break;
+    }
+    return state;
+}
+
 
 export const appReducer = combineReducers({
                     token,
@@ -152,11 +152,11 @@ export const appReducer = combineReducers({
                     is_logged_in,
                     userlist,
                     tablelist,
-                    table_id,
                     hand,
                     seat,
-                    dealer,
-                    auction
+                    bidder,
+                    auction,
+                    contract
                     });
 
 export const rootReducer = (state, action) => {

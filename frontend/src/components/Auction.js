@@ -10,7 +10,7 @@ class Auction extends React.Component {
     };
 
     return <div style={styles}>
-              Auction goes here
+              {this.props.auction}
            </ div>
   }
 }

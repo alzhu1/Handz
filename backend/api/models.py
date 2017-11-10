@@ -219,7 +219,87 @@ class DealField(models.Field):
 #         value = self.value_from_object(obj)
 #         return self.get_prep_value(value)
 
+
+
+class Contract(object):
+
+    def __init__(self, contract_string, trump, tricks,
+                    is_doubled, is_redoubled):
+        self.contract_string = contract_string
+        self.trump = trump
+        self.tricks = tricks
+        self.is_doubled = is_doubled
+        self.is_redoubled = is_redoubled
+
+def parse_contract(contract_string):
+
+    tricks = int(contract_string[0])
+
+    # hard code spade trump, no doubles
+    trump = 'spades'
+    is_doubled = False
+    is_redoubled = False
+
+    contract = Contract(contract_string=contract_string,
+                        trump=trump,
+                        tricks=tricks,
+                        is_doubled=is_doubled,
+                        is_redoubled=is_redoubled)
+
+    return contract
+
+def parse_auction(auction_string):
+
+    contract = '2S'
+    return contract
+
+class ContractField(models.Field):
+
+    def __init__(self, *args, **kwargs):
+        kwargs['max_length'] = 5
+        super(ContractField, self).__init__(*args, **kwargs)
+
+    def deconstruct(self):
+        name, path, args, kwargs = super(ContractField, self).deconstruct()
+        del kwargs["max_length"]
+        return name, path, args, kwargs
+
+    def db_type(self, connection):
+        return 'contract'
+
+    def from_db_value(self, value, expression, connection, context):
+        if value is None:
+            return value
+        return parse_contract(value)
+
+    def to_python(self, value):
+        if isinstance(value, Contract):
+            return value
+
+        if value is None:
+            return value
+
+        return parse_contract(value)
+
+    def get_prep_value(self, value):
+        return value
+
+    def formfield(self, **kwargs):
+        # This is a fairly standard way to set up some defaults
+        # while letting the caller override them.
+        defaults = {'form_class': MyFormField}
+        defaults.update(kwargs)
+        return super(ContractField, self).formfield(**defaults)
+
+    def get_internal_type(self):
+        return 'CharField'
+
+    def value_to_string(self, obj):
+        value = self.value_from_object(obj)
+        return self.get_prep_value(value)
+
 class BridgeTableManager(models.Manager):
+
     def create_deal(self):
         deal = construct_deal()
         # auction = parse_auction('')
@@ -232,11 +312,34 @@ class BridgeTableManager(models.Manager):
 class BridgeTable(models.Model):
     # users = models.ManyToManyField(settings.AUTH_USER_MODEL)
     deal = DealField()
-    direction_to_bid = models.CharField(max_length=5,default='')
     # auction = AuctionField()
     auction = models.CharField(max_length=100,default='')
+    declarer = models.CharField(max_length=5,default='')
+    contract = ContractField(default=None,null=True)
+    direction_to_bid = models.CharField(max_length=5,default='')
+    
     objects = BridgeTableManager()
-    # deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
+
+    def next_bidder(self):
+        if self.direction_to_bid == 'north':
+            self.direction_to_bid = 'east'
+        elif self.direction_to_bid == 'east':
+            self.direction_to_bid = 'south'
+        elif self.direction_to_bid == 'south':
+            self.direction_to_bid = 'west'
+        elif self.direction_to_bid == 'west':
+            self.direction_to_bid = 'north'
+        self.save()
+
+    def set_contract(self):
+        if len(self.auction)<4 or self.auction[-3:]!='PPP':
+            return None
+        self.contract = parse_auction(self.auction)
+        self.save()
+
+    def update_auction(self, bid):
+        self.auction = self.auction + bid
+        self.save()
 
 
 
