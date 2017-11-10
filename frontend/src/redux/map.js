@@ -11,7 +11,7 @@ export const mapStateToProps = (state) => {
         tablelist: state.tablelist,
         hand: state.hand,
         seat: state.seat,
-        bidder: state.bidder,
+        direction_to_act: state.direction_to_act,
         auction: state.auction,
         contract: state.contract,
     };

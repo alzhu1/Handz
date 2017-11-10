@@ -82,9 +82,9 @@ export const leaveSeat = (seat) => ({
     seat
 })
 
-export const getBidder = (bidder) => ({
+export const getBidder = (direction_to_act) => ({
     type: a.GET_BIDDER,
-    bidder
+    direction_to_act
 })
 
 export const getAuction = (auction) => ({

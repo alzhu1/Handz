@@ -116,10 +116,10 @@ class SockConsumer(ReduxConsumer):
                       })
 
         # get dealer
-        bidder = BridgeTable.objects.get(pk=table_id).direction_to_bid
+        direction_to_act = BridgeTable.objects.get(pk=table_id).direction_to_act
         self.send_to_group(username, {
                       'type': 'GET_BIDDER',
-                      'bidder': bidder
+                      'direction_to_act': direction_to_act
                       })
 
         # get auction
@@ -200,7 +200,7 @@ class SockConsumer(ReduxConsumer):
 
         # set next bidder
         table.next_bidder()
-        bidder = table.direction_to_bid
+        direction_to_act = table.direction_to_act
 
         # update auction
         table.update_auction(bid)
@@ -215,7 +215,7 @@ class SockConsumer(ReduxConsumer):
 
         self.send_to_group(str(table_id), {
                       'type': 'GET_BIDDER',
-                      'bidder': bidder
+                      'direction_to_act': direction_to_act
                       })
 
         # if contract is set, send contract

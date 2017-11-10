@@ -305,7 +305,7 @@ class BridgeTableManager(models.Manager):
         # auction = parse_auction('')
         table = self.create(
             deal=deal,
-            direction_to_bid=deal.dealer
+            direction_to_act=deal.dealer
             )
         return table
 
@@ -316,19 +316,19 @@ class BridgeTable(models.Model):
     auction = models.CharField(max_length=100,default='')
     declarer = models.CharField(max_length=5,default='')
     contract = ContractField(default=None,null=True)
-    direction_to_bid = models.CharField(max_length=5,default='')
-    
+    direction_to_act = models.CharField(max_length=5,default='')
+    # declarer = models.CharField(max_length=5,default='')
     objects = BridgeTableManager()
 
     def next_bidder(self):
-        if self.direction_to_bid == 'north':
-            self.direction_to_bid = 'east'
-        elif self.direction_to_bid == 'east':
-            self.direction_to_bid = 'south'
-        elif self.direction_to_bid == 'south':
-            self.direction_to_bid = 'west'
-        elif self.direction_to_bid == 'west':
-            self.direction_to_bid = 'north'
+        if self.direction_to_act == 'north':
+            self.direction_to_act = 'east'
+        elif self.direction_to_act == 'east':
+            self.direction_to_act = 'south'
+        elif self.direction_to_act == 'south':
+            self.direction_to_act = 'west'
+        elif self.direction_to_act == 'west':
+            self.direction_to_act = 'north'
         self.save()
 
     def set_contract(self):
@@ -340,6 +340,18 @@ class BridgeTable(models.Model):
     def update_auction(self, bid):
         self.auction = self.auction + bid
         self.save()
+
+    # def next_card_player(self):
+    #     if
+    #         if self.direction_to_play == 'north':
+    #             self.direction_to_play = 'east'
+    #         elif self.direction_to_play == 'east':
+    #             self.direction_to_play = 'south'
+    #         elif self.direction_to_play == 'south':
+    #             self.direction_to_play = 'west'
+    #         elif self.direction_to_play == 'west':
+    #             self.direction_to_play = 'north'
+    #     self.save()
 
 
 

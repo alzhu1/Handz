@@ -108,10 +108,10 @@ export const seat = (state = '', action) => {
     return state;
 }
 
-export const bidder = (state = '', action) => {
+export const direction_to_act = (state = '', action) => {
     switch(action.type) {
         case a.GET_BIDDER:
-          return action.bidder;
+          return action.direction_to_act;
         case a.LEAVE_TABLE:
             return '';
         default:
@@ -154,7 +154,7 @@ export const appReducer = combineReducers({
                     tablelist,
                     hand,
                     seat,
-                    bidder,
+                    direction_to_act,
                     auction,
                     contract
                     });
