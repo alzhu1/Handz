@@ -375,23 +375,26 @@ class BridgeTable(models.Model):
     auction = models.CharField(max_length=100,default='')
     contract = ContractField(default=None,null=True)
     direction_to_act = models.CharField(max_length=5,default='')
-    tricks_taken = models.IntegerField(default=None,null=True)
+    NS_tricks_taken = models.IntegerField(default=None,null=True)
+    EW_tricks_taken = models.IntegerField(default=None,null=True)
     trick = models.CharField(max_length=12,default='')
     objects = BridgeTableManager()
 
     def take_seat(self, user, seat):
-        if seat == 'north' and self.north == '':
+        if seat == 'north':
             self.north = user
-        elif seat == 'east' and self.east == '':
+        elif seat == 'east':
             self.east = user
-        elif seat == 'south' and self.south == '':
+        elif seat == 'south':
             self.south = user
-        elif seat == 'west' and self.west == '':
+        elif seat == 'west':
             self.west = user
         else:
             print(user)
             print(seat)
+            print(self.north)
             raise ValueError('Could not take seat')
+        print('take seat')
         self.save()
 
     # def take_seat(self, user, seat):
@@ -408,16 +411,17 @@ class BridgeTable(models.Model):
     #     self.save()
 
     def leave_seat(self, user, seat):
-        if seat == 'north' and self.north == user:
+        if seat == 'north':
             self.north = ''
-        elif seat == 'east' and self.east == user:
+        elif seat == 'east':
             self.east = ''
-        elif seat == 'south' and self.south == user:
+        elif seat == 'south':
             self.south = ''
-        elif seat == 'west' and self.west == user:
+        elif seat == 'west':
             self.west = ''
         else:
             raise ValueError('Could not leave seat')
+        print('left seat')
         self.save()
 
     # def leave_seat(self, user, seat):
@@ -469,7 +473,63 @@ class BridgeTable(models.Model):
         self.save()
 
     def evaluate_trick(self):
-        pass
+        card1 = self.trick[:3]
+        card2 = self.trick[3:6]
+        card3 = self.trick[6:9]
+        card4 = self.trick[9:]
+        trick = [card2, card3, card4]
+
+        # rank and suit required to win
+        trump = self.contract.trump[0].upper()
+        rank = card1[1]
+        suit = card1[2]
+        winner = card1[0]
+
+        # rank of cards
+        order = list('AKQJT98765432')
+
+        for t in trick:
+            print(t)
+            print(trump)
+            print(suit)
+            print(rank)
+            if t[2] == trump and suit != trump:
+                rank = t[1]
+                suit = t[2]
+                winner = t[0]
+            elif t[2] == suit and order.index(t[1]) < order.index(rank):
+                rank = t[1]
+                suit = t[2]
+                winner = t[0]
+
+        print('winning trick')
+        print(suit + rank)
+        print(winner)
+
+        if winner == 'E':
+            self.direction_to_act = 'east'
+        elif winner == 'W':
+            self.direction_to_act = 'west'
+        elif winner == 'N':
+            self.direction_to_act = 'north'
+        elif winner == 'S':
+            self.direction_to_act = 'south'
+
+        self.trick = ''
+        self.NS_tricks_taken += 1
+        self.save()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

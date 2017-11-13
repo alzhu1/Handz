@@ -174,6 +174,11 @@ class SockConsumer(ReduxConsumer):
     def TAKE_SEAT(self, action):
         print('TAKE_SEAT')
         username = self.message.channel_session['user']
+        user = User.objects.get(username=username)
+
+        # leave seat if sitting
+        self.LEAVE_SEAT()
+
         seat = action['seat']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
@@ -182,12 +187,12 @@ class SockConsumer(ReduxConsumer):
 
         # take seat on backend
         table.take_seat(username, seat)
-        user = User.objects.get(username=username)
+
         user.seat = seat
         user.save()
 
         # send action to front end
-        self.send_to_group(username, {
+        self.send_to_group(str(table_id), {
                       'type': 'TAKE_SEAT',
                       'seat': seat,
                       'table_id': table_id
@@ -196,21 +201,21 @@ class SockConsumer(ReduxConsumer):
         self.GET_HAND(hand)
 
     @action('LEAVE_SEAT')
-    def LEAVE_SEAT(self, action):
+    def LEAVE_SEAT(self):
         print('LEAVE_SEAT')
         username = self.message.channel_session['user']
-        seat = action['seat']
+        user = User.objects.get(username=username)
+        seat = user.seat
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
 
         # leave seat on backend
         table.leave_seat(username, seat)
-        user = User.objects.get(username=username)
         user.seat = ''
         user.save()
 
         # send action to frontend
-        self.send_to_group(username, {
+        self.send_to_group(str(table_id), {
                       'type': 'LEAVE_SEAT',
                       'seat': seat,
                       'table_id': table_id
