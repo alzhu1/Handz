@@ -66,3 +66,12 @@ export const makeBidThunk = (bid) => (
         return(emit(a.makeBid(bid)));
     }
 )
+
+export const playCardThunk = (card) => (
+    function (dispatch, getState, emit) {
+        if (getState().contract != '' &&
+            getState().seat === getState().direction_to_act) {
+          return(emit(a.playCard(card)));
+        }
+    }
+)

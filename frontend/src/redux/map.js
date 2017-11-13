@@ -55,5 +55,8 @@ export const mapDispatchToProps = (dispatch,emit) => {
       makeBidThunk: (bid) => {
         dispatch(th.makeBidThunk(bid));
       },
+      playCardThunk: (card) => {
+        dispatch(th.playCardThunk(card));
+      },
     }
 };

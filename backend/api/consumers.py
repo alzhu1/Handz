@@ -104,6 +104,7 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         table_id = action['table_id']
         self.message.channel_session['table_id'] = table_id
+        table = BridgeTable.objects.get(pk=table_id)
 
         # add self to table channels group
         # remove self from all group
@@ -116,9 +117,9 @@ class SockConsumer(ReduxConsumer):
                       })
 
         # get dealer
-        direction_to_act = BridgeTable.objects.get(pk=table_id).direction_to_act
+        direction_to_act = table.direction_to_act
         self.send_to_group(username, {
-                      'type': 'GET_BIDDER',
+                      'type': 'GET_NEXT_ACTOR',
                       'direction_to_act': direction_to_act
                       })
 
@@ -128,6 +129,14 @@ class SockConsumer(ReduxConsumer):
                       'type': 'GET_AUCTION',
                       'auction': list(auction)
                       })
+
+        # get contract
+        if table.contract != None:
+          contract = table.contract.contract_string
+          self.send_to_group(str(table_id), {
+                        'type': 'GET_CONTRACT',
+                        'contract': contract
+                        })
 
     @action('LEAVE_TABLE')
     def LEAVE_TABLE(self, action):
@@ -167,8 +176,17 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         seat = action['seat']
         table_id = self.message.channel_session['table_id']
-        deal = BridgeTable.objects.get(pk=table_id).deal
+        table = BridgeTable.objects.get(pk=table_id)
+        deal = table.deal
         hand = deal.direction(seat)
+
+        # take seat on backend
+        table.take_seat(username, seat)
+        user = User.objects.get(username=username)
+        user.seat = seat
+        user.save()
+
+        # send action to front end
         self.send_to_group(username, {
                       'type': 'TAKE_SEAT',
                       'seat': seat,
@@ -183,7 +201,15 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         seat = action['seat']
         table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
 
+        # leave seat on backend
+        table.leave_seat(username, seat)
+        user = User.objects.get(username=username)
+        user.seat = ''
+        user.save()
+
+        # send action to frontend
         self.send_to_group(username, {
                       'type': 'LEAVE_SEAT',
                       'seat': seat,
@@ -198,32 +224,61 @@ class SockConsumer(ReduxConsumer):
         bid = action['bid']
         table = BridgeTable.objects.get(pk=table_id)
 
-        # set next bidder
-        table.next_bidder()
+
+        # set contract if auction is over, otherwise it does nothing
+        table.next_actor()
+        table.set_contract()
+
+        # set next actor
         direction_to_act = table.direction_to_act
 
         # update auction
         table.update_auction(bid)
 
-        # set contract if auction is over, otherwise it does nothing
-        table.set_contract()
-
+        # send auction
+        auction = list(table.auction)
         self.send_to_group(str(table_id), {
                       'type': 'GET_AUCTION',
-                      'auction': list(table.auction)
+                      'auction': auction
                       })
 
-        self.send_to_group(str(table_id), {
-                      'type': 'GET_BIDDER',
-                      'direction_to_act': direction_to_act
-                      })
+        # send next actor information
+        self.GET_NEXT_ACTOR(direction_to_act)
 
         # if contract is set, send contract
         if table.contract != None:
+            contract = table.contract.contract_string
             self.send_to_group(str(table_id), {
                           'type': 'GET_CONTRACT',
-                          'contract': table.contract
+                          'contract': contract
                           })
+
+
+    def GET_NEXT_ACTOR(self, direction_to_act):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_NEXT_ACTOR',
+                      'direction_to_act': direction_to_act
+                      })
+
+    # card play actions
+    @action('PLAY_CARD')
+    def PLAY_CARD(self, action):
+        print('PLAY_CARD')
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        if table.contract != None:
+            user = User.objects.get(username=username)
+            print('valid')
+            table.play_card(user.seat[0].upper(), action['card'])
+
+            # tell front end who is next actor
+            direction_to_act = table.direction_to_act
+            self.GET_NEXT_ACTOR(direction_to_act)
+        else:
+            raise ValueError('Card should not be able to be played')
 
     @action('MODIFY_USER_LIST')
     def MODIFY_USER_LIST(self, content, is_logged_in=True, username=None, user_list=[]):

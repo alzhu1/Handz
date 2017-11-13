@@ -1,6 +1,8 @@
 import React from 'react';
+import {mapStateToProps, mapDispatchToProps} from 'redux/map';
+import {connect} from 'react-redux';
 
-export default class Card extends React.Component {
+class Card extends React.Component {
   render() {
     let src = require('../images/acbl/' + this.props.card + '.png')
     let defaults = {
@@ -10,6 +12,11 @@ export default class Card extends React.Component {
       // position:'relative',
       // left:this.props.left
     };
-    return <img src={src} style={defaults}/>
+    return (
+            <img src={src} style={defaults}
+            onClick={() =>{this.props.playCardThunk(this.props.card)}}
+           />)
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

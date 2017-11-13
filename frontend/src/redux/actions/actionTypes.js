@@ -21,8 +21,10 @@ export const TAKE_SEAT = 'TAKE_SEAT';
 export const LEAVE_SEAT = 'LEAVE_SEAT';
 
 // auction actions
-export const GET_BIDDER = 'GET_BIDDER';
+export const GET_NEXT_ACTOR = 'GET_NEXT_ACTOR';
 export const GET_AUCTION = 'GET_AUCTION';
 export const MAKE_BID = 'MAKE_BID';
-export const NEXT_BIDDER = 'NEXT_BIDDER';
 export const GET_CONTRACT = 'GET_CONTRACT';
+
+// cardplay actions
+export const PLAY_CARD = 'PLAY_CARD';

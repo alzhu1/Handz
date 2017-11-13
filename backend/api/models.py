@@ -12,7 +12,7 @@ class User(AbstractUser):
     '''
     Custom User
     '''
-    # hand_position = models.IntegerField(default=-1)
+    seat = models.CharField(max_length=5, default='')
     is_logged_in = models.BooleanField(default=False)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -223,9 +223,10 @@ class DealField(models.Field):
 
 class Contract(object):
 
-    def __init__(self, contract_string, trump, tricks,
+    def __init__(self, contract_string, declarer, trump, tricks,
                     is_doubled, is_redoubled):
         self.contract_string = contract_string
+        self.declarer = declarer
         self.trump = trump
         self.tricks = tricks
         self.is_doubled = is_doubled
@@ -235,12 +236,14 @@ def parse_contract(contract_string):
 
     tricks = int(contract_string[0])
 
-    # hard code spade trump, no doubles
+    # hard code declarer, spade trump, no doubles
+    declarer = 'north'
     trump = 'spades'
     is_doubled = False
     is_redoubled = False
 
     contract = Contract(contract_string=contract_string,
+                        declarer=declarer,
                         trump=trump,
                         tricks=tricks,
                         is_doubled=is_doubled,
@@ -282,7 +285,9 @@ class ContractField(models.Field):
         return parse_contract(value)
 
     def get_prep_value(self, value):
-        return value
+        if value is None:
+            return value
+        return value.contract_string
 
     def formfield(self, **kwargs):
         # This is a fairly standard way to set up some defaults
@@ -298,29 +303,137 @@ class ContractField(models.Field):
         value = self.value_from_object(obj)
         return self.get_prep_value(value)
 
+class Trick(object):
+
+    def __init__(self, trick_string, north, south, east, west, dealer):
+        self.hand_string = hand_string
+        self.north = north
+        self.east = east
+        self.south = south
+        self.west = west
+
+
+# class TrickField(models.Field):
+#
+#     def db_type(self, connection):
+#         return 'trick'
+#
+#     def from_db_value(self, value, expression, connection, context):
+#         if value is None:
+#             return value
+#         return parse_trick(value)
+#
+#     def to_python(self, value):
+#         if isinstance(value, Trick):
+#             return value
+#
+#         if value is None:
+#             return value
+#
+#         return parse_trick(value)
+#
+#     def get_prep_value(self, value):
+#         if value is None:
+#             return value
+#         return value.trick_string
+#
+#     def formfield(self, **kwargs):
+#         # This is a fairly standard way to set up some defaults
+#         # while letting the caller override them.
+#         defaults = {'form_class': MyFormField}
+#         defaults.update(kwargs)
+#         return super(TrickField, self).formfield(**defaults)
+#
+#     def get_internal_type(self):
+#         return 'CharField'
+#
+#     def value_to_string(self, obj):
+#         value = self.value_from_object(obj)
+#         return self.get_prep_value(value)
+
 class BridgeTableManager(models.Manager):
 
     def create_deal(self):
         deal = construct_deal()
         # auction = parse_auction('')
         table = self.create(
-            deal=deal,
-            direction_to_act=deal.dealer
-            )
+                deal=deal,
+                direction_to_act=deal.dealer
+                )
         return table
 
 class BridgeTable(models.Model):
-    # users = models.ManyToManyField(settings.AUTH_USER_MODEL)
-    deal = DealField()
+    # users
+    north = models.CharField(max_length=100,default='')
+    south = models.CharField(max_length=100,default='')
+    east = models.CharField(max_length=100,default='')
+    west = models.CharField(max_length=100,default='')
+
+
+    deal = DealField(default=None,null=True)
     # auction = AuctionField()
     auction = models.CharField(max_length=100,default='')
-    declarer = models.CharField(max_length=5,default='')
     contract = ContractField(default=None,null=True)
     direction_to_act = models.CharField(max_length=5,default='')
-    # declarer = models.CharField(max_length=5,default='')
+    tricks_taken = models.IntegerField(default=None,null=True)
+    trick = models.CharField(max_length=12,default='')
     objects = BridgeTableManager()
 
-    def next_bidder(self):
+    def take_seat(self, user, seat):
+        if seat == 'north' and self.north == '':
+            self.north = user
+        elif seat == 'east' and self.east == '':
+            self.east = user
+        elif seat == 'south' and self.south == '':
+            self.south = user
+        elif seat == 'west' and self.west == '':
+            self.west = user
+        else:
+            print(user)
+            print(seat)
+            raise ValueError('Could not take seat')
+        self.save()
+
+    # def take_seat(self, user, seat):
+    #     if seat == 'north' and not self.north:
+    #         self.north = User.objects.get(username=user)
+    #     elif seat == 'east' and not self.east:
+    #         self.east = User.objects.get(username=user)
+    #     elif seat == 'south' and not self.south:
+    #         self.south = User.objects.get(username=user)
+    #     elif seat == 'west' and not self.west:
+    #         self.west = User.objects.get(username=user)
+    #     else:
+    #         raise ValueError('Could not take seat')
+    #     self.save()
+
+    def leave_seat(self, user, seat):
+        if seat == 'north' and self.north == user:
+            self.north = ''
+        elif seat == 'east' and self.east == user:
+            self.east = ''
+        elif seat == 'south' and self.south == user:
+            self.south = ''
+        elif seat == 'west' and self.west == user:
+            self.west = ''
+        else:
+            raise ValueError('Could not leave seat')
+        self.save()
+
+    # def leave_seat(self, user, seat):
+    #     if seat == 'north' and self.north.username == user:
+    #         self.north = None
+    #     elif seat == 'east' and self.east.username == user:
+    #         self.east = None
+    #     elif seat == 'south' and self.south.username == user:
+    #         self.south = None
+    #     elif seat == 'west' and self.west.username == user:
+    #         self.west = None
+    #     else:
+    #         raise ValueError('Could not leave seat')
+    #     self.save()
+
+    def next_actor(self):
         if self.direction_to_act == 'north':
             self.direction_to_act = 'east'
         elif self.direction_to_act == 'east':
@@ -332,26 +445,32 @@ class BridgeTable(models.Model):
         self.save()
 
     def set_contract(self):
-        if len(self.auction)<4 or self.auction[-3:]!='PPP':
-            return None
-        self.contract = parse_auction(self.auction)
-        self.save()
+        # if auction is not over, do nothing
+        # otherwise set contract begin play
+        if len(self.auction)>0 and self.auction[0]=='P':
+            self.contract = parse_contract(parse_auction(self.auction))
+
+            # set opening leader to be left of declarer
+            self.direction_to_act = self.contract.declarer
+            self.next_actor()
+            self.save()
 
     def update_auction(self, bid):
         self.auction = self.auction + bid
         self.save()
 
-    # def next_card_player(self):
-    #     if
-    #         if self.direction_to_play == 'north':
-    #             self.direction_to_play = 'east'
-    #         elif self.direction_to_play == 'east':
-    #             self.direction_to_play = 'south'
-    #         elif self.direction_to_play == 'south':
-    #             self.direction_to_play = 'west'
-    #         elif self.direction_to_play == 'west':
-    #             self.direction_to_play = 'north'
-    #     self.save()
+    def play_card(self, seat, card):
+        self.trick = self.trick + seat + card
+        print(self.trick)
+        if len(self.trick) < 12:
+            self.next_actor()
+        else:
+            self.evaluate_trick()
+        self.save()
+
+    def evaluate_trick(self):
+        pass
+
 
 
 

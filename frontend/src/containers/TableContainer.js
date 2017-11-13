@@ -33,6 +33,7 @@ class TableContainer extends React.Component {
               <Hand className="HandTop" position='top'/>
               <Hand className="HandLeft" position='left'/>
               <Auction />
+              {this.props.contract}
               <Hand className="HandRight" position='right'/>
               <Hand className="HandBottom" position='bottom'/>
               <BiddingBox />

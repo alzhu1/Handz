@@ -110,7 +110,7 @@ export const seat = (state = '', action) => {
 
 export const direction_to_act = (state = '', action) => {
     switch(action.type) {
-        case a.GET_BIDDER:
+        case a.GET_NEXT_ACTOR:
           return action.direction_to_act;
         case a.LEAVE_TABLE:
             return '';

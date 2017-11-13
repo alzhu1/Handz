@@ -10,7 +10,8 @@ class BiddingBox extends React.Component {
       alignSelf: 'center'
     };
 
-    if (this.props.direction_to_act === this.props.seat) {
+    if (this.props.direction_to_act === this.props.seat &&
+        this.props.contract == '') {
       return (
             <div style={styles}>
                 <ButtonBase onClick={() =>

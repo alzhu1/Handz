@@ -82,8 +82,8 @@ export const leaveSeat = (seat) => ({
     seat
 })
 
-export const getBidder = (direction_to_act) => ({
-    type: a.GET_BIDDER,
+export const getNextActor = (direction_to_act) => ({
+    type: a.GET_NEXT_ACTOR,
     direction_to_act
 })
 
@@ -100,4 +100,9 @@ export const makeBid = (bid) => ({
 export const getContract = (contract) => ({
     type: a.GET_CONTRACT,
     contract
+})
+
+export const playCard = (card) => ({
+    type: a.PLAY_CARD,
+    card
 })
