@@ -144,6 +144,18 @@ export const contract = (state = '', action) => {
     return state;
 }
 
+export const trick = (state = '', action) => {
+    switch(action.type) {
+        case a.GET_TRICK:
+          return action.trick;
+        case a.LEAVE_TABLE:
+            return '';
+        default:
+            break;
+    }
+    return state;
+}
+
 
 export const appReducer = combineReducers({
                     token,
@@ -156,7 +168,8 @@ export const appReducer = combineReducers({
                     seat,
                     direction_to_act,
                     auction,
-                    contract
+                    contract,
+                    trick
                     });
 
 export const rootReducer = (state, action) => {

@@ -106,3 +106,8 @@ export const playCard = (card) => ({
     type: a.PLAY_CARD,
     card
 })
+
+export const getTrick = (trick) => ({
+    type: a.GET_TRICK,
+    trick
+})

@@ -375,9 +375,11 @@ class BridgeTable(models.Model):
     auction = models.CharField(max_length=100,default='')
     contract = ContractField(default=None,null=True)
     direction_to_act = models.CharField(max_length=5,default='')
-    NS_tricks_taken = models.IntegerField(default=None,null=True)
-    EW_tricks_taken = models.IntegerField(default=None,null=True)
+    NS_tricks_taken = models.IntegerField(default=0,null=True)
+    EW_tricks_taken = models.IntegerField(default=0,null=True)
+    total_tricks = models.IntegerField(default=0,null=True)
     trick = models.CharField(max_length=12,default='')
+    objects = models.Manager()
     objects = BridgeTableManager()
 
     def take_seat(self, user, seat):
@@ -515,21 +517,13 @@ class BridgeTable(models.Model):
         elif winner == 'S':
             self.direction_to_act = 'south'
 
+        if winner == 'W' or winner == 'E':
+            self.EW_tricks_taken += 1
+        elif winner == 'N' or winner == 'S':
+            self.NS_tricks_taken += 1
+        self.total_tricks += 1
         self.trick = ''
-        self.NS_tricks_taken += 1
         self.save()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

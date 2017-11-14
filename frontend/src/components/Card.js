@@ -4,6 +4,9 @@ import {connect} from 'react-redux';
 
 class Card extends React.Component {
   render() {
+    if (this.props.card == '') {
+      return <div />
+    }
     let src = require('../images/acbl/' + this.props.card + '.png')
     let defaults = {
       height: '50px',
@@ -12,6 +15,7 @@ class Card extends React.Component {
       // position:'relative',
       // left:this.props.left
     };
+
     return (
             <img src={src} style={defaults}
             onClick={() =>{this.props.playCardThunk(this.props.card)}}

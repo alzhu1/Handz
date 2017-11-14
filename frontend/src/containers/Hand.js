@@ -10,7 +10,10 @@ import ButtonBase from 'material-ui/Button';
 var _ = require('lodash');
 
 class Hand extends React.Component {
-
+    constructor() {
+        super();
+        this.state = {current_card: ""};
+    }
 
     createCardList(hand) {
       var cardlist = [];
@@ -78,8 +81,6 @@ class Hand extends React.Component {
               return 'north'
           }
       }
-
-
     }
 
 
@@ -105,10 +106,10 @@ class Hand extends React.Component {
       let left = 25
       for (var i = 0, len = 13; i < len; i++) {
           cards.push( <Card
-                    card={cardlist[i]}
-                    key={_.uniqueId()}
-                    left={left}
-                  />)
+                        card={cardlist[i]}
+                        key={_.uniqueId()}
+                        left={left}
+                      />)
           left = left - 25
       }
 
@@ -120,10 +121,9 @@ class Hand extends React.Component {
       // })
       let cardinal = this.buttonDirection(this.props.position, this.props.seat)
 
-
-
       return (
         <div className={this.props.className}>
+          <Card card={this.state.current_card} key={_.uniqueId()}/>
           {cards}
           <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
           {cardinal}

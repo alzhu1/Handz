@@ -282,6 +282,18 @@ class SockConsumer(ReduxConsumer):
             # tell front end who is next actor
             direction_to_act = table.direction_to_act
             self.GET_NEXT_ACTOR(direction_to_act)
+
+            # send updated trick
+            # trick = self.trick
+            # self.send_to_group(str(table_id), {
+            #               'type': 'GET_TRICK',
+            #               'trick': {
+            #                         'north':
+            #                         'south':
+            #                         'east':
+            #                         'west':
+            #                     }
+            #               })
         else:
             raise ValueError('Card should not be able to be played')
 
