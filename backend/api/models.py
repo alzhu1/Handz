@@ -305,51 +305,75 @@ class ContractField(models.Field):
 
 class Trick(object):
 
-    def __init__(self, trick_string, north, south, east, west, dealer):
-        self.hand_string = hand_string
+    def __init__(self, trick_string, north, south, east, west):
+        self.trick_string = trick_string
         self.north = north
         self.east = east
         self.south = south
         self.west = west
 
 
-# class TrickField(models.Field):
-#
-#     def db_type(self, connection):
-#         return 'trick'
-#
-#     def from_db_value(self, value, expression, connection, context):
-#         if value is None:
-#             return value
-#         return parse_trick(value)
-#
-#     def to_python(self, value):
-#         if isinstance(value, Trick):
-#             return value
-#
-#         if value is None:
-#             return value
-#
-#         return parse_trick(value)
-#
-#     def get_prep_value(self, value):
-#         if value is None:
-#             return value
-#         return value.trick_string
-#
-#     def formfield(self, **kwargs):
-#         # This is a fairly standard way to set up some defaults
-#         # while letting the caller override them.
-#         defaults = {'form_class': MyFormField}
-#         defaults.update(kwargs)
-#         return super(TrickField, self).formfield(**defaults)
-#
-#     def get_internal_type(self):
-#         return 'CharField'
-#
-#     def value_to_string(self, obj):
-#         value = self.value_from_object(obj)
-#         return self.get_prep_value(value)
+class TrickField(models.Field):
+
+    def db_type(self, connection):
+        return 'trick'
+
+    def from_db_value(self, value, expression, connection, context):
+        if value is None:
+            return value
+        return parse_trick(value)
+
+    def to_python(self, value):
+        if isinstance(value, Trick):
+            return value
+
+        if value is None:
+            return value
+
+        return parse_trick(value)
+
+    def get_prep_value(self, value):
+        if value is None:
+            return value
+        if isinstance(value, str):
+            return value
+        return value.trick_string
+
+    def formfield(self, **kwargs):
+        # This is a fairly standard way to set up some defaults
+        # while letting the caller override them.
+        defaults = {'form_class': MyFormField}
+        defaults.update(kwargs)
+        return super(TrickField, self).formfield(**defaults)
+
+    def get_internal_type(self):
+        return 'CharField'
+
+    def value_to_string(self, obj):
+        value = self.value_from_object(obj)
+        return self.get_prep_value(value)
+
+def parse_trick(trick_string):
+
+    card_list = []
+    north, south, east, west = '', '', '', ''
+    for i in range(0, len(trick_string), 3):
+        c = trick_string[i:i+3]
+        if c[0] == 'N':
+            north= c[1:]
+        elif c[0] == 'S':
+            south= c[1:]
+        elif c[0] == 'E':
+            east= c[1:]
+        elif c[0] == 'W':
+            west= c[1:]
+    trick = Trick(trick_string=trick_string,
+                    north=north,
+                    south=south,
+                    east=east,
+                    west=west
+                    )
+    return trick
 
 class BridgeTableManager(models.Manager):
 
@@ -374,11 +398,12 @@ class BridgeTable(models.Model):
     # auction = AuctionField()
     auction = models.CharField(max_length=100,default='')
     contract = ContractField(default=None,null=True)
+    trick = TrickField(default='')
+
     direction_to_act = models.CharField(max_length=5,default='')
     NS_tricks_taken = models.IntegerField(default=0,null=True)
     EW_tricks_taken = models.IntegerField(default=0,null=True)
     total_tricks = models.IntegerField(default=0,null=True)
-    trick = models.CharField(max_length=12,default='')
     objects = models.Manager()
     objects = BridgeTableManager()
 
@@ -466,19 +491,19 @@ class BridgeTable(models.Model):
         self.save()
 
     def play_card(self, seat, card):
-        self.trick = self.trick + seat + card
-        print(self.trick)
-        if len(self.trick) < 12:
+        self.trick = parse_trick(self.trick.trick_string + seat + card)
+        if len(self.trick.trick_string) < 12:
             self.next_actor()
         else:
             self.evaluate_trick()
+        print(self.trick.trick_string)
         self.save()
 
     def evaluate_trick(self):
-        card1 = self.trick[:3]
-        card2 = self.trick[3:6]
-        card3 = self.trick[6:9]
-        card4 = self.trick[9:]
+        card1 = self.trick.trick_string[:3]
+        card2 = self.trick.trick_string[3:6]
+        card3 = self.trick.trick_string[6:9]
+        card4 = self.trick.trick_string[9:]
         trick = [card2, card3, card4]
 
         # rank and suit required to win
@@ -522,7 +547,7 @@ class BridgeTable(models.Model):
         elif winner == 'N' or winner == 'S':
             self.NS_tricks_taken += 1
         self.total_tricks += 1
-        self.trick = ''
+        self.trick = parse_trick('')
         self.save()
 
 

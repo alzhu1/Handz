@@ -18,7 +18,7 @@ class Card extends React.Component {
 
     return (
             <img src={src} style={defaults}
-            onClick={() =>{this.props.playCardThunk(this.props.card)}}
+            onClick={() => {this.props.playCardThunk(this.props.card)}}
            />)
   }
 }

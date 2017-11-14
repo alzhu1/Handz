@@ -144,7 +144,8 @@ export const contract = (state = '', action) => {
     return state;
 }
 
-export const trick = (state = '', action) => {
+export const trick = (state = {'north': '', 'south': '',
+                            'east': '', 'west': ''}, action) => {
     switch(action.type) {
         case a.GET_TRICK:
           return action.trick;
