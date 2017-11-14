@@ -71,6 +71,58 @@ def construct_hand(hand_int_list):
 
     return Hand(spades,hearts,diamonds,clubs)
 
+def remove_card_from_hand(hand, card):
+    spades = hand.spades
+    hearts = hand.hearts
+    diamonds = hand.diamonds
+    clubs = hand.clubs
+
+    if card[1] == 'S':
+        spades = spades.replace(card[0], '')
+    elif card[1] == 'H':
+        hearts = hearts.replace(card[0], '')
+    elif card[1] == 'D':
+        diamonds = diamonds.replace(card[0], '')
+    elif card[1] == 'C':
+        clubs = clubs.replace(card[0], '')
+
+    return Hand(spades,hearts,diamonds,clubs)
+
+def remove_card_from_hand_string(hand_string, card):
+
+    hand = list(hand_string)
+
+    def map_card_to_int(card):
+        i = 0
+        if card[1] == 'H':
+            i+=13
+        elif card[1] == 'D':
+            i+=26
+        elif card[1] == 'C':
+            i+=39
+
+        if card[0] == 'A':
+            pass
+        elif card[0] == 'K':
+            i+=1
+        elif card[0] == 'T':
+            i+=10
+        elif card[0] == 'Q':
+            i+=11
+        elif card[0] == 'J':
+            i+=12
+        else:
+            i+= int(card[0])
+
+        return i
+
+    i = map_card_to_int(card)
+    hand[i] = '0'
+    hand = ''.join(hand)
+    print('hand')
+    print(hand)
+    return hand
+
 class Deal(object):
 
     def __init__(self, hand_string, north, south, east, west, dealer):
@@ -80,6 +132,17 @@ class Deal(object):
         self.south = south
         self.west = west
         self.dealer = dealer
+
+    def play_card(self, seat, card):
+        self.hand_string = remove_card_from_hand_string(self.hand_string, card)
+        if seat == 'north':
+            self.north = remove_card_from_hand(self.direction(seat), card)
+        elif seat == 'east':
+            self.east = remove_card_from_hand(self.direction(seat), card)
+        elif seat == 'south':
+            self.south = remove_card_from_hand(self.direction(seat), card)
+        elif seat == 'west':
+            self.west = remove_card_from_hand(self.direction(seat), card)
 
     def direction(self, seat):
         if seat == 'north':
@@ -151,6 +214,8 @@ class DealField(models.Field):
         return parse_deal(value)
 
     def get_prep_value(self, value):
+        if isinstance(value, str):
+            return value
         return value.hand_string
 
     def formfield(self, **kwargs):
@@ -497,7 +562,11 @@ class BridgeTable(models.Model):
         else:
             self.evaluate_trick()
         print(self.trick.trick_string)
+
+        # update dealer
+        self.deal = parse_deal(remove_card_from_hand_string(self.deal.hand_string, card))
         self.save()
+        print(self.deal.east.hearts)
 
     def evaluate_trick(self):
         card1 = self.trick.trick_string[:3]

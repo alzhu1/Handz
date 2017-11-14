@@ -84,7 +84,8 @@ export const tablelist = (state = [], action) => {
     return state;
 }
 
-export const hand = (state = '', action) => {
+export const hand = (state = {'spades': '', 'hearts': '',
+                            'diamonds': '', 'clubs': ''}, action) => {
     switch(action.type) {
         case a.GET_HAND:
             return action.hand;

@@ -100,7 +100,11 @@ class Hand extends React.Component {
 
       const cards = []
       let left = 25
-      for (var i = 0, len = 13; i < len; i++) {
+      let card_len = (this.props.hand['spades'].length +
+                      this.props.hand['hearts'].length +
+                      this.props.hand['diamonds'].length +
+                      this.props.hand['clubs'].length)
+      for (var i = 0, len = card_len; i < len; i++) {
           cards.push( <Card
                         card={cardlist[i]}
                         key={_.uniqueId()}
@@ -116,7 +120,7 @@ class Hand extends React.Component {
       //           />
       // })
       let cardinal = this.buttonDirection(this.props.position, this.props.seat)
-      console.log(this.props.trick[cardinal])
+
       return (
         <div className={this.props.className}>
           <Card card={this.props.trick[cardinal]} key={_.uniqueId()}/>

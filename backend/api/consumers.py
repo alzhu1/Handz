@@ -177,7 +177,7 @@ class SockConsumer(ReduxConsumer):
         user = User.objects.get(username=username)
 
         # leave seat if sitting
-        self.LEAVE_SEAT()
+        self.LEAVE_SEAT(action)
 
         seat = action['seat']
         table_id = self.message.channel_session['table_id']
@@ -201,7 +201,7 @@ class SockConsumer(ReduxConsumer):
         self.GET_HAND(hand)
 
     @action('LEAVE_SEAT')
-    def LEAVE_SEAT(self):
+    def LEAVE_SEAT(self, action):
         print('LEAVE_SEAT')
         username = self.message.channel_session['user']
         user = User.objects.get(username=username)
@@ -274,10 +274,15 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
+        card = action['card']
         if table.contract != None:
             user = User.objects.get(username=username)
+
+            # current seat, !! need to normalize
+            seat = table.direction_to_act
+
             print('valid')
-            table.play_card(user.seat[0].upper(), action['card'])
+            table.play_card(user.seat[0].upper(), card)
 
             # tell front end who is next actor
             direction_to_act = table.direction_to_act
@@ -294,6 +299,10 @@ class SockConsumer(ReduxConsumer):
                                     'west': trick.west,
                                 }
                           })
+            # update hand frontend
+            hand = table.deal.direction(seat)
+            self.GET_HAND(hand)
+
         else:
             raise ValueError('Card should not be able to be played')
 
