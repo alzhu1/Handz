@@ -144,6 +144,9 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
 
+        #leave seat if sitting
+
+        # send leave table action to front end
         self.send_to_group(username, {
                       'type': 'LEAVE_TABLE',
                       'table_id': table_id
@@ -177,8 +180,10 @@ class SockConsumer(ReduxConsumer):
         user = User.objects.get(username=username)
 
         # leave seat if sitting
+        print('1')
         self.LEAVE_SEAT(action)
-
+        print('3')
+        print(hasattr(user, 'seat'))
         seat = action['seat']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
@@ -188,14 +193,10 @@ class SockConsumer(ReduxConsumer):
         # take seat on backend
         table.take_seat(username, seat)
 
-        user.seat = seat
-        user.save()
-
         # send action to front end
         self.send_to_group(str(table_id), {
                       'type': 'TAKE_SEAT',
-                      'seat': seat,
-                      'table_id': table_id
+                      'seat': seat
                       })
 
         self.GET_HAND(hand)
@@ -204,22 +205,28 @@ class SockConsumer(ReduxConsumer):
     def LEAVE_SEAT(self, action):
         print('LEAVE_SEAT')
         username = self.message.channel_session['user']
-        user = User.objects.get(username=username)
-        seat = user.seat
         table_id = self.message.channel_session['table_id']
+        user = User.objects.get(username=username)
         table = BridgeTable.objects.get(pk=table_id)
 
-        # leave seat on backend
-        table.leave_seat(username, seat)
-        user.seat = ''
-        user.save()
+        # leave seat on backend if sitting
+        if hasattr(user, 'seat'):
+            seat = user.seat.direction
+            print(seat)
+            table.leave_seat(username)
+            print('2')
+            print(user.seat.direction)
 
-        # send action to frontend
-        self.send_to_group(str(table_id), {
-                      'type': 'LEAVE_SEAT',
-                      'seat': seat,
-                      'table_id': table_id
-                      })
+            # send action to frontend
+            self.send_to_group(str(table_id), {
+                          'type': 'LEAVE_SEAT',
+                          'seat': seat,
+                          'table_id': table_id
+                          })
+
+            print(hasattr(user, 'seat'))
+
+        print(hasattr(user, 'seat'))
 
     @action('MAKE_BID')
     def MAKE_BID(self, action):
@@ -299,6 +306,7 @@ class SockConsumer(ReduxConsumer):
                                     'west': trick.west,
                                 }
                           })
+
             # update hand frontend
             hand = table.deal.direction(seat)
             self.GET_HAND(hand)

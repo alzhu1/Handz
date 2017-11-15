@@ -12,7 +12,7 @@ class User(AbstractUser):
     '''
     Custom User
     '''
-    seat = models.CharField(max_length=5, default='')
+    # seat = models.CharField(max_length=5, default='')
     is_logged_in = models.BooleanField(default=False)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -71,23 +71,6 @@ def construct_hand(hand_int_list):
 
     return Hand(spades,hearts,diamonds,clubs)
 
-def remove_card_from_hand(hand, card):
-    spades = hand.spades
-    hearts = hand.hearts
-    diamonds = hand.diamonds
-    clubs = hand.clubs
-
-    if card[1] == 'S':
-        spades = spades.replace(card[0], '')
-    elif card[1] == 'H':
-        hearts = hearts.replace(card[0], '')
-    elif card[1] == 'D':
-        diamonds = diamonds.replace(card[0], '')
-    elif card[1] == 'C':
-        clubs = clubs.replace(card[0], '')
-
-    return Hand(spades,hearts,diamonds,clubs)
-
 def remove_card_from_hand_string(hand_string, card):
 
     hand = list(hand_string)
@@ -132,17 +115,6 @@ class Deal(object):
         self.south = south
         self.west = west
         self.dealer = dealer
-
-    def play_card(self, seat, card):
-        self.hand_string = remove_card_from_hand_string(self.hand_string, card)
-        if seat == 'north':
-            self.north = remove_card_from_hand(self.direction(seat), card)
-        elif seat == 'east':
-            self.east = remove_card_from_hand(self.direction(seat), card)
-        elif seat == 'south':
-            self.south = remove_card_from_hand(self.direction(seat), card)
-        elif seat == 'west':
-            self.west = remove_card_from_hand(self.direction(seat), card)
 
     def direction(self, seat):
         if seat == 'north':
@@ -440,6 +412,27 @@ def parse_trick(trick_string):
                     )
     return trick
 
+# class East(models.Model):
+#     name = models.CharField(max_length=25)
+#     user = models.OneToOneField('User',on_delete=models.CASCADE,primary_key=True)
+#
+# class West(models.Model):
+#     name = models.CharField(max_length=25)
+#     user = models.OneToOneField('User',on_delete=models.CASCADE,primary_key=True)
+#
+# class North(models.Model):
+#     name = models.CharField(max_length=25)
+#     user = models.OneToOneField('User',on_delete=models.CASCADE,primary_key=True)
+#
+# class South(models.Model):
+#     name = models.CharField(max_length=25)
+#     user = models.OneToOneField('User',on_delete=models.CASCADE,primary_key=True)
+
+class Seat(models.Model):
+    # direction_choices = ('North', 'South', 'East', 'West')
+    direction = models.CharField(max_length=5)
+    user = models.OneToOneField('User',on_delete=models.CASCADE,related_name='seat', null=True)
+
 class BridgeTableManager(models.Manager):
 
     def create_deal(self):
@@ -453,11 +446,19 @@ class BridgeTableManager(models.Manager):
 
 class BridgeTable(models.Model):
     # users
-    north = models.CharField(max_length=100,default='')
-    south = models.CharField(max_length=100,default='')
-    east = models.CharField(max_length=100,default='')
-    west = models.CharField(max_length=100,default='')
+    # north = models.CharField(max_length=100,default='')
+    # south = models.CharField(max_length=100,default='')
+    # east = models.CharField(max_length=100,default='')
+    # west = models.CharField(max_length=100,default='')
 
+    north = models.OneToOneField('Seat',default=None, null= True,
+            on_delete=models.CASCADE,related_name='table_as_north')
+    south = models.OneToOneField('Seat',default=None, null= True,
+            on_delete=models.CASCADE,related_name='table_as_south')
+    east = models.OneToOneField('Seat',default=None, null= True,
+            on_delete=models.CASCADE,related_name='table_as_east')
+    west = models.OneToOneField('Seat',default=None, null= True,
+            on_delete=models.CASCADE,related_name='table_as_west')
 
     deal = DealField(default=None,null=True)
     # auction = AuctionField()
@@ -472,21 +473,24 @@ class BridgeTable(models.Model):
     objects = models.Manager()
     objects = BridgeTableManager()
 
-    def take_seat(self, user, seat):
+    def take_seat(self, username, seat):
+        user = User.objects.get(username=username)
         if seat == 'north':
-            self.north = user
+            self.north = Seat(user=user,direction='north')
+            self.north.save()
         elif seat == 'east':
-            self.east = user
+            self.east = Seat(user=user,direction='east')
+            self.east.save()
         elif seat == 'south':
-            self.south = user
+            self.south = Seat(user=user,direction='south')
+            self.south.save()
         elif seat == 'west':
-            self.west = user
+            self.west = Seat(user=user,direction='west')
+            self.west.save()
         else:
-            print(user)
+            print(username)
             print(seat)
-            print(self.north)
             raise ValueError('Could not take seat')
-        print('take seat')
         self.save()
 
     # def take_seat(self, user, seat):
@@ -502,19 +506,16 @@ class BridgeTable(models.Model):
     #         raise ValueError('Could not take seat')
     #     self.save()
 
-    def leave_seat(self, user, seat):
-        if seat == 'north':
-            self.north = ''
-        elif seat == 'east':
-            self.east = ''
-        elif seat == 'south':
-            self.south = ''
-        elif seat == 'west':
-            self.west = ''
-        else:
-            raise ValueError('Could not leave seat')
+    def leave_seat(self, username):
+        print('leave seat')
+        user = User.objects.get(username=username)
+
+        print(user.seat.direction)
+        user.seat.delete()
+        user.save()
         print('left seat')
         self.save()
+        print(user.seat.direction)
 
     # def leave_seat(self, user, seat):
     #     if seat == 'north' and self.north.username == user:
@@ -561,12 +562,10 @@ class BridgeTable(models.Model):
             self.next_actor()
         else:
             self.evaluate_trick()
-        print(self.trick.trick_string)
 
         # update dealer
         self.deal = parse_deal(remove_card_from_hand_string(self.deal.hand_string, card))
         self.save()
-        print(self.deal.east.hearts)
 
     def evaluate_trick(self):
         card1 = self.trick.trick_string[:3]

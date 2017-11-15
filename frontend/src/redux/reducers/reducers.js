@@ -89,8 +89,12 @@ export const hand = (state = {'spades': '', 'hearts': '',
     switch(action.type) {
         case a.GET_HAND:
             return action.hand;
+        case a.LEAVE_SEAT:
+            return {'spades': '', 'hearts': '',
+                                        'diamonds': '', 'clubs': ''};
         case a.LEAVE_TABLE:
-            return '';
+            return {'spades': '', 'hearts': '',
+                                        'diamonds': '', 'clubs': ''};
         default:
             break;
     }
@@ -102,6 +106,8 @@ export const seat = (state = '', action) => {
         case a.TAKE_SEAT:
             return action.seat;
         case a.LEAVE_SEAT:
+            return '';
+        case a.LEAVE_TABLE:
             return '';
         default:
             break;
@@ -151,7 +157,8 @@ export const trick = (state = {'north': '', 'south': '',
         case a.GET_TRICK:
           return action.trick;
         case a.LEAVE_TABLE:
-            return '';
+            return {'north': '', 'south': '',
+                                        'east': '', 'west': ''};
         default:
             break;
     }

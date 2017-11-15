@@ -84,7 +84,7 @@ class Hand extends React.Component {
 
       var cardlist = [];
 
-      if (this.props.hand === '' || this.props.position !== 'bottom') {
+      if (this.props.hand === "" || this.props.position !== 'bottom') {
 
           for (var i = 0, len = 13; i < len; i++) {
               cardlist.push('blue_back');
@@ -96,8 +96,11 @@ class Hand extends React.Component {
           // create list of cards e.g. 9S4D...
           cardlist = this.createCardList(this.props.hand)
 
+
+
       }
 
+      console.log(this.props.position)
       const cards = []
       let left = 25
       let card_len = (this.props.hand['spades'].length +
