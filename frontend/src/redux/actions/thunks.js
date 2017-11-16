@@ -71,9 +71,6 @@ export const playCardThunk = (card) => (
     function (dispatch, getState, emit) {
         if (getState().contract != '' &&
             getState().seat === getState().direction_to_act) {
-          // remove card from hand_string
-
-
           return(emit(a.playCard(card)));
         }
     }

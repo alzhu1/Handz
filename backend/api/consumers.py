@@ -8,6 +8,18 @@ from .engine import ReduxConsumer, action
 
 from .models import BridgeTable, Deal
 
+def suit_name(abbr):
+    if abbr == 'S':
+        return 'spades'
+    elif abbr =='H':
+        return 'hearts'
+    elif abbr =='D':
+        return 'diamonds'
+    elif abbr =='C':
+        return 'clubs'
+    else:
+        raise ValueError('not valid suit')
+
 class SockConsumer(ReduxConsumer):
     channel_session_user = True
     http_user = True
@@ -194,7 +206,7 @@ class SockConsumer(ReduxConsumer):
         table.take_seat(username, seat)
 
         # send action to front end
-        self.send_to_group(str(table_id), {
+        self.send_to_group(username, {
                       'type': 'TAKE_SEAT',
                       'seat': seat
                       })
@@ -218,10 +230,9 @@ class SockConsumer(ReduxConsumer):
             print(user.seat.direction)
 
             # send action to frontend
-            self.send_to_group(str(table_id), {
+            self.send_to_group(username, {
                           'type': 'LEAVE_SEAT',
-                          'seat': seat,
-                          'table_id': table_id
+                          'seat': seat
                           })
 
             print(hasattr(user, 'seat'))
@@ -281,38 +292,55 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
-        card = action['card']
+
+
         if table.contract != None:
+            card = action['card']
             user = User.objects.get(username=username)
+            seat = user.seat.direction
 
-            # current seat, !! need to normalize
-            seat = table.direction_to_act
 
-            print('valid')
-            table.play_card(user.seat[0].upper(), card)
+            # check if first card in trick
+            if table.trick.trick_string:
+                suit_led = table.trick.trick_string[2]
+                print(suit_led)
+                # check if card matches first card in trick or out of that suit
+                if suit_led == card[1] or not table.deal.direction(seat).get_hand(suit_led):
+                    is_valid_card = True
+                else:
+                    is_valid_card = False
+            # first card to be played so true
+            else:
+                is_valid_card = True
 
-            # tell front end who is next actor
-            direction_to_act = table.direction_to_act
-            self.GET_NEXT_ACTOR(direction_to_act)
+            if is_valid_card:
+                print('valid')
+                table.play_card(seat[0].upper(), card)
 
-            # send updated trick
-            trick = table.trick
-            self.send_to_group(str(table_id), {
-                          'type': 'GET_TRICK',
-                          'trick': {
-                                    'north': trick.north,
-                                    'south': trick.south,
-                                    'east': trick.east,
-                                    'west': trick.west,
-                                }
-                          })
+                # tell front end who is next actor
+                direction_to_act = table.direction_to_act
+                self.GET_NEXT_ACTOR(direction_to_act)
 
-            # update hand frontend
-            hand = table.deal.direction(seat)
-            self.GET_HAND(hand)
+                # send updated trick
+                trick = table.trick
+                self.send_to_group(str(table_id), {
+                              'type': 'GET_TRICK',
+                              'trick': {
+                                        'north': trick.north,
+                                        'south': trick.south,
+                                        'east': trick.east,
+                                        'west': trick.west,
+                                    }
+                              })
 
+                # update hand frontend
+                hand = table.deal.direction(seat)
+                self.GET_HAND(hand)
+
+            else:
+                raise ValueError('Must follow suit')
         else:
-            raise ValueError('Card should not be able to be played')
+            raise ValueError('Contract not set, card cannot be played')
 
     @action('MODIFY_USER_LIST')
     def MODIFY_USER_LIST(self, content, is_logged_in=True, username=None, user_list=[]):

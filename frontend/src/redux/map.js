@@ -15,6 +15,7 @@ export const mapStateToProps = (state) => {
         auction: state.auction,
         contract: state.contract,
         trick: state.trick,
+        suit_led: state.suit_led,
     };
 };
 

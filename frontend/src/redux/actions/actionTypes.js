@@ -29,3 +29,4 @@ export const GET_CONTRACT = 'GET_CONTRACT';
 // cardplay actions
 export const PLAY_CARD = 'PLAY_CARD';
 export const GET_TRICK = 'GET_TRICK';
+export const SUIT_LED = 'SUIT_LED';

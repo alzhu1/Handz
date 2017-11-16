@@ -41,6 +41,18 @@ class Hand(object):
         self.diamonds = ''.join(sorted(diamonds, key=self.sort_key, reverse=True))
         self.clubs = ''.join(sorted(clubs, key=self.sort_key, reverse=True))
 
+    def get_hand(self, suit):
+        if suit == 'spades' or 'S':
+            return self.spades
+        if suit == 'hearts' or 'H':
+            return self.hearts
+        if suit == 'diamonds' or 'D':
+            return self.diamonds
+        if suit == 'clubs' or 'C':
+            return self.clubs
+        else:
+            raise ValueError ('Not valid suit')
+
 def construct_hand(hand_int_list):
 
     spades, hearts, diamonds, clubs = '', '', '', ''

@@ -151,20 +151,31 @@ export const contract = (state = '', action) => {
     return state;
 }
 
-export const trick = (state = {'north': '', 'south': '',
-                            'east': '', 'west': ''}, action) => {
+const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
+
+export const trick = (state = empty_trick, action) => {
     switch(action.type) {
         case a.GET_TRICK:
           return action.trick;
         case a.LEAVE_TABLE:
-            return {'north': '', 'south': '',
-                                        'east': '', 'west': ''};
+            return empty_trick;
         default:
             break;
     }
     return state;
 }
 
+export const suit_led = (state = '', action) => {
+    switch(action.type) {
+        case a.SUIT_LED:
+          return action.suit
+        case a.LEAVE_TABLE:
+            return '';
+        default:
+            break;
+    }
+    return state;
+}
 
 export const appReducer = combineReducers({
                     token,
@@ -178,7 +189,8 @@ export const appReducer = combineReducers({
                     direction_to_act,
                     auction,
                     contract,
-                    trick
+                    trick,
+                    suit_led
                     });
 
 export const rootReducer = (state, action) => {

@@ -111,3 +111,8 @@ export const getTrick = (trick) => ({
     type: a.GET_TRICK,
     trick
 })
+
+export const suitLed = (suit) => ({
+    type: a.SUIT_LED,
+    suit
+})
