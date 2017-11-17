@@ -84,17 +84,16 @@ export const tablelist = (state = [], action) => {
     return state;
 }
 
-export const hand = (state = {'spades': '', 'hearts': '',
-                            'diamonds': '', 'clubs': ''}, action) => {
+export const empty_hand = {'spades': "", 'hearts': "",'diamonds': "", 'clubs': ""}
+
+export const hand = (state = empty_hand, action) => {
     switch(action.type) {
         case a.GET_HAND:
             return action.hand;
         case a.LEAVE_SEAT:
-            return {'spades': '', 'hearts': '',
-                                        'diamonds': '', 'clubs': ''};
+            return empty_hand;
         case a.LEAVE_TABLE:
-            return {'spades': '', 'hearts': '',
-                                        'diamonds': '', 'clubs': ''};
+            return empty_hand;
         default:
             break;
     }
@@ -177,21 +176,38 @@ export const suit_led = (state = '', action) => {
     return state;
 }
 
+
+export const default_dist = {'north': empty_hand, 'south': empty_hand,
+                            'east': empty_hand, 'west': empty_hand}
+
+export const other_hands = (state = default_dist, action) => {
+    switch(action.type) {
+        case a.GET_DISTRIBUTIONS:
+          return action.hands
+        case a.LEAVE_TABLE:
+            return default_dist;
+        default:
+            break;
+    }
+    return state;
+}
+
 export const appReducer = combineReducers({
-                    token,
-                    username,
-                    chats,
-                    is_logged_in,
-                    userlist,
-                    tablelist,
-                    hand,
-                    seat,
-                    direction_to_act,
-                    auction,
-                    contract,
-                    trick,
-                    suit_led
-                    });
+token,
+username,
+chats,
+is_logged_in,
+userlist,
+tablelist,
+hand,
+seat,
+direction_to_act,
+auction,
+contract,
+trick,
+suit_led,
+other_hands
+});
 
 export const rootReducer = (state, action) => {
     if (action.type === 'LOGOUT') {

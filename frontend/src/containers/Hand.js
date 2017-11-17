@@ -7,6 +7,8 @@ import 'css/table.css'
 import Button from 'material-ui/Button';
 import ButtonBase from 'material-ui/Button';
 
+import {empty_hand} from 'redux/reducers/reducers';
+
 var _ = require('lodash');
 
 class Hand extends React.Component {
@@ -84,18 +86,22 @@ class Hand extends React.Component {
 
       var cardlist = [];
 
-      if (this.props.hand === "" || this.props.position !== 'bottom') {
+      if (this.props.hand === empty_hand || this.props.position !== 'bottom') {
 
           for (var i = 0, len = 13; i < len; i++) {
               cardlist.push('blue_back');
           }
+          var card_len = 13
 
       }
       else{
 
           // create list of cards e.g. 9S4D...
           cardlist = this.createCardList(this.props.hand)
-
+          var card_len = (this.props.hand['spades'].length +
+                          this.props.hand['hearts'].length +
+                          this.props.hand['diamonds'].length +
+                          this.props.hand['clubs'].length)
 
 
       }
@@ -103,10 +109,6 @@ class Hand extends React.Component {
       console.log(this.props.position)
       const cards = []
       let left = 25
-      let card_len = (this.props.hand['spades'].length +
-                      this.props.hand['hearts'].length +
-                      this.props.hand['diamonds'].length +
-                      this.props.hand['clubs'].length)
       for (var i = 0, len = card_len; i < len; i++) {
           cards.push( <Card
                         card={cardlist[i]}

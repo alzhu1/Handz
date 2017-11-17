@@ -205,13 +205,19 @@ class SockConsumer(ReduxConsumer):
         # take seat on backend
         table.take_seat(username, seat)
 
-        # send action to front end
+        # send hand distributions to front send
+        self.GET_DISTRIBUTIONS()
+
+        # send take seat action to front end
         self.send_to_group(username, {
                       'type': 'TAKE_SEAT',
                       'seat': seat
                       })
 
         self.GET_HAND(hand)
+
+        # get trick if in the middle of play
+        self.GET_TRICK()
 
     @action('LEAVE_SEAT')
     def LEAVE_SEAT(self, action):
@@ -277,12 +283,58 @@ class SockConsumer(ReduxConsumer):
                           })
 
 
+
     def GET_NEXT_ACTOR(self, direction_to_act):
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
         self.send_to_group(str(table_id), {
                       'type': 'GET_NEXT_ACTOR',
                       'direction_to_act': direction_to_act
+                      })
+
+    def GET_DISTRIBUTIONS(self):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        deal = table.deal
+        north = {'spades': len(deal.north.spades),
+                'hearts': len(deal.north.hearts),
+                'diamonds': len(deal.north.diamonds),
+                'clubs': len(deal.north.clubs)}
+        south = {'spades': len(deal.south.spades),
+                'hearts': len(deal.south.hearts),
+                'diamonds': len(deal.south.diamonds),
+                'clubs': len(deal.south.clubs)}
+        east = {'spades': len(deal.east.spades),
+                'hearts': len(deal.east.hearts),
+                'diamonds': len(deal.east.diamonds),
+                'clubs': len(deal.east.clubs)}
+        west = {'spades': len(deal.west.spades),
+                'hearts': len(deal.west.hearts),
+                'diamonds': len(deal.west.diamonds),
+                'clubs': len(deal.west.clubs)}
+
+        self.send_to_group(username, {
+                      'type': 'GET_DISTRIBUTIONS',
+                      'hands': {'north':north,
+                                'south': south,
+                                'east': east,
+                                'west': west}
+                      })
+
+    def GET_TRICK(self):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        trick = table.trick
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_TRICK',
+                      'trick': {
+                                'north': trick.north,
+                                'south': trick.south,
+                                'east': trick.east,
+                                'west': trick.west,
+                            }
                       })
 
     # card play actions
@@ -300,18 +352,18 @@ class SockConsumer(ReduxConsumer):
             seat = user.seat.direction
 
 
-            # check if first card in trick
+            # check if card played is valid
+            is_valid_card = True
+            # check if first card in trick matches suit
             if table.trick.trick_string:
                 suit_led = table.trick.trick_string[2]
                 print(suit_led)
                 # check if card matches first card in trick or out of that suit
-                if suit_led == card[1] or not table.deal.direction(seat).get_hand(suit_led):
-                    is_valid_card = True
+                if suit_led == card[1] or not table.deal.direction(seat).get_suit(suit_led):
+                    pass
                 else:
                     is_valid_card = False
-            # first card to be played so true
-            else:
-                is_valid_card = True
+
 
             if is_valid_card:
                 print('valid')
@@ -322,20 +374,14 @@ class SockConsumer(ReduxConsumer):
                 self.GET_NEXT_ACTOR(direction_to_act)
 
                 # send updated trick
-                trick = table.trick
-                self.send_to_group(str(table_id), {
-                              'type': 'GET_TRICK',
-                              'trick': {
-                                        'north': trick.north,
-                                        'south': trick.south,
-                                        'east': trick.east,
-                                        'west': trick.west,
-                                    }
-                              })
+                self.GET_TRICK()
 
                 # update hand frontend
                 hand = table.deal.direction(seat)
                 self.GET_HAND(hand)
+
+                # update distributions
+                self.GET_DISTRIBUTIONS()
 
             else:
                 raise ValueError('Must follow suit')

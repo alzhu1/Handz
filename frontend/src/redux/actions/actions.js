@@ -116,3 +116,10 @@ export const suitLed = (suit) => ({
     type: a.SUIT_LED,
     suit
 })
+
+// actions only dispatched by backend
+
+export const getDistributions = (hands) => ({
+    type: a.GET_DISTRIBUTIONS,
+    hands
+})

@@ -16,7 +16,6 @@ export const CREATE_TABLE = 'CREATE_TABLE';
 export const GET_TABLES = 'GET_TABLES';
 export const JOIN_TABLE = 'JOIN_TABLE';
 export const LEAVE_TABLE = 'LEAVE_TABLE';
-export const GET_HAND = 'GET_HAND';
 export const TAKE_SEAT = 'TAKE_SEAT';
 export const LEAVE_SEAT = 'LEAVE_SEAT';
 
@@ -25,6 +24,10 @@ export const GET_NEXT_ACTOR = 'GET_NEXT_ACTOR';
 export const GET_AUCTION = 'GET_AUCTION';
 export const MAKE_BID = 'MAKE_BID';
 export const GET_CONTRACT = 'GET_CONTRACT';
+
+// hand actions
+export const GET_HAND = 'GET_HAND';
+export const GET_DISTRIBUTIONS = 'GET_DISTRIBUTIONS';
 
 // cardplay actions
 export const PLAY_CARD = 'PLAY_CARD';
