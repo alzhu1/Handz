@@ -9,8 +9,8 @@ class Card extends React.Component {
     }
     let src = require('../images/acbl/' + this.props.card + '.png')
     let defaults = {
-      height: '50px',
-      width: '30px',
+      height: '10%',
+      width: '10%',
       backgroundColor: 'clear',
       // position:'relative',
       // left:this.props.left

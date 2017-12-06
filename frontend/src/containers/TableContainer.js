@@ -21,40 +21,39 @@ class TableContainer extends React.Component {
 
   render() {
 
-    // let styles = {
-    //   display: 'flex',
-    //   alignSelf: 'center',
-    //   transform: 'rotate(90deg)',
-    // }
-
     return (
-        <div>
-          <div className="Table">
-              <Hand className="HandTop" position='top'/>
-              <Hand className="HandLeft" position='left'/>
-              <Auction />
-              {this.props.contract}
-              <Hand className="HandRight" position='right'/>
-              <Hand className="HandBottom" position='bottom'/>
-              <BiddingBox />
 
-          </div>
-          <ChatContainer />
+        <div className="Table">
+          {/* table div */}
+
+            <Auction />
+            {this.props.contract}
+
+            <div className='HandTop'>
+              <Hand position='top'/>
+            </div>
+
+            <div className="HandLeft">
+              <Hand position='left'/>
+            </div>
+
+            <div className="HandRight">
+              <Hand position='right'/>
+            </div>
+
+            <div className="HandBottom">
+              <Hand position='bottom'/>
+            </div>
+
+            <div className="BiddingBox">
+              <BiddingBox />
+            </div>
+
+
         </div>
       )
     }
 }
-
-
-// <Button onClick={()=> this.props.takeSeatThunk('east',this.props.table_id)}>
-//     East
-// </Button>
-// <Button onClick={()=> this.props.takeSeatThunk('south',this.props.table_id)}>
-//     South
-// </Button>
-// <Button onClick={()=> this.props.takeSeatThunk('west',this.props.table_id)}>
-//     West
-// </Button>
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableContainer);
