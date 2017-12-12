@@ -192,6 +192,18 @@ export const other_hands = (state = default_dist, action) => {
     return state;
 }
 
+export const invalid_login = (state = false, action) => {
+    switch(action.type) {
+        case a.LOGIN_INVALID:
+            return true;
+        case a.RESET_LOGIN_INVALID:
+            return false;
+        default:
+            break;
+    }
+    return state;
+}
+
 export const appReducer = combineReducers({
 token,
 username,
@@ -206,7 +218,8 @@ auction,
 contract,
 trick,
 suit_led,
-other_hands
+other_hands,
+invalid_login
 });
 
 export const rootReducer = (state, action) => {

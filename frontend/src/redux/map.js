@@ -17,6 +17,7 @@ export const mapStateToProps = (state) => {
         trick: state.trick,
         suit_led: state.suit_led,
         other_hands: state.other_hands,
+        invalid_login: state.invalid_login,
     };
 };
 
@@ -60,6 +61,9 @@ export const mapDispatchToProps = (dispatch,emit) => {
       },
       playCardThunk: (card) => {
         dispatch(th.playCardThunk(card));
+      },
+      resetLogin: () => {
+        dispatch(a.resetLogin());
       },
     }
 };

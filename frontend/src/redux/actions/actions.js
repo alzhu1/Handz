@@ -15,6 +15,9 @@ export const isLoggedIn = bool => ({
   bool
 });
 
+export const resetLogin = () => ({
+    type: a.RESET_LOGIN_INVALID
+})
 
 export const chatMessage = (message, username, receiver) => ({
     type: a.CHAT_MESSAGE,

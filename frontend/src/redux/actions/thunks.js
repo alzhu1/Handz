@@ -3,8 +3,6 @@ import * as a from './actions';
 export function loginThunk(username, password) {
     return function (dispatch, getState, emit) {
         emit(a.login(username,password))
-        dispatch(a.getUsername(username))
-        dispatch(a.isLoggedIn(true))
     }
 }
 

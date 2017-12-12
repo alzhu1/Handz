@@ -6,6 +6,9 @@ export const CREATE_USER = 'CREATE_USER';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const SIGN_UP = 'SIGN_UP';
+export const LOGIN_INVALID = 'LOGIN_INVALID';
+export const RESET_LOGIN_INVALID = 'RESET_LOGIN_INVALID';
+
 
 // user actions
 export const CHAT_MESSAGE = 'CHAT_MESSAGE';

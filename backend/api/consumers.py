@@ -8,6 +8,8 @@ from .engine import ReduxConsumer, action
 
 from .models import BridgeTable, Deal
 
+from numpy import random
+
 def suit_name(abbr):
     if abbr == 'S':
         return 'spades'
@@ -37,10 +39,25 @@ class SockConsumer(ReduxConsumer):
     @action('LOGIN')
     def LOGIN(self, content):
         print('LOGIN')
-        print(content)
         username = content['username']
         password = content['password']
+
+        # login and signup at the same time
+        is_valid = self.SIGN_UP(content)
+
+        if not is_valid:
+            print('not valid')
+            self.message.channel_session['user'] = str(random.randint(1,101))
+            control = self.get_control_channel()
+            self.add(control)
+            self.send_to_group(control, {
+                          'type': 'LOGIN_INVALID'
+                          })
+            return
+
+
         user = authenticate(username=username,password=password)
+        print(content['username'])
         user.is_logged_in = True
         user.save()
 
@@ -49,12 +66,24 @@ class SockConsumer(ReduxConsumer):
 
         control = self.get_control_channel()
         self.add(control)
+        print('control')
+        print(control)
 
         # get logged in users and dispatch
         # to deprecate
         user_list = []
         for x in User.objects.filter(is_logged_in=True):
             user_list.append(x.username)
+
+        # log in on front end
+        self.send_to_group(username, {
+                        'type': 'GET_USERNAME',
+                        'username': username
+                      })
+        self.send_to_group(username, {
+                        'type': 'IS_LOGGED_IN',
+                        'bool': True
+                      })
 
         self.MODIFY_USER_LIST(None, True, username, user_list)
 
@@ -66,8 +95,12 @@ class SockConsumer(ReduxConsumer):
         print('SIGN_UP')
         username = content['username']
         password = content['password']
-        user = User.objects.create_user(username=username,password=password)
-        user.save()
+        if User.objects.filter(username=username).exists():
+            return False
+        else:
+            user = User.objects.create_user(username=username,password=password)
+            user.save()
+            return True
 
     @action('LOGOUT')
     def LOGOUT(self, action=None):
@@ -78,6 +111,9 @@ class SockConsumer(ReduxConsumer):
         user.is_logged_in = False
         user.save()
         self.MODIFY_USER_LIST(None, False, username)
+
+        # delete user
+        user.delete()
 
         # delete all tables
         BridgeTable.objects.all().delete()
