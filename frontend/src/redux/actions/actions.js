@@ -120,9 +120,22 @@ export const suitLed = (suit) => ({
     suit
 })
 
+export const getDeclarer = (declarer) => ({
+    type: a.GET_DECLARER,
+    declarer
+})
+
 // actions only dispatched by backend
 
 export const getDistributions = (hands) => ({
     type: a.GET_DISTRIBUTIONS,
     hands
+})
+
+export const loginInvalid = () => ({
+    type: a.LOGIN_INVALID,
+})
+
+export const showDummy = () => ({
+    type: a.SHOW_DUMMY,
 })

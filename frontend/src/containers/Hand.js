@@ -83,7 +83,6 @@ class Hand extends React.Component {
       }
     }
 
-
     render() {
 
       // var cardlist = [];

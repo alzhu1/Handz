@@ -38,7 +38,7 @@ class InvalidLoginDialog extends React.Component {
             keepMounted
             onRequestClose={this.handleRequestClose}
           >
-            <DialogTitle>{"Username in Use"}</DialogTitle>
+            <DialogTitle>{"Username In Use"}</DialogTitle>
             <DialogContent>
               <DialogContentText>
                 Try a different username

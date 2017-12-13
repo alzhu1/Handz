@@ -126,7 +126,7 @@ class Deal(object):
         self.east = east
         self.south = south
         self.west = west
-        self.dealer = dealer
+        self.dealer = dealer     
 
     def direction(self, seat):
         if seat == 'north':

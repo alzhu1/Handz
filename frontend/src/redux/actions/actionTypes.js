@@ -27,10 +27,13 @@ export const GET_NEXT_ACTOR = 'GET_NEXT_ACTOR';
 export const GET_AUCTION = 'GET_AUCTION';
 export const MAKE_BID = 'MAKE_BID';
 export const GET_CONTRACT = 'GET_CONTRACT';
+export const GET_DECLARER = 'GET_DECLARER';
 
 // hand actions
 export const GET_HAND = 'GET_HAND';
 export const GET_DISTRIBUTIONS = 'GET_DISTRIBUTIONS';
+export const SHOW_DUMMY = 'SHOW_DUMMY';
+export const GET_DUMMY_HAND = 'GET_DUMMY_HAND';
 
 // cardplay actions
 export const PLAY_CARD = 'PLAY_CARD';

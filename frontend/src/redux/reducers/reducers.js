@@ -100,6 +100,20 @@ export const hand = (state = empty_hand, action) => {
     return state;
 }
 
+export const dummy_hand = (state = empty_hand, action) => {
+    switch(action.type) {
+        case a.GET_DUMMY_HAND:
+            return action.hand;
+        case a.LEAVE_SEAT:
+            return empty_hand;
+        case a.LEAVE_TABLE:
+            return empty_hand;
+        default:
+            break;
+    }
+    return state;
+}
+
 export const seat = (state = '', action) => {
     switch(action.type) {
         case a.TAKE_SEAT:
@@ -204,6 +218,65 @@ export const invalid_login = (state = false, action) => {
     return state;
 }
 
+export const declarer = (state = '', action) => {
+    switch(action.type) {
+        case a.GET_DECLARER:
+            return action.declarer;
+        default:
+            break;
+    }
+    return state;
+}
+
+export const dummy = (state = '', action) => {
+    switch(action.type) {
+        case a.GET_DECLARER:
+          function findDummy(seat) {
+            switch(seat) {
+              case 'south':
+                'north'
+              case 'north':
+                return 'south'
+              case 'west':
+                return 'east'
+              case 'east':
+                return 'west'
+              default:
+                  break;
+            }
+          }
+            return findDummy(action.declarer);
+        default:
+            break;
+    }
+    return state;
+}
+
+
+
+
+export const show_dummy = (state = false, action) => {
+    switch(action.type) {
+        case a.GET_DISTRIBUTIONS:
+          const hands = action.hands
+          var count = 0
+          for (var seat in hands){
+            for (var suit in hands[seat]) {
+              count += hands[seat][suit]
+            }
+          }
+          if (count === 52) {
+            return false
+          }
+          else {
+            return true
+          }
+        default:
+            break;
+    }
+    return state;
+}
+
 export const appReducer = combineReducers({
 token,
 username,
@@ -216,10 +289,14 @@ seat,
 direction_to_act,
 auction,
 contract,
+declarer,
+dummy,
+dummy_hand,
 trick,
 suit_led,
 other_hands,
-invalid_login
+invalid_login,
+show_dummy
 });
 
 export const rootReducer = (state, action) => {

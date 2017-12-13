@@ -10,6 +10,7 @@ class Suit extends React.Component {
 
   render() {
     const cards = []
+    // show player's cards without ordering
     if (this.props.seat === this.props.direction || this.props.seat === ''){
       const hand = this.props.hand
       let left = 25
@@ -39,6 +40,20 @@ class Suit extends React.Component {
           left = left - 25
       }
     }
+    // show dummy's cards
+    else if (this.props.show_dummy && this.props.direction === this.props.dummy){
+      const suit_hand = this.props.dummy_hand[this.props.suit]
+      cards.push(<SuitSymbol suit={this.props.suit} key={_.uniqueId()}/>)
+      let left = 25
+      for (var i = 0; i < suit_hand.length; i++) {
+        cards.push( <Card card={suit_hand[i] + this.props.suit[0].toUpperCase()}
+                            key={_.uniqueId()}
+                            left={left} />)
+          left = left - 25
+      }
+
+    }
+    // other player's cards, face down
     else {
       cards.push(<SuitSymbol suit={this.props.suit} key={_.uniqueId()}/>)
       const suit_len = this.props.other_hands[this.props.direction][this.props.suit]

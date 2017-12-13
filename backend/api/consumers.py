@@ -22,6 +22,16 @@ def suit_name(abbr):
     else:
         raise ValueError('not valid suit')
 
+def find_dummy(seat):
+    if seat == 'north':
+        return 'south'
+    elif seat == 'east':
+        return 'west'
+    elif seat == 'south':
+        return 'north'
+    elif seat == 'west':
+        return 'east'
+
 class SockConsumer(ReduxConsumer):
     channel_session_user = True
     http_user = True
@@ -207,20 +217,6 @@ class SockConsumer(ReduxConsumer):
         # remove table_id
         self.message.channel_session['table_id'] = ''
 
-    @action('GET_HAND')
-    def GET_HAND(self, hand):
-        print('GET_HAND')
-        username = self.message.channel_session['user']
-        self.send_to_group(username, {
-                      'type': 'GET_HAND',
-                      'hand': {
-                            'spades':hand.spades,
-                            'hearts':hand.hearts,
-                            'diamonds':hand.diamonds,
-                            'clubs':hand.clubs,
-                        }
-                      })
-
     @action('TAKE_SEAT')
     def TAKE_SEAT(self, action):
         print('TAKE_SEAT')
@@ -228,10 +224,7 @@ class SockConsumer(ReduxConsumer):
         user = User.objects.get(username=username)
 
         # leave seat if sitting
-        print('1')
         self.LEAVE_SEAT(action)
-        print('3')
-        print(hasattr(user, 'seat'))
         seat = action['seat']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
@@ -250,10 +243,15 @@ class SockConsumer(ReduxConsumer):
                       'seat': seat
                       })
 
+        # get hand
         self.GET_HAND(hand)
 
         # get trick if in the middle of play
         self.GET_TRICK()
+
+        if table.contract != None:
+            self.SET_CONTRACT(table)
+
 
     @action('LEAVE_SEAT')
     def LEAVE_SEAT(self, action):
@@ -312,13 +310,64 @@ class SockConsumer(ReduxConsumer):
 
         # if contract is set, send contract
         if table.contract != None:
-            contract = table.contract.contract_string
-            self.send_to_group(str(table_id), {
-                          'type': 'GET_CONTRACT',
-                          'contract': contract
-                          })
+            self.SET_CONTRACT(table)
+
+    @action('GET_HAND')
+    def GET_HAND(self, hand):
+        print('GET_HAND')
+        username = self.message.channel_session['user']
+        self.send_to_group(username, {
+                      'type': 'GET_HAND',
+                      'hand': {
+                            'spades':hand.spades,
+                            'hearts':hand.hearts,
+                            'diamonds':hand.diamonds,
+                            'clubs':hand.clubs,
+                        }
+                      })
+
+    def SET_CONTRACT(self, table):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        contract = table.contract.contract_string
+        declarer = table.contract.declarer
+        dummy_hand = table.deal.direction(find_dummy(declarer))
+
+        self.GET_CONTRACT(contract)
+
+        self.GET_DUMMY_HAND(dummy_hand)
+
+        self.GET_DECLARER(declarer)
 
 
+    def GET_CONTRACT(self, contract):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_CONTRACT',
+                      'contract': contract
+                      })
+
+    def GET_DUMMY_HAND(self, dummy_hand):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        self.send_to_group(str(table_id), {
+                  'type': 'GET_DUMMY_HAND',
+                  'hand': {
+                        'spades':dummy_hand.spades,
+                        'hearts':dummy_hand.hearts,
+                        'diamonds':dummy_hand.diamonds,
+                        'clubs':dummy_hand.clubs,
+                    }
+                  })
+
+    def GET_DECLARER(self, declarer):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_DECLARER',
+                      'declarer': declarer
+                      })
 
     def GET_NEXT_ACTOR(self, direction_to_act):
         username = self.message.channel_session['user']

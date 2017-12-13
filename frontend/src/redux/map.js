@@ -18,6 +18,10 @@ export const mapStateToProps = (state) => {
         suit_led: state.suit_led,
         other_hands: state.other_hands,
         invalid_login: state.invalid_login,
+        declarer: state.declarer,
+        show_dummy: state.show_dummy,
+        dummy: state.dummy,
+        dummy_hand: state.dummy_hand,
     };
 };
 
