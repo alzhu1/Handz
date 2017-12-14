@@ -454,9 +454,12 @@ class SockConsumer(ReduxConsumer):
                 suit_led = table.trick.trick_string[2]
                 print(suit_led)
                 # check if card matches first card in trick or out of that suit
-                print(table.deal.direction(direction_to_act).get_suit(suit_led))
-                print(table.deal.direction(direction_to_act).hearts)
-                if suit_led == card[1] or not table.deal.direction(direction_to_act).get_suit(suit_led):
+                # and check if card played is actually in your hand
+                # print(table.deal.direction(direction_to_act).get_suit(suit_led))
+                # print(table.deal.direction(direction_to_act).hearts)
+                if ((suit_led == card[1] or not
+                    table.deal.direction(direction_to_act).get_suit(suit_led)) and
+                    card[0] in table.deal.direction(direction_to_act).get_suit(card[1])):
                     pass
                 else:
                     is_valid_card = False
