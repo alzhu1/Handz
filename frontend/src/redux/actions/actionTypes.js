@@ -34,6 +34,7 @@ export const GET_HAND = 'GET_HAND';
 export const GET_DISTRIBUTIONS = 'GET_DISTRIBUTIONS';
 export const SHOW_DUMMY = 'SHOW_DUMMY';
 export const GET_DUMMY_HAND = 'GET_DUMMY_HAND';
+export const GET_TRICK_STRING = 'GET_TRICK_STRING';
 
 // cardplay actions
 export const PLAY_CARD = 'PLAY_CARD';

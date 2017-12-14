@@ -1,4 +1,6 @@
 import * as a from './actions';
+import {findDummy} from '../reducers/reducers';
+import {suitName} from '../reducers/reducers';
 
 export function loginThunk(username, password) {
     return function (dispatch, getState, emit) {
@@ -67,8 +69,12 @@ export const makeBidThunk = (bid) => (
 
 export const playCardThunk = (card) => (
     function (dispatch, getState, emit) {
-        if (getState().contract != '' &&
-            getState().seat === getState().direction_to_act) {
+        console.log(card)
+        console.log(getState().seat)
+        console.log(findDummy(getState().seat))
+        if ((getState().contract != '') && (getState().seat != getState().dummy) &&
+            ((getState().seat === getState().direction_to_act && getState().hand[suitName(card[1])].indexOf(card[0]) > -1) ||
+            (getState().dummy === getState().direction_to_act && findDummy(getState().seat)===getState().dummy && getState().hand[suitName(card[1])].indexOf(card[0]) === -1))) {
           return(emit(a.playCard(card)));
         }
     }

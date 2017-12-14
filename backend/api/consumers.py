@@ -287,7 +287,6 @@ class SockConsumer(ReduxConsumer):
         bid = action['bid']
         table = BridgeTable.objects.get(pk=table_id)
 
-
         # set contract if auction is over, otherwise it does nothing
         table.next_actor()
         table.set_contract()
@@ -399,7 +398,7 @@ class SockConsumer(ReduxConsumer):
                 'diamonds': len(deal.west.diamonds),
                 'clubs': len(deal.west.clubs)}
 
-        self.send_to_group(username, {
+        self.send_to_group(str(table_id), {
                       'type': 'GET_DISTRIBUTIONS',
                       'hands': {'north':north,
                                 'south': south,
@@ -422,6 +421,16 @@ class SockConsumer(ReduxConsumer):
                             }
                       })
 
+    def GET_TRICK_STRING(self):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        trick_string = table.trick_string
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_TRICK_STRING',
+                      'trick_string': table.trick_string
+                      })
+
     # card play actions
     @action('PLAY_CARD')
     def PLAY_CARD(self, action):
@@ -435,6 +444,7 @@ class SockConsumer(ReduxConsumer):
             card = action['card']
             user = User.objects.get(username=username)
             seat = user.seat.direction
+            direction_to_act = table.direction_to_act
 
 
             # check if card played is valid
@@ -444,7 +454,9 @@ class SockConsumer(ReduxConsumer):
                 suit_led = table.trick.trick_string[2]
                 print(suit_led)
                 # check if card matches first card in trick or out of that suit
-                if suit_led == card[1] or not table.deal.direction(seat).get_suit(suit_led):
+                print(table.deal.direction(direction_to_act).get_suit(suit_led))
+                print(table.deal.direction(direction_to_act).hearts)
+                if suit_led == card[1] or not table.deal.direction(direction_to_act).get_suit(suit_led):
                     pass
                 else:
                     is_valid_card = False
@@ -465,8 +477,17 @@ class SockConsumer(ReduxConsumer):
                 hand = table.deal.direction(seat)
                 self.GET_HAND(hand)
 
+                # get dummy's hand
+                declarer = table.contract.declarer
+                dummy_hand = table.deal.direction(find_dummy(declarer))
+                self.GET_DUMMY_HAND(dummy_hand)
+
                 # update distributions
                 self.GET_DISTRIBUTIONS()
+
+                # send updated trick string if trick is complete
+                self.GET_TRICK_STRING()
+
 
             else:
                 raise ValueError('Must follow suit')

@@ -1,6 +1,37 @@
 import * as a from 'redux/actions/actionTypes';
 import {combineReducers} from "redux";
 
+export function findDummy(seat) {
+  switch(seat) {
+    case 'south':
+      return 'north'
+    case 'north':
+      return 'south'
+    case 'west':
+      return 'east'
+    case 'east':
+      return 'west'
+    default:
+        break;
+  }
+}
+
+export function suitName(suit) {
+  switch(suit) {
+    case 'S':
+      return 'spades'
+    case 'H':
+      return 'hearts'
+    case 'C':
+      return 'clubs'
+    case 'D':
+      return 'diamonds'
+    default:
+        break;
+  }
+}
+
+
 export const initialState = {};
 
 export const token = (state = "", action) => {
@@ -231,29 +262,12 @@ export const declarer = (state = '', action) => {
 export const dummy = (state = '', action) => {
     switch(action.type) {
         case a.GET_DECLARER:
-          function findDummy(seat) {
-            switch(seat) {
-              case 'south':
-                'north'
-              case 'north':
-                return 'south'
-              case 'west':
-                return 'east'
-              case 'east':
-                return 'west'
-              default:
-                  break;
-            }
-          }
             return findDummy(action.declarer);
         default:
             break;
     }
     return state;
 }
-
-
-
 
 export const show_dummy = (state = false, action) => {
     switch(action.type) {
@@ -271,6 +285,18 @@ export const show_dummy = (state = false, action) => {
           else {
             return true
           }
+        default:
+            break;
+    }
+    return state;
+}
+
+export const trick_string = (state = '', action) => {
+    switch(action.type) {
+        case a.GET_TRICK_STRING:
+            return action.trick_string;
+        case a.LEAVE_SEAT:
+            return '';
         default:
             break;
     }
@@ -296,7 +322,8 @@ trick,
 suit_led,
 other_hands,
 invalid_login,
-show_dummy
+show_dummy,
+trick_string
 });
 
 export const rootReducer = (state, action) => {

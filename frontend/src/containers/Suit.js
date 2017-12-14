@@ -45,8 +45,11 @@ class Suit extends React.Component {
       const suit_hand = this.props.dummy_hand[this.props.suit]
       cards.push(<SuitSymbol suit={this.props.suit} key={_.uniqueId()}/>)
       let left = 25
+      console.log('direction')
+      console.log(this.props.direction)
       for (var i = 0; i < suit_hand.length; i++) {
         cards.push( <Card card={suit_hand[i] + this.props.suit[0].toUpperCase()}
+                            card_seat = {this.props.direction}
                             key={_.uniqueId()}
                             left={left} />)
           left = left - 25

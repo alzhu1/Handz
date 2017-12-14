@@ -139,3 +139,8 @@ export const loginInvalid = () => ({
 export const showDummy = () => ({
     type: a.SHOW_DUMMY,
 })
+
+export const GET_TRICK_STRING  = (trick_string) => ({
+    type: a.SHOW_DUMMY,
+    trick_string
+})

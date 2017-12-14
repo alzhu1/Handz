@@ -42,13 +42,13 @@ class Hand(object):
         self.clubs = ''.join(sorted(clubs, key=self.sort_key, reverse=True))
 
     def get_suit(self, suit):
-        if suit == 'spades' or 'S':
+        if suit == 'spades' or suit == 'S':
             return self.spades
-        if suit == 'hearts' or 'H':
+        if suit == 'hearts' or suit =='H':
             return self.hearts
-        if suit == 'diamonds' or 'D':
+        if suit == 'diamonds' or suit =='D':
             return self.diamonds
-        if suit == 'clubs' or 'C':
+        if suit == 'clubs' or suit =='C':
             return self.clubs
         else:
             raise ValueError ('Not valid suit')
@@ -126,7 +126,7 @@ class Deal(object):
         self.east = east
         self.south = south
         self.west = west
-        self.dealer = dealer     
+        self.dealer = dealer
 
     def direction(self, seat):
         if seat == 'north':
@@ -424,22 +424,6 @@ def parse_trick(trick_string):
                     )
     return trick
 
-# class East(models.Model):
-#     name = models.CharField(max_length=25)
-#     user = models.OneToOneField('User',on_delete=models.CASCADE,primary_key=True)
-#
-# class West(models.Model):
-#     name = models.CharField(max_length=25)
-#     user = models.OneToOneField('User',on_delete=models.CASCADE,primary_key=True)
-#
-# class North(models.Model):
-#     name = models.CharField(max_length=25)
-#     user = models.OneToOneField('User',on_delete=models.CASCADE,primary_key=True)
-#
-# class South(models.Model):
-#     name = models.CharField(max_length=25)
-#     user = models.OneToOneField('User',on_delete=models.CASCADE,primary_key=True)
-
 class Seat(models.Model):
     # direction_choices = ('North', 'South', 'East', 'West')
     direction = models.CharField(max_length=5)
@@ -457,12 +441,6 @@ class BridgeTableManager(models.Manager):
         return table
 
 class BridgeTable(models.Model):
-    # users
-    # north = models.CharField(max_length=100,default='')
-    # south = models.CharField(max_length=100,default='')
-    # east = models.CharField(max_length=100,default='')
-    # west = models.CharField(max_length=100,default='')
-
     north = models.OneToOneField('Seat',default=None, null= True,
             on_delete=models.CASCADE,related_name='table_as_north')
     south = models.OneToOneField('Seat',default=None, null= True,
@@ -479,6 +457,7 @@ class BridgeTable(models.Model):
     trick = TrickField(default='')
 
     direction_to_act = models.CharField(max_length=5,default='')
+    trick_string = models.CharField(max_length=13,default='')
     NS_tricks_taken = models.IntegerField(default=0,null=True)
     EW_tricks_taken = models.IntegerField(default=0,null=True)
     total_tricks = models.IntegerField(default=0,null=True)
@@ -505,19 +484,6 @@ class BridgeTable(models.Model):
             raise ValueError('Could not take seat')
         self.save()
 
-    # def take_seat(self, user, seat):
-    #     if seat == 'north' and not self.north:
-    #         self.north = User.objects.get(username=user)
-    #     elif seat == 'east' and not self.east:
-    #         self.east = User.objects.get(username=user)
-    #     elif seat == 'south' and not self.south:
-    #         self.south = User.objects.get(username=user)
-    #     elif seat == 'west' and not self.west:
-    #         self.west = User.objects.get(username=user)
-    #     else:
-    #         raise ValueError('Could not take seat')
-    #     self.save()
-
     def leave_seat(self, username):
         print('leave seat')
         user = User.objects.get(username=username)
@@ -528,19 +494,6 @@ class BridgeTable(models.Model):
         print('left seat')
         self.save()
         print(user.seat.direction)
-
-    # def leave_seat(self, user, seat):
-    #     if seat == 'north' and self.north.username == user:
-    #         self.north = None
-    #     elif seat == 'east' and self.east.username == user:
-    #         self.east = None
-    #     elif seat == 'south' and self.south.username == user:
-    #         self.south = None
-    #     elif seat == 'west' and self.west.username == user:
-    #         self.west = None
-    #     else:
-    #         raise ValueError('Could not leave seat')
-    #     self.save()
 
     def next_actor(self):
         if self.direction_to_act == 'north':
@@ -626,26 +579,7 @@ class BridgeTable(models.Model):
             self.EW_tricks_taken += 1
         elif winner == 'N' or winner == 'S':
             self.NS_tricks_taken += 1
+        self.trick_string += winner
         self.total_tricks += 1
         self.trick = parse_trick('')
         self.save()
-
-
-
-
-# class Deal(models.Model):
-#     # bridge_table = models.ForeignKey(BridgeTable, on_delete=models.CASCADE)
-#     deal_id = models.AutoField(primary_key=True, blank=True)
-#     north = HandField()
-#     south = HandField()
-#     east = HandField()
-#     west = HandField()
-#
-#     # dealer = models.IntegerField(default=1)
-#     # vulnerability = models.IntegerField(default='')
-#     # board_number = models.IntegerField(default=1)
-#
-#     hand_string = models.CharField(max_length=52)
-#     objects = DealManager()
-#     # in_play = models.BooleanField()
-#     # next_player = models.IntegerField(default=-1)
