@@ -438,6 +438,18 @@ class BridgeTableManager(models.Manager):
                 deal=deal,
                 direction_to_act=deal.dealer
                 )
+        n = Seat(user=None,direction='north')
+        n.save()
+        s = Seat(user=None,direction='south')
+        s.save()
+        e = Seat(user=None,direction='east')
+        e.save()
+        w = Seat(user=None,direction='west')
+        w.save()
+        table.north = n
+        table.south = s
+        table.east = e
+        table.west = w
         return table
 
 class BridgeTable(models.Model):
@@ -469,11 +481,11 @@ class BridgeTable(models.Model):
         print('seat')
         print(seat)
         if seat == 'north':
-            s = Seat(user=user,direction='north')
-            # self.north = Seat(user=user,direction='north')
-            # self.north.save()
-            s.table_as_north = self
-            s.save()
+            # s = Seat(user=user,direction='north')
+            self.north = Seat(user=user,direction='north')
+            self.north.save()
+            # s.table_as_north = self
+            # s.save()
             # self.north = s
             # self.north.save()
         elif seat == 'east':
