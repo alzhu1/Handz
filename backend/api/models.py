@@ -466,9 +466,16 @@ class BridgeTable(models.Model):
 
     def take_seat(self, username, seat):
         user = User.objects.get(username=username)
+        print('seat')
+        print(seat)
         if seat == 'north':
-            self.north = Seat(user=user,direction='north')
-            self.north.save()
+            s = Seat(user=user,direction='north')
+            # self.north = Seat(user=user,direction='north')
+            # self.north.save()
+            s.table_as_north = self
+            s.save()
+            # self.north = s
+            # self.north.save()
         elif seat == 'east':
             self.east = Seat(user=user,direction='east')
             self.east.save()
@@ -507,15 +514,13 @@ class BridgeTable(models.Model):
         self.save()
 
     def set_contract(self):
-        # if auction is not over, do nothing
-        # otherwise set contract begin play
-        if len(self.auction)>0 and self.auction[0]=='P':
-            self.contract = parse_contract(parse_auction(self.auction))
+        # if auction is not over, do nothing, otherwise set contract and begin play
+        self.contract = parse_contract(parse_auction(self.auction))
 
-            # set opening leader to be left of declarer
-            self.direction_to_act = self.contract.declarer
-            self.next_actor()
-            self.save()
+        # set opening leader to be left of declarer
+        self.direction_to_act = self.contract.declarer
+        self.next_actor()
+        self.save()
 
     def update_auction(self, bid):
         self.auction = self.auction + bid

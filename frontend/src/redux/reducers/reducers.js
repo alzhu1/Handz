@@ -303,6 +303,22 @@ export const trick_string = (state = '', action) => {
     return state;
 }
 
+
+export const empty_seats = {'north': '', 'south': '',
+                            'east': '', 'west': ''}
+
+export const table_seats = (state = empty_seats, action) => {
+    switch(action.type) {
+        case a.UPDATE_TABLE_SEATS:
+          return action.seats
+        case a.LEAVE_TABLE:
+            return empty_seats;
+        default:
+            break;
+    }
+    return state;
+}
+
 export const appReducer = combineReducers({
 token,
 username,
@@ -323,7 +339,8 @@ suit_led,
 other_hands,
 invalid_login,
 show_dummy,
-trick_string
+trick_string,
+table_seats
 });
 
 export const rootReducer = (state, action) => {

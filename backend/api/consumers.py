@@ -9,6 +9,23 @@ from .engine import ReduxConsumer, action
 from .models import BridgeTable, Deal
 
 from numpy import random
+import re
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+
+    return False
 
 def suit_name(abbr):
     if abbr == 'S':
@@ -31,6 +48,27 @@ def find_dummy(seat):
         return 'north'
     elif seat == 'west':
         return 'east'
+
+def find_winner(dealer, num):
+    if dealer == 'north':
+        d = 0
+    elif seat == 'east':
+        d = 1
+    elif seat == 'south':
+        d = 2
+    elif seat == 'west':
+        d = 3
+
+    n = (d + num) % 4
+
+    if n % 4 == 0:
+        return 'north'
+    elif n % 4 == 1:
+        return 'east'
+    elif n % 4 == 2:
+        return 'south'
+    elif n % 4 == 3:
+        return 'west'
 
 class SockConsumer(ReduxConsumer):
     channel_session_user = True
@@ -233,6 +271,20 @@ class SockConsumer(ReduxConsumer):
 
         # take seat on backend
         table.take_seat(username, seat)
+        print('self.north')
+        print(table)
+        print(table.north)
+        print(table.north.user)
+        print(user.seat.direction)
+        table.save()
+
+        table = BridgeTable.objects.get(pk=table_id)
+
+        print('self.north2')
+        print(table)
+        print(table.north)
+        print(table.north.user)
+        print(user.seat.direction)
 
         # send hand distributions to front send
         self.GET_DISTRIBUTIONS()
@@ -249,6 +301,9 @@ class SockConsumer(ReduxConsumer):
         # get trick if in the middle of play
         self.GET_TRICK()
 
+        # update table members
+        self.UPDATE_TABLE_SEATS(table)
+
         if table.contract != None:
             self.SET_CONTRACT(table)
 
@@ -263,6 +318,12 @@ class SockConsumer(ReduxConsumer):
 
         # leave seat on backend if sitting
         if hasattr(user, 'seat'):
+
+            print('leave table')
+            print(table)
+            print(table.north.user)
+            print(user.seat.direction)
+
             seat = user.seat.direction
             print(seat)
             table.leave_seat(username)
@@ -287,15 +348,51 @@ class SockConsumer(ReduxConsumer):
         bid = action['bid']
         table = BridgeTable.objects.get(pk=table_id)
 
-        # set contract if auction is over, otherwise it does nothing
+        # update auction
+        table.update_auction(bid)
+
+        # if auction is over, ask declarer for strain
         table.next_actor()
-        table.set_contract()
+        print('auction length')
+        print(table.auction)
+        if len(table.auction)>3 and table.auction[-3:]=='PPP':
+
+            # test
+            # table.take_seat(username, 'north')
+
+            # find auction winner
+            dealer = table.deal.dealer
+            # pos = re.match('.+([0-9])[^0-9]*$', table.auction).group(1)
+            for i,x in enumerate(table.auction):
+                if is_number(x):
+                    level = x
+                    pos = i
+            print('pos')
+            print(pos)
+            winner = find_winner(dealer, pos)
+            print('winner')
+            print(winner)
+            if winner == 'north':
+                print(table.north)
+                winner = table.north.user
+            elif winner == 'east':
+                winner = table.east.user
+            elif winner == 'west':
+                winner = table.west.user
+            elif winner == 'south':
+                winner = table.south.user
+            else:
+                print('error user')
+
+            print('winner2')
+            print(winner)
+            # self.ASK_STRAIN(winner)
+
+            table.set_contract()
 
         # set next actor
         direction_to_act = table.direction_to_act
 
-        # update auction
-        table.update_auction(bid)
 
         # send auction
         auction = list(table.auction)
@@ -337,6 +434,12 @@ class SockConsumer(ReduxConsumer):
         self.GET_DUMMY_HAND(dummy_hand)
 
         self.GET_DECLARER(declarer)
+
+    # need work
+    def ASK_STRAIN(self, declarer):
+        self.send_to_group(declarer, {
+                      'type': 'ASK_STRAIN'
+                      })
 
 
     def GET_CONTRACT(self, contract):
@@ -429,6 +532,30 @@ class SockConsumer(ReduxConsumer):
         self.send_to_group(str(table_id), {
                       'type': 'GET_TRICK_STRING',
                       'trick_string': table.trick_string
+                      })
+
+    def UPDATE_TABLE_SEATS(self, table):
+        print('UPDATE_TABLE_SEATS')
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        north, south, east, west = '','','',''
+        if table.north:
+            north = str(table.north.user)
+        if table.south:
+            south = str(table.south.user)
+        if table.east:
+            east = str(table.east.user)
+        if table.west:
+            west = str(table.west.user)
+
+        self.send_to_group(str(table_id), {
+                      'type': 'UPDATE_TABLE_SEATS',
+                      'seats': {
+                                'north': north,
+                                'south': south,
+                                'east': east,
+                                'west': west,
+                            }
                       })
 
     # card play actions

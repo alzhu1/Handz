@@ -22,7 +22,8 @@ export const mapStateToProps = (state) => {
         show_dummy: state.show_dummy,
         dummy: state.dummy,
         dummy_hand: state.dummy_hand,
-        trick_string: state.trick_string
+        trick_string: state.trick_string,
+        table_seats: state.table_seats
     };
 };
 
