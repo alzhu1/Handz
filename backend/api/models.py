@@ -434,22 +434,19 @@ class BridgeTableManager(models.Manager):
     def create_deal(self):
         deal = construct_deal()
         # auction = parse_auction('')
-        table = self.create(
-                deal=deal,
-                direction_to_act=deal.dealer
-                )
-        n = Seat(user=None,direction='north')
-        n.save()
-        s = Seat(user=None,direction='south')
-        s.save()
-        e = Seat(user=None,direction='east')
-        e.save()
-        w = Seat(user=None,direction='west')
-        w.save()
-        table.north = n
-        table.south = s
-        table.east = e
-        table.west = w
+        table = self.create(deal=deal,direction_to_act=deal.dealer)
+        # n = Seat(user=None,direction='north')
+        # n.save()
+        # s = Seat(user=None,direction='south')
+        # s.save()
+        # e = Seat(user=None,direction='east')
+        # e.save()
+        # w = Seat(user=None,direction='west')
+        # w.save()
+        # table.north = n
+        # table.south = s
+        # table.east = e
+        # table.west = w
         return table
 
 class BridgeTable(models.Model):
@@ -478,25 +475,22 @@ class BridgeTable(models.Model):
 
     def take_seat(self, username, seat):
         user = User.objects.get(username=username)
-        print('seat')
-        print(seat)
         if seat == 'north':
-            # s = Seat(user=user,direction='north')
-            self.north = Seat(user=user,direction='north')
-            self.north.save()
-            # s.table_as_north = self
-            # s.save()
-            # self.north = s
-            # self.north.save()
+            s = Seat(user=user,direction='north')
+            s.save()
+            self.north = s
         elif seat == 'east':
-            self.east = Seat(user=user,direction='east')
-            self.east.save()
+            s = Seat(user=user,direction='east')
+            s.save()
+            self.east = s
         elif seat == 'south':
-            self.south = Seat(user=user,direction='south')
-            self.south.save()
+            s = Seat(user=user,direction='south')
+            s.save()
+            self.south = s
         elif seat == 'west':
-            self.west = Seat(user=user,direction='west')
-            self.west.save()
+            s = Seat(user=user,direction='west')
+            s.save()
+            self.west = s
         else:
             print(username)
             print(seat)

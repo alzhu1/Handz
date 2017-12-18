@@ -276,7 +276,7 @@ class SockConsumer(ReduxConsumer):
         print(table.north)
         print(table.north.user)
         print(user.seat.direction)
-        table.save()
+        # table.save()
 
         table = BridgeTable.objects.get(pk=table_id)
 
