@@ -9,10 +9,35 @@ class BiddingBox extends React.Component {
     let styles = {
       alignSelf: 'center'
     };
-
-    if (this.props.direction_to_act === this.props.seat &&
-        this.props.contract == '') {
-          if (this.props.special_phase === '') {
+    if (this.props.special_phase === 'ask_strain'
+             && this.props.declarer === this.props.seat){
+      return(
+        <div>
+          <ButtonBase onClick={() =>
+              {this.props.chooseStrainThunk('NT')}}>
+              NoTrump
+          </ ButtonBase>
+          <ButtonBase onClick={() =>
+              {this.props.chooseStrainThunk('S')}}>
+              Spades
+          </ ButtonBase>
+          <ButtonBase onClick={() =>
+              {this.props.chooseStrainThunk('H')}}>
+              Hearts
+          </ ButtonBase>
+          <ButtonBase onClick={() =>
+              {this.props.chooseStrainThunk('C')}}>
+              Clubs
+          </ ButtonBase>
+          <ButtonBase onClick={() =>
+              {this.props.chooseStrainThunk('D')}}>
+              Diamonds
+          </ ButtonBase>
+        </div>
+      )
+    }
+    else if (this.props.direction_to_act === this.props.seat &&
+        this.props.contract == '' && this.props.special_phase === '') {
             return (
               <div style={styles}>
                   <ButtonBase onClick={() =>
@@ -50,36 +75,6 @@ class BiddingBox extends React.Component {
                </div>
            )
          }
-         else if (this.props.special_phase === 'ask_strain'){
-           return(
-             <div>
-               <ButtonBase onClick={() =>
-                   {this.props.chooseStrainThunk('NT')}}>
-                   NoTrump
-               </ ButtonBase>
-               <ButtonBase onClick={() =>
-                   {this.props.chooseStrainThunk('S')}}>
-                   Spades
-               </ ButtonBase>
-               <ButtonBase onClick={() =>
-                   {this.props.chooseStrainThunk('H')}}>
-                   Hearts
-               </ ButtonBase>
-               <ButtonBase onClick={() =>
-                   {this.props.chooseStrainThunk('C')}}>
-                   Clubs
-               </ ButtonBase>
-               <ButtonBase onClick={() =>
-                   {this.props.chooseStrainThunk('D')}}>
-                   Diamonds
-               </ ButtonBase>
-             </div>
-           )
-         }
-         else {
-           return <div />
-         }
-    }
     else {
       return <div />
     }

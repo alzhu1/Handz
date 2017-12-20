@@ -496,7 +496,7 @@ class BridgeTable(models.Model):
     trick_string = models.CharField(max_length=13,default='')
     NS_tricks_taken = models.IntegerField(default=0,null=True)
     EW_tricks_taken = models.IntegerField(default=0,null=True)
-    total_tricks = models.IntegerField(default=0,null=True)
+    level = models.IntegerField(default=0,null=True)
     objects = models.Manager()
     objects = BridgeTableManager()
 
@@ -580,6 +580,10 @@ class BridgeTable(models.Model):
             self.direction_to_act = 'north'
         self.save()
 
+    # def set_declarer(self, direction):
+    #     self.contract.declarer = direction
+    #     self.contract.save()
+
     def set_contract(self, level, strain, declarer):
         # if auction is not over, do nothing, otherwise set contract and begin play
         auction_string = str(level) + strain + declarer[0].upper()
@@ -588,6 +592,8 @@ class BridgeTable(models.Model):
         # set opening leader to be left of declarer
         self.direction_to_act = self.contract.declarer
         self.next_actor()
+        print('opening leader')
+        print(self.direction_to_act)
         self.save()
 
     def update_auction(self, bid):
@@ -653,6 +659,5 @@ class BridgeTable(models.Model):
         elif winner == 'N' or winner == 'S':
             self.NS_tricks_taken += 1
         self.trick_string += winner
-        self.total_tricks += 1
         self.trick = parse_trick('')
         self.save()
