@@ -271,20 +271,6 @@ class SockConsumer(ReduxConsumer):
 
         # take seat on backend
         table.take_seat(username, seat)
-        print('self.north')
-        print(table)
-        print(table.north)
-        print(table.north.user)
-        print(user.seat.direction)
-        # table.save()
-
-        table = BridgeTable.objects.get(pk=table_id)
-
-        print('self.north2')
-        print(table)
-        print(table.north)
-        print(table.north.user)
-        print(user.seat.direction)
 
         # send hand distributions to front send
         self.GET_DISTRIBUTIONS()
@@ -302,7 +288,7 @@ class SockConsumer(ReduxConsumer):
         self.GET_TRICK()
 
         # update table members
-        self.UPDATE_TABLE_SEATS(table)
+        self.UPDATE_TABLE_SEATS()
 
         if table.contract != None:
             self.SET_CONTRACT(table)
@@ -321,14 +307,19 @@ class SockConsumer(ReduxConsumer):
 
             print('leave table')
             print(table)
+            print(table.north)
             print(table.north.user)
             print(user.seat.direction)
 
             seat = user.seat.direction
             print(seat)
-            table.leave_seat(username)
+            table.leave_seat(username, seat)
             print('2')
+            print(user.seat)
             print(user.seat.direction)
+            user.seat = None
+            user.save()
+
 
             # send action to frontend
             self.send_to_group(username, {
@@ -338,7 +329,6 @@ class SockConsumer(ReduxConsumer):
 
             print(hasattr(user, 'seat'))
 
-        print(hasattr(user, 'seat'))
 
     @action('MAKE_BID')
     def MAKE_BID(self, action):
@@ -534,11 +524,19 @@ class SockConsumer(ReduxConsumer):
                       'trick_string': table.trick_string
                       })
 
-    def UPDATE_TABLE_SEATS(self, table):
+    def UPDATE_TABLE_SEATS(self):
         print('UPDATE_TABLE_SEATS')
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
         north, south, east, west = '','','',''
+        print(table)
+        print(table.north)
+        try:
+            print(table.north.user)
+        except Seat.DoesNotExist:
+            pass
+
         if table.north:
             north = str(table.north.user)
         if table.south:

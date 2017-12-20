@@ -427,27 +427,33 @@ def parse_trick(trick_string):
 class Seat(models.Model):
     # direction_choices = ('North', 'South', 'East', 'West')
     direction = models.CharField(max_length=5)
-    user = models.OneToOneField('User',on_delete=models.CASCADE,related_name='seat', null=True)
+    user = models.OneToOneField('User',on_delete=models.CASCADE, null=True)
+
+def default_seat():
+    return Seat(user=None,direction=None)
 
 class BridgeTableManager(models.Manager):
 
     def create_deal(self):
         deal = construct_deal()
         # auction = parse_auction('')
-        table = self.create(deal=deal,direction_to_act=deal.dealer)
-        # n = Seat(user=None,direction='north')
-        # n.save()
-        # s = Seat(user=None,direction='south')
-        # s.save()
-        # e = Seat(user=None,direction='east')
-        # e.save()
-        # w = Seat(user=None,direction='west')
-        # w.save()
-        # table.north = n
-        # table.south = s
-        # table.east = e
-        # table.west = w
+        north = Seat(user=None,direction='north')
+        north.save()
+        south = Seat(user=None,direction='south')
+        south.save()
+        east = Seat(user=None,direction='east')
+        east.save()
+        west = Seat(user=None,direction='west')
+        west.save()
+        table = self.create(deal=deal,
+        direction_to_act=deal.dealer,
+        north=north,
+        south=south,
+        east=east,
+        west=west)
         return table
+
+
 
 class BridgeTable(models.Model):
     north = models.OneToOneField('Seat',default=None, null= True,
@@ -476,37 +482,61 @@ class BridgeTable(models.Model):
     def take_seat(self, username, seat):
         user = User.objects.get(username=username)
         if seat == 'north':
-            s = Seat(user=user,direction='north')
-            s.save()
-            self.north = s
+            self.north.user = user
+            self.north.save()
+            # s = Seat(user=user,direction='north')
+            # s.save()
+            # self.north = s
         elif seat == 'east':
-            s = Seat(user=user,direction='east')
-            s.save()
-            self.east = s
+            self.east.user = user
+            self.east.save()
         elif seat == 'south':
-            s = Seat(user=user,direction='south')
-            s.save()
-            self.south = s
+            self.south.user = user
+            self.south.save()
         elif seat == 'west':
-            s = Seat(user=user,direction='west')
-            s.save()
-            self.west = s
+            self.west.user = user
+            self.west.save()
         else:
             print(username)
             print(seat)
             raise ValueError('Could not take seat')
         self.save()
 
-    def leave_seat(self, username):
+    def leave_seat(self, username, seat):
         print('leave seat')
-        user = User.objects.get(username=username)
+        if seat == 'north':
+            self.north.user = None
+            self.north.save()
+        elif seat == 'south':
+            self.south.user = None
+            self.south.save()
+        elif seat == 'east':
+            self.east.user = None
+            self.east.save()
+        elif seat == 'west':
+            self.west.user = None
+            self.west.save()
 
-        print(user.seat.direction)
-        user.seat.delete()
-        user.save()
+        # print(user.seat)
+        # s = Seat.objects.get(user=user)
+        # s.delete()
+        # Seat.objects.get(user=user).delete()
+        #
+        # print(Seat.objects.all())
+        # Seat.objects.filter(user=user).delete()
+        # print(Seat.objects.all())
+        # print(s)
+
+        # print(user.seat)
+        # user.seat.delete()
+        # user.save()
+        # print(user.seat)
+        # user.save()
+        # print(user.seat)
         print('left seat')
         self.save()
-        print(user.seat.direction)
+        # print(user.seat)
+        # print(user.seat.direction)
 
     def next_actor(self):
         if self.direction_to_act == 'north':
