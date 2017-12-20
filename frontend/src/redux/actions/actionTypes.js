@@ -30,6 +30,10 @@ export const MAKE_BID = 'MAKE_BID';
 export const GET_CONTRACT = 'GET_CONTRACT';
 export const GET_DECLARER = 'GET_DECLARER';
 
+export const ASK_STRAIN = 'ASK_STRAIN';
+export const RESET_PHASE = 'RESET_PHASE';
+export const CHOOSE_STRAIN = 'CHOOSE_STRAIN';
+
 // hand actions
 export const GET_HAND = 'GET_HAND';
 export const GET_DISTRIBUTIONS = 'GET_DISTRIBUTIONS';

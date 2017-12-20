@@ -23,7 +23,8 @@ export const mapStateToProps = (state) => {
         dummy: state.dummy,
         dummy_hand: state.dummy_hand,
         trick_string: state.trick_string,
-        table_seats: state.table_seats
+        table_seats: state.table_seats,
+        special_phase: state.special_phase,
     };
 };
 
@@ -70,6 +71,9 @@ export const mapDispatchToProps = (dispatch,emit) => {
       },
       resetLogin: () => {
         dispatch(a.resetLogin());
+      },
+      chooseStrainThunk: (suit) => {
+        dispatch(th.chooseStrainThunk(suit));
       },
     }
 };

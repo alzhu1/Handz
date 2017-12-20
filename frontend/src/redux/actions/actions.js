@@ -110,6 +110,11 @@ export const playCard = (card) => ({
     card
 })
 
+export const chooseStrain = (suit) => ({
+    type: a.CHOOSE_STRAIN,
+    suit
+})
+
 export const getTrick = (trick) => ({
     type: a.GET_TRICK,
     trick
@@ -140,7 +145,7 @@ export const showDummy = () => ({
     type: a.SHOW_DUMMY,
 })
 
-export const GET_TRICK_STRING  = (trick_string) => ({
-    type: a.SHOW_DUMMY,
+export const getTrickString  = (trick_string) => ({
+    type: a.GET_TRICK_STRING,
     trick_string
 })

@@ -8,6 +8,30 @@ from rest_framework.authtoken.models import Token
 
 from numpy import random
 
+def suit_name(abbr):
+    if abbr == 'S':
+        return 'spades'
+    elif abbr =='H':
+        return 'hearts'
+    elif abbr =='D':
+        return 'diamonds'
+    elif abbr =='C':
+        return 'clubs'
+    else:
+        raise ValueError('not valid suit')
+
+def declarer_name(abbr):
+    if abbr == 'N':
+        return 'north'
+    elif abbr =='S':
+        return 'south'
+    elif abbr =='E':
+        return 'east'
+    elif abbr =='W':
+        return 'west'
+    else:
+        raise ValueError('not valid direction')
+
 class User(AbstractUser):
     '''
     Custom User
@@ -284,10 +308,8 @@ class Contract(object):
 def parse_contract(contract_string):
 
     tricks = int(contract_string[0])
-
-    # hard code declarer, spade trump, no doubles
-    declarer = 'north'
-    trump = 'spades'
+    declarer = declarer_name(contract_string[2])
+    trump = suit_name(contract_string[1])
     is_doubled = False
     is_redoubled = False
 
@@ -300,10 +322,10 @@ def parse_contract(contract_string):
 
     return contract
 
-def parse_auction(auction_string):
-
-    contract = '2S'
-    return contract
+# def parse_auction(auction_string):
+#
+#     contract = '2S'
+#     return contract
 
 class ContractField(models.Field):
 
@@ -429,8 +451,7 @@ class Seat(models.Model):
     direction = models.CharField(max_length=5)
     user = models.OneToOneField('User',on_delete=models.CASCADE, null=True)
 
-def default_seat():
-    return Seat(user=None,direction=None)
+
 
 class BridgeTableManager(models.Manager):
 
@@ -478,6 +499,16 @@ class BridgeTable(models.Model):
     total_tricks = models.IntegerField(default=0,null=True)
     objects = models.Manager()
     objects = BridgeTableManager()
+
+    def is_seat_empty(self, seat):
+        if (seat == 'north' and self.north.user != None or
+            seat == 'east' and self.east.user != None or
+            seat == 'south' and self.south.user != None or
+            seat == 'west' and self.west.user != None):
+            print('Someone is sitting there!')
+            return False
+        else:
+            return True
 
     def take_seat(self, username, seat):
         user = User.objects.get(username=username)
@@ -549,9 +580,10 @@ class BridgeTable(models.Model):
             self.direction_to_act = 'north'
         self.save()
 
-    def set_contract(self):
+    def set_contract(self, level, strain, declarer):
         # if auction is not over, do nothing, otherwise set contract and begin play
-        self.contract = parse_contract(parse_auction(self.auction))
+        auction_string = str(level) + strain + declarer[0].upper()
+        self.contract = parse_contract(auction_string)
 
         # set opening leader to be left of declarer
         self.direction_to_act = self.contract.declarer

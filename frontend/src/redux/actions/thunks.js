@@ -79,3 +79,9 @@ export const playCardThunk = (card) => (
         }
     }
 )
+
+export const chooseStrainThunk = (suit) => (
+    function (dispatch, getState, emit) {
+      return(emit(a.chooseStrain(suit)));
+    }
+)

@@ -270,28 +270,30 @@ class SockConsumer(ReduxConsumer):
         hand = deal.direction(seat)
 
         # take seat on backend
-        table.take_seat(username, seat)
+        # check if anyone is sitting first
+        if table.is_seat_empty(seat):
+            table.take_seat(username, seat)
 
-        # send hand distributions to front send
-        self.GET_DISTRIBUTIONS()
+            # send hand distributions to front send
+            self.GET_DISTRIBUTIONS()
 
-        # send take seat action to front end
-        self.send_to_group(username, {
-                      'type': 'TAKE_SEAT',
-                      'seat': seat
-                      })
+            # send take seat action to front end
+            self.send_to_group(username, {
+                          'type': 'TAKE_SEAT',
+                          'seat': seat
+                          })
 
-        # get hand
-        self.GET_HAND(hand)
+            # get hand
+            self.GET_HAND(hand)
 
-        # get trick if in the middle of play
-        self.GET_TRICK()
+            # get trick if in the middle of play
+            self.GET_TRICK()
 
-        # update table members
-        self.UPDATE_TABLE_SEATS()
+            # update table members
+            self.UPDATE_TABLE_SEATS()
 
-        if table.contract != None:
-            self.SET_CONTRACT(table)
+            if table.contract != None:
+                self.GET_CONTRACT(table.contract.contract_string)
 
 
     @action('LEAVE_SEAT')
@@ -341,14 +343,12 @@ class SockConsumer(ReduxConsumer):
         # update auction
         table.update_auction(bid)
 
-        # if auction is over, ask declarer for strain
         table.next_actor()
-        print('auction length')
-        print(table.auction)
-        if len(table.auction)>3 and table.auction[-3:]=='PPP':
+        # set next actor
+        direction_to_act = table.direction_to_act
 
-            # test
-            # table.take_seat(username, 'north')
+        # if auction is over, ask declarer for strain
+        if len(table.auction)>3 and table.auction[-3:]=='PPP':
 
             # find auction winner
             dealer = table.deal.dealer
@@ -376,13 +376,11 @@ class SockConsumer(ReduxConsumer):
 
             print('winner2')
             print(winner)
-            # self.ASK_STRAIN(winner)
+            # set next actor as winner of auction
+            # to be added
 
-            table.set_contract()
-
-        # set next actor
-        direction_to_act = table.direction_to_act
-
+            # ask strain on front end
+            self.ASK_STRAIN(str(winner))
 
         # send auction
         auction = list(table.auction)
@@ -394,11 +392,28 @@ class SockConsumer(ReduxConsumer):
         # send next actor information
         self.GET_NEXT_ACTOR(direction_to_act)
 
-        # if contract is set, send contract
-        if table.contract != None:
-            self.SET_CONTRACT(table)
+    @action('CHOOSE_STRAIN')
+    def CHOOSE_STRAIN(self, action):
+        print('CHOOSE_STRAIN')
+        print(action)
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        user = User.objects.get(username=username)
 
-    @action('GET_HAND')
+        level = 2
+        strain = action['suit']
+        declarer = user.seat.direction
+        # if contract is set, send contract
+        self.SET_CONTRACT(level, strain, declarer)
+
+        # reset special phase
+        self.send_to_group(username, {
+                      'type': 'RESET_PHASE'
+                      })
+
+
+    # @action('GET_HAND')
     def GET_HAND(self, hand):
         print('GET_HAND')
         username = self.message.channel_session['user']
@@ -412,20 +427,22 @@ class SockConsumer(ReduxConsumer):
                         }
                       })
 
-    def SET_CONTRACT(self, table):
+    def SET_CONTRACT(self, level, strain, declarer):
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+
+        table.set_contract(level, strain, declarer)
+
         contract = table.contract.contract_string
-        declarer = table.contract.declarer
-        dummy_hand = table.deal.direction(find_dummy(declarer))
 
         self.GET_CONTRACT(contract)
 
+        dummy_hand = table.deal.direction(find_dummy(declarer))
         self.GET_DUMMY_HAND(dummy_hand)
 
         self.GET_DECLARER(declarer)
 
-    # need work
     def ASK_STRAIN(self, declarer):
         self.send_to_group(declarer, {
                       'type': 'ASK_STRAIN'
@@ -530,20 +547,20 @@ class SockConsumer(ReduxConsumer):
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
         north, south, east, west = '','','',''
-        print(table)
-        print(table.north)
-        try:
-            print(table.north.user)
-        except Seat.DoesNotExist:
-            pass
+        # print(table)
+        # print(table.north)
+        # try:
+        #     print(table.north.user)
+        # except Seat.DoesNotExist:
+        #     pass
 
-        if table.north:
+        if table.north.user != None:
             north = str(table.north.user)
-        if table.south:
+        if table.south.user != None:
             south = str(table.south.user)
-        if table.east:
+        if table.east.user != None:
             east = str(table.east.user)
-        if table.west:
+        if table.west.user != None:
             west = str(table.west.user)
 
         self.send_to_group(str(table_id), {

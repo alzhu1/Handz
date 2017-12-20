@@ -319,6 +319,18 @@ export const table_seats = (state = empty_seats, action) => {
     return state;
 }
 
+export const special_phase = (state = '', action) => {
+    switch(action.type) {
+        case a.ASK_STRAIN:
+          return 'ask_strain'
+        case a.RESET_PHASE:
+          return ''
+        default:
+            break;
+    }
+    return state;
+}
+
 export const appReducer = combineReducers({
 token,
 username,
@@ -340,7 +352,8 @@ other_hands,
 invalid_login,
 show_dummy,
 trick_string,
-table_seats
+table_seats,
+special_phase
 });
 
 export const rootReducer = (state, action) => {

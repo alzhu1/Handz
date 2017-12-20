@@ -123,7 +123,7 @@ class Hand extends React.Component {
           <div>
             <Suit suit='all' direction={cardinal}/>
             <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
-              {cardinal}
+              <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
               {this.props.table_seats[cardinal]}
             </ButtonBase>
           </div>
@@ -137,7 +137,7 @@ class Hand extends React.Component {
             <Suit suit='diamonds' direction={cardinal}/>
             <Suit suit='clubs' direction={cardinal}/>
             <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
-              {cardinal}
+              <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
               {this.props.table_seats[cardinal]}
             </ButtonBase>
           </div>
