@@ -277,6 +277,9 @@ class SockConsumer(ReduxConsumer):
             # send hand distributions to front send
             self.GET_DISTRIBUTIONS()
 
+            # send point counts to front end
+            self.GET_POINT_COUNT()
+
             # send take seat action to front end
             self.send_to_group(username, {
                           'type': 'TAKE_SEAT',
@@ -582,6 +585,23 @@ class SockConsumer(ReduxConsumer):
                             }
                       })
 
+    def GET_POINT_COUNT(self):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        north = table.deal.north.hcp
+        south = table.deal.south.hcp
+        east = table.deal.east.hcp
+        west = table.deal.west.hcp
+
+        self.send_to_group(username, {
+                      'type': 'GET_POINT_COUNT',
+                      'hands': {'north': north,
+                                'south': south,
+                                'east': east,
+                                'west': west}
+                      })
+
     # card play actions
     @action('PLAY_CARD')
     def PLAY_CARD(self, action):
@@ -647,6 +667,34 @@ class SockConsumer(ReduxConsumer):
                 raise ValueError('Must follow suit')
         else:
             raise ValueError('Contract not set, card cannot be played')
+
+        if table.EW_tricks_taken + table.NS_tricks_taken == 13:
+            self.CALC_SCORE()
+
+    @action('CALC_SCORE')
+    def CALC_SCORE(self, action):
+        print('CALC_SCORE')
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        declarer = table.contract.declarer
+        level = table.contract.level
+
+        if declarer == 'north' or declarer == 'south':
+            tricks_taken = table.NS_tricks_taken
+        else:
+            tricks_taken = table.EW_tricks_taken
+
+        if level + 6 >= tricks_taken:
+            print(level * 30)
+        else:
+            print(((level + 6) - tricks_taken) * 50)
+
+
+
+
+
+
 
     @action('MODIFY_USER_LIST')
     def MODIFY_USER_LIST(self, content, is_logged_in=True, username=None, user_list=[]):

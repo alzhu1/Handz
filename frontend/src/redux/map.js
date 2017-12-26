@@ -25,6 +25,7 @@ export const mapStateToProps = (state) => {
         trick_string: state.trick_string,
         table_seats: state.table_seats,
         special_phase: state.special_phase,
+        point_counts: state.point_counts,
     };
 };
 

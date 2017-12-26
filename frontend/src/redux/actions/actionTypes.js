@@ -22,6 +22,7 @@ export const LEAVE_TABLE = 'LEAVE_TABLE';
 export const TAKE_SEAT = 'TAKE_SEAT';
 export const LEAVE_SEAT = 'LEAVE_SEAT';
 export const UPDATE_TABLE_SEATS = 'UPDATE_TABLE_SEATS';
+export const GET_POINT_COUNT = 'GET_POINT_COUNT';
 
 // auction actions
 export const GET_NEXT_ACTOR = 'GET_NEXT_ACTOR';

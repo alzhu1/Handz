@@ -319,12 +319,26 @@ export const table_seats = (state = empty_seats, action) => {
     return state;
 }
 
+export const point_counts = (state = empty_seats, action) => {
+    switch(action.type) {
+        case a.GET_POINT_COUNT:
+          return action.hands
+        case a.LEAVE_TABLE:
+            return empty_seats;
+        default:
+            break;
+    }
+    return state;
+}
+
 export const special_phase = (state = '', action) => {
     switch(action.type) {
         case a.ASK_STRAIN:
           return 'ask_strain'
         case a.RESET_PHASE:
           return ''
+        case a.LEAVE_TABLE:
+            return '';
         default:
             break;
     }
@@ -353,7 +367,8 @@ invalid_login,
 show_dummy,
 trick_string,
 table_seats,
-special_phase
+special_phase,
+point_counts
 });
 
 export const rootReducer = (state, action) => {

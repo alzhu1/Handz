@@ -4,6 +4,7 @@ import ChatContainer from 'containers/ChatContainer';
 import Hand from 'containers/Hand';
 import Auction from 'components/Auction';
 import BiddingBox from 'components/BiddingBox';
+import TableMarker from 'components/TableMarker';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
@@ -35,6 +36,10 @@ class TableContainer extends React.Component {
 
             <div className="HandLeft">
               <Hand position='left'/>
+            </div>
+
+            <div className="TableMarker">
+              <TableMarker/>
             </div>
 
             <div className="HandRight">

@@ -6,8 +6,10 @@
   height: 100vh;
 }
 
- /*[col1] 33% [col2] 33% [col3] 33% [col4];*/
-
+.TableMarker {
+  grid-column: 3 / 5;
+  grid-row: 4/ 6;
+}
 .HandTop {
   grid-column: 3 / 5;
   grid-row: 1 / 3;

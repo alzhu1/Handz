@@ -59,11 +59,12 @@ class Hand(object):
         else:
             return int(s)
 
-    def __init__(self, spades, hearts, diamonds, clubs):
+    def __init__(self, spades, hearts, diamonds, clubs, hcp):
         self.spades = ''.join(sorted(spades, key=self.sort_key, reverse=True))
         self.hearts = ''.join(sorted(hearts, key=self.sort_key, reverse=True))
         self.diamonds = ''.join(sorted(diamonds, key=self.sort_key, reverse=True))
         self.clubs = ''.join(sorted(clubs, key=self.sort_key, reverse=True))
+        self.hcp = hcp
 
     def get_suit(self, suit):
         if suit == 'spades' or suit == 'S':
@@ -80,6 +81,7 @@ class Hand(object):
 def construct_hand(hand_int_list):
 
     spades, hearts, diamonds, clubs = '', '', '', ''
+    hcp = 0
 
     def suit_rank(i):
         if i%13==0:
@@ -95,6 +97,18 @@ def construct_hand(hand_int_list):
         else:
             return str(i%13)
 
+    def HCP_card(i):
+        if i%13==0:
+            return 4
+        elif i%13==1:
+            return 3
+        elif i%13==11:
+            return 2
+        elif i%13==12:
+            return 1
+        else:
+            return 0
+
     for x in hand_int_list:
         if x < 13:
             spades += suit_rank(x)
@@ -104,8 +118,9 @@ def construct_hand(hand_int_list):
             diamonds += suit_rank(x)
         else:
             clubs += suit_rank(x)
+        hcp += HCP_card(x)
 
-    return Hand(spades,hearts,diamonds,clubs)
+    return Hand(spades,hearts,diamonds,clubs, hcp)
 
 def remove_card_from_hand_string(hand_string, card):
 
@@ -296,18 +311,19 @@ class DealField(models.Field):
 
 class Contract(object):
 
-    def __init__(self, contract_string, declarer, trump, tricks,
+    def __init__(self, contract_string, declarer, trump, level,
                     is_doubled, is_redoubled):
         self.contract_string = contract_string
         self.declarer = declarer
         self.trump = trump
-        self.tricks = tricks
+        self.level = level
         self.is_doubled = is_doubled
         self.is_redoubled = is_redoubled
 
+
 def parse_contract(contract_string):
 
-    tricks = int(contract_string[0])
+    level = int(contract_string[0])
     declarer = declarer_name(contract_string[2])
     trump = suit_name(contract_string[1])
     is_doubled = False
@@ -316,7 +332,7 @@ def parse_contract(contract_string):
     contract = Contract(contract_string=contract_string,
                         declarer=declarer,
                         trump=trump,
-                        tricks=tricks,
+                        level=level,
                         is_doubled=is_doubled,
                         is_redoubled=is_redoubled)
 
