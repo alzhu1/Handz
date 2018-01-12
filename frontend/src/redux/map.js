@@ -49,8 +49,8 @@ export const mapDispatchToProps = (dispatch,emit) => {
       chatThunk: (message, receiver) => {
         dispatch(th.chatThunk(message, receiver));
       },
-      createTableThunk: () => {
-        dispatch(th.createTableThunk());
+      createTableThunk: (table_type) => {
+        dispatch(th.createTableThunk(table_type));
       },
       joinTableThunk: (table_id) => {
         dispatch(th.joinTableThunk(table_id));

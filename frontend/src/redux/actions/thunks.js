@@ -35,11 +35,12 @@ export const leaveTableThunk = () => (
     }
 )
 
-export const createTableThunk = () => (
+export const createTableThunk = (table_type) => (
     function (dispatch, getState, emit) {
-        return(emit(a.createTable()));
+        return(emit(a.createTable(table_type)));
     }
 )
+
 
 export const chatThunk = (message, receiver) => (
     function (dispatch, getState, emit) {

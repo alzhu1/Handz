@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 
 from numpy import random
 
+
 def suit_name(abbr):
     if abbr == 'S':
         return 'spades'
@@ -466,28 +467,39 @@ class Seat(models.Model):
     # direction_choices = ('North', 'South', 'East', 'West')
     direction = models.CharField(max_length=5)
     user = models.OneToOneField('User',on_delete=models.CASCADE, null=True)
+    robot = models.BooleanField(default=False)
+
+    def get_table(self, direction):
+        if direction == 'north':
+            return self.table_as_north
+        elif direction == 'east':
+            return self.table_as_east
+        elif direction == 'south':
+            return self.table_as_south
+        elif direction == 'west':
+            return self.westable_as_westt
 
 
 
 class BridgeTableManager(models.Manager):
 
-    def create_deal(self):
+    def create_deal(self, robot=False):
         deal = construct_deal()
         # auction = parse_auction('')
         north = Seat(user=None,direction='north')
         north.save()
-        south = Seat(user=None,direction='south')
+        south = Seat(user=None,direction='south',robot=robot)
         south.save()
-        east = Seat(user=None,direction='east')
+        east = Seat(user=None,direction='east',robot=robot)
         east.save()
-        west = Seat(user=None,direction='west')
+        west = Seat(user=None,direction='west',robot=robot)
         west.save()
         table = self.create(deal=deal,
-        direction_to_act=deal.dealer,
-        north=north,
-        south=south,
-        east=east,
-        west=west)
+            direction_to_act=deal.dealer,
+            north=north,
+            south=south,
+            east=east,
+            west=west)
         return table
 
 
@@ -502,6 +514,7 @@ class BridgeTable(models.Model):
     west = models.OneToOneField('Seat',default=None, null= True,
             on_delete=models.CASCADE,related_name='table_as_west')
 
+    phase = models.CharField(max_length=100,default='auction')
     deal = DealField(default=None,null=True)
     # auction = AuctionField()
     auction = models.CharField(max_length=100,default='')
@@ -596,6 +609,16 @@ class BridgeTable(models.Model):
             self.direction_to_act = 'north'
         self.save()
 
+    def get_seat(self, seat):
+        if seat == 'north':
+            return self.north
+        elif seat == 'east':
+            return self.east
+        elif seat == 'south':
+            return self.south
+        elif seat == 'west':
+            return self.west
+
     # def set_declarer(self, direction):
     #     self.contract.declarer = direction
     #     self.contract.save()
@@ -612,8 +635,62 @@ class BridgeTable(models.Model):
         print(self.direction_to_act)
         self.save()
 
+    def find_declarer(self):
+
+        def is_number(s):
+            try:
+                float(s)
+                return True
+            except ValueError:
+                pass
+
+            try:
+                import unicodedata
+                unicodedata.numeric(s)
+                return True
+            except (TypeError, ValueError):
+                pass
+
+            return False
+
+        def find_winner(dealer, num):
+            if dealer == 'north':
+                d = 0
+            elif seat == 'east':
+                d = 1
+            elif seat == 'south':
+                d = 2
+            elif seat == 'west':
+                d = 3
+
+            n = (d + num) % 4
+
+            if n % 4 == 0:
+                return 'north'
+            elif n % 4 == 1:
+                return 'east'
+            elif n % 4 == 2:
+                return 'south'
+            elif n % 4 == 3:
+                return 'west'
+
+        dealer = self.deal.dealer
+        # pos = re.match('.+([0-9])[^0-9]*$', table.auction).group(1)
+        for i,x in enumerate(self.auction):
+            if is_number(x):
+                level = x
+                pos = i
+        self.level = level
+        self.save()
+        declarer = find_winner(dealer, pos)
+        return declarer
+
+
+
     def update_auction(self, bid):
         self.auction = self.auction + bid
+        if len(self.auction)>3 and self.auction[-3:]=='PPP':
+            self.phase = 'play'
         self.save()
 
     def play_card(self, seat, card):

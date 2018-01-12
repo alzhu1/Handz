@@ -11,21 +11,21 @@ from .models import BridgeTable, Deal
 from numpy import random
 import re
 
-def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        pass
-
-    try:
-        import unicodedata
-        unicodedata.numeric(s)
-        return True
-    except (TypeError, ValueError):
-        pass
-
-    return False
+# def is_number(s):
+#     try:
+#         float(s)
+#         return True
+#     except ValueError:
+#         pass
+#
+#     try:
+#         import unicodedata
+#         unicodedata.numeric(s)
+#         return True
+#     except (TypeError, ValueError):
+#         pass
+#
+#     return False
 
 def suit_name(abbr):
     if abbr == 'S':
@@ -49,26 +49,26 @@ def find_dummy(seat):
     elif seat == 'west':
         return 'east'
 
-def find_winner(dealer, num):
-    if dealer == 'north':
-        d = 0
-    elif seat == 'east':
-        d = 1
-    elif seat == 'south':
-        d = 2
-    elif seat == 'west':
-        d = 3
-
-    n = (d + num) % 4
-
-    if n % 4 == 0:
-        return 'north'
-    elif n % 4 == 1:
-        return 'east'
-    elif n % 4 == 2:
-        return 'south'
-    elif n % 4 == 3:
-        return 'west'
+# def find_winner(dealer, num):
+#     if dealer == 'north':
+#         d = 0
+#     elif seat == 'east':
+#         d = 1
+#     elif seat == 'south':
+#         d = 2
+#     elif seat == 'west':
+#         d = 3
+#
+#     n = (d + num) % 4
+#
+#     if n % 4 == 0:
+#         return 'north'
+#     elif n % 4 == 1:
+#         return 'east'
+#     elif n % 4 == 2:
+#         return 'south'
+#     elif n % 4 == 3:
+#         return 'west'
 
 class SockConsumer(ReduxConsumer):
     channel_session_user = True
@@ -171,13 +171,26 @@ class SockConsumer(ReduxConsumer):
     def CREATE_TABLE(self, content):
         print('CREATE_TABLE')
 
-        # create table and generate deal
-        table = BridgeTable.objects.create_deal()
-        table.save()
-
         # send action to frontend
-        content['id'] = table.id
-        self.send_to_group('all',content)
+        if content['table_type'] == 'single':
+            # create table and generate deal with robots
+            table = BridgeTable.objects.create_deal(robot=True)
+            print('robot')
+            print(table.north.robot)
+            print(table.south.robot)
+            content['id'] = table.id
+            self.JOIN_TABLE(content)
+            content['seat'] = 'north'
+            self.TAKE_SEAT(content)
+        else:
+            # create table and generate deal without robots
+            table = BridgeTable.objects.create_deal()
+            print('robot')
+            print(table.north.robot)
+            print(table.south.robot)
+            content['id'] = table.id
+            self.send_to_group('all',content)
+        table.save()
 
     @action('GET_TABLES')
     def GET_TABLES(self, action=None):
@@ -197,8 +210,9 @@ class SockConsumer(ReduxConsumer):
     @action('JOIN_TABLE')
     def JOIN_TABLE(self, action):
         print('JOIN_TABLE')
+        print(action)
         username = self.message.channel_session['user']
-        table_id = action['table_id']
+        table_id = action['id']
         self.message.channel_session['table_id'] = table_id
         table = BridgeTable.objects.get(pk=table_id)
 
@@ -350,47 +364,60 @@ class SockConsumer(ReduxConsumer):
         table.update_auction(bid)
 
         table.next_actor()
+
+        # send auction actions to front end
+        self.auction_front_end_actions()
+
+
+    def auction_front_end_actions(self, table_id=None):
+        username = self.message.channel_session['user']
+        if table_id == None:
+            table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+
         # set next actor
         direction_to_act = table.direction_to_act
 
         # if auction is over, ask declarer for strain
-        if len(table.auction)>3 and table.auction[-3:]=='PPP':
+        if table.phase == 'play':
 
-            # find auction winner
-            dealer = table.deal.dealer
-            # pos = re.match('.+([0-9])[^0-9]*$', table.auction).group(1)
-            for i,x in enumerate(table.auction):
-                if is_number(x):
-                    level = x
-                    pos = i
-            print('pos')
-            print(pos)
-            table.level = level
-            table.save()
-            declarer = find_winner(dealer, pos)
-            if declarer == 'north':
-                print(table.north)
-                winner = table.north.user
-            elif declarer == 'east':
-                winner = table.east.user
-            elif declarer == 'west':
-                winner = table.west.user
-            elif declarer == 'south':
-                winner = table.south.user
-            else:
-                print('error user')
+            # # find auction winner
+            # dealer = table.deal.dealer
+            # for i,x in enumerate(table.auction):
+            #     if is_number(x):
+            #         level = x
+            #         pos = i
+            # print('pos')
+            # print(pos)
+            # table.level = level
+            # table.save()
+            # declarer = find_winner(dealer, pos)
 
-            print('winner2')
-            print(winner)
+
+            # if declarer == 'north':
+            #     print(table.north)
+            #     winner = table.north.user
+            # elif declarer == 'east':
+            #     winner = table.east.user
+            # elif declarer == 'west':
+            #     winner = table.west.user
+            # elif declarer == 'south':
+            #     winner = table.south.user
+            # else:
+            #     print('error user')
+            #
+            # print('winner2')
+            # print(winner)
+
             # set next actor as winner of auction
             # to be added
             # table.set_declarer(winner)
             # print(table.contract.declarer)
+            declarer = table.find_declarer()
             self.GET_DECLARER(declarer)
 
             # ask strain on front end
             self.ASK_STRAIN()
-
         else:
         # send next actor information
             self.GET_NEXT_ACTOR(direction_to_act)
@@ -401,6 +428,7 @@ class SockConsumer(ReduxConsumer):
                       'type': 'GET_AUCTION',
                       'auction': auction
                       })
+
 
     @action('CHOOSE_STRAIN')
     def CHOOSE_STRAIN(self, action):
@@ -497,6 +525,14 @@ class SockConsumer(ReduxConsumer):
                       'type': 'GET_NEXT_ACTOR',
                       'direction_to_act': direction_to_act
                       })
+        table = BridgeTable.objects.get(pk=table_id)
+        next_seat = table.get_seat(direction_to_act)
+        print('is_robot?')
+        print(next_seat.robot)
+        # print(next_seat.table_as_east)
+        if next_seat.robot:
+            self.Robot_AI(table,direction_to_act)
+
 
     def GET_DISTRIBUTIONS(self):
         username = self.message.channel_session['user']
@@ -690,12 +726,6 @@ class SockConsumer(ReduxConsumer):
         else:
             print(((level + 6) - tricks_taken) * 50)
 
-
-
-
-
-
-
     @action('MODIFY_USER_LIST')
     def MODIFY_USER_LIST(self, content, is_logged_in=True, username=None, user_list=[]):
         print('MODIFY_USER_LIST')
@@ -708,7 +738,6 @@ class SockConsumer(ReduxConsumer):
                           'username': username,
                           'users': user_list
                           })
-
 
     # chat actions
     @action('CHAT_MESSAGE')
@@ -731,3 +760,14 @@ class SockConsumer(ReduxConsumer):
             self.send_to_group(receiver,content)
             content['message'] = 'to ' + receiver + ': '  + message
             self.send_to_group(username,content)
+
+    def Robot_AI(self, table, seat):
+
+        if table.phase == 'auction':
+            table.update_auction('P')
+            table.save()
+            print('from robot ai')
+            print(table.auction)
+            self.auction_front_end_actions(table_id=table.id)
+        elif table.phase == 'play':
+            pass

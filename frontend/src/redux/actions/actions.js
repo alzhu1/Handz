@@ -49,8 +49,9 @@ export const modifyUserList = (is_logged_in,username,users) => ({
       users
 })
 
-export const createTable = () => ({
+export const createTable = (table_type) => ({
     type: a.CREATE_TABLE,
+    table_type: table_type,
     // to be assigned in backend
     id: 0
 })
@@ -60,9 +61,9 @@ export const getTables = (tablelist) => ({
     tablelist: tablelist
 })
 
-export const joinTable = (table_id) => ({
+export const joinTable = (id) => ({
     type: a.JOIN_TABLE,
-    table_id
+    id
 })
 
 export const leaveTable = () => ({

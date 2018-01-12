@@ -20,7 +20,13 @@ class TableList extends React.Component {
       return (
         <div>
             <button onClick={() =>
-                {this.props.createTableThunk()}}>Create Table
+                {this.props.createTableThunk('standard')}}>Create Table
+            </button>
+            <button onClick={() =>
+                {this.props.createTableThunk('single')}}>
+                <Link to="/table" style={{display: 'block', height: '100%'}}>
+                  Play Single Player
+                </Link>
             </button>
             {tables}
         </div>
