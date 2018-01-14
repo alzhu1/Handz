@@ -235,10 +235,7 @@ class SockConsumer(ReduxConsumer):
 
         # get auction
         auction = BridgeTable.objects.get(pk=table_id).auction
-        self.send_to_group(username, {
-                      'type': 'GET_AUCTION',
-                      'auction': list(auction)
-                      })
+        self.GET_AUCTION(list(auction))
 
         # get contract
         if table.contract != None:
@@ -368,6 +365,10 @@ class SockConsumer(ReduxConsumer):
         # send auction actions to front end
         self.auction_front_end_actions()
 
+        # set next actor
+        direction_to_act = table.direction_to_act
+        self.GET_NEXT_ACTOR(direction_to_act)
+
 
     def auction_front_end_actions(self, table_id=None):
         username = self.message.channel_session['user']
@@ -375,59 +376,25 @@ class SockConsumer(ReduxConsumer):
             table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
 
-        # set next actor
-        direction_to_act = table.direction_to_act
+        # # set next actor
+        # direction_to_act = table.direction_to_act
 
         # if auction is over, ask declarer for strain
         if table.phase == 'play':
-
-            # # find auction winner
-            # dealer = table.deal.dealer
-            # for i,x in enumerate(table.auction):
-            #     if is_number(x):
-            #         level = x
-            #         pos = i
-            # print('pos')
-            # print(pos)
-            # table.level = level
-            # table.save()
-            # declarer = find_winner(dealer, pos)
-
-
-            # if declarer == 'north':
-            #     print(table.north)
-            #     winner = table.north.user
-            # elif declarer == 'east':
-            #     winner = table.east.user
-            # elif declarer == 'west':
-            #     winner = table.west.user
-            # elif declarer == 'south':
-            #     winner = table.south.user
-            # else:
-            #     print('error user')
-            #
-            # print('winner2')
-            # print(winner)
-
-            # set next actor as winner of auction
-            # to be added
-            # table.set_declarer(winner)
-            # print(table.contract.declarer)
             declarer = table.find_declarer()
             self.GET_DECLARER(declarer)
-
             # ask strain on front end
             self.ASK_STRAIN()
-        else:
-        # send next actor information
-            self.GET_NEXT_ACTOR(direction_to_act)
+        # else:
+        # # send next actor information
+        #     print('get next actor recusive??')
+        #     self.GET_NEXT_ACTOR(direction_to_act)
+
 
         # send auction
         auction = list(table.auction)
-        self.send_to_group(str(table_id), {
-                      'type': 'GET_AUCTION',
-                      'auction': auction
-                      })
+        print(auction)
+        self.GET_AUCTION(auction)
 
 
     @action('CHOOSE_STRAIN')
@@ -488,6 +455,13 @@ class SockConsumer(ReduxConsumer):
                       'type': 'ASK_STRAIN'
                       })
 
+    def GET_AUCTION(self, auction):
+        table_id = self.message.channel_session['table_id']
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_AUCTION',
+                      'auction': auction
+                      })
+
 
     def GET_CONTRACT(self, contract):
         username = self.message.channel_session['user']
@@ -528,10 +502,14 @@ class SockConsumer(ReduxConsumer):
         table = BridgeTable.objects.get(pk=table_id)
         next_seat = table.get_seat(direction_to_act)
         print('is_robot?')
+        print(next_seat.direction)
         print(next_seat.robot)
+        print(table_id)
         # print(next_seat.table_as_east)
         if next_seat.robot:
             self.Robot_AI(table,direction_to_act)
+            table.next_actor()
+            self.GET_NEXT_ACTOR(table.direction_to_act)
 
 
     def GET_DISTRIBUTIONS(self):
@@ -768,6 +746,7 @@ class SockConsumer(ReduxConsumer):
             table.save()
             print('from robot ai')
             print(table.auction)
+            print(table.id)
             self.auction_front_end_actions(table_id=table.id)
         elif table.phase == 'play':
             pass
