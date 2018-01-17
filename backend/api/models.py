@@ -609,6 +609,26 @@ class BridgeTable(models.Model):
             self.direction_to_act = 'north'
         self.save()
 
+    def find_next_actor(self):
+        if self.direction_to_act == 'north':
+            return 'east'
+        elif self.direction_to_act == 'east':
+            return 'south'
+        elif self.direction_to_act == 'south':
+            return 'west'
+        elif self.direction_to_act == 'west':
+            return 'north'
+
+    def find_prev_actor(self):
+        if self.direction_to_act == 'north':
+            return 'west'
+        elif self.direction_to_act == 'east':
+            return 'north'
+        elif self.direction_to_act == 'south':
+            return 'east'
+        elif self.direction_to_act == 'west':
+            return 'south'
+
     def get_seat(self, seat):
         if seat == 'north':
             return self.north
@@ -630,7 +650,7 @@ class BridgeTable(models.Model):
 
         # set opening leader to be left of declarer
         self.direction_to_act = self.contract.declarer
-        self.next_actor()
+        # self.next_actor()
         print('opening leader')
         print(self.direction_to_act)
         self.save()
@@ -696,7 +716,8 @@ class BridgeTable(models.Model):
     def play_card(self, seat, card):
         self.trick = parse_trick(self.trick.trick_string + seat + card)
         if len(self.trick.trick_string) < 12:
-            self.next_actor()
+            pass
+            # self.next_actor()
         else:
             self.evaluate_trick()
 

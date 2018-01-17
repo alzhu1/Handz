@@ -360,24 +360,18 @@ class SockConsumer(ReduxConsumer):
         # update auction
         table.update_auction(bid)
 
-        table.next_actor()
-
         # send auction actions to front end
         self.auction_front_end_actions()
 
         # set next actor
-        direction_to_act = table.direction_to_act
-        self.GET_NEXT_ACTOR(direction_to_act)
+        # table.next_actor()
+        self.GET_NEXT_ACTOR()
 
 
     def auction_front_end_actions(self, table_id=None):
-        username = self.message.channel_session['user']
         if table_id == None:
             table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
-
-        # # set next actor
-        # direction_to_act = table.direction_to_act
 
         # if auction is over, ask declarer for strain
         if table.phase == 'play':
@@ -385,11 +379,6 @@ class SockConsumer(ReduxConsumer):
             self.GET_DECLARER(declarer)
             # ask strain on front end
             self.ASK_STRAIN()
-        # else:
-        # # send next actor information
-        #     print('get next actor recusive??')
-        #     self.GET_NEXT_ACTOR(direction_to_act)
-
 
         # send auction
         auction = list(table.auction)
@@ -438,7 +427,7 @@ class SockConsumer(ReduxConsumer):
         table = BridgeTable.objects.get(pk=table_id)
 
         table.set_contract(level, strain, declarer)
-        self.GET_NEXT_ACTOR(table.direction_to_act)
+        self.GET_NEXT_ACTOR()
 
         contract = table.contract.contract_string
 
@@ -491,26 +480,6 @@ class SockConsumer(ReduxConsumer):
                       'type': 'GET_DECLARER',
                       'declarer': declarer
                       })
-
-    def GET_NEXT_ACTOR(self, direction_to_act):
-        username = self.message.channel_session['user']
-        table_id = self.message.channel_session['table_id']
-        self.send_to_group(str(table_id), {
-                      'type': 'GET_NEXT_ACTOR',
-                      'direction_to_act': direction_to_act
-                      })
-        table = BridgeTable.objects.get(pk=table_id)
-        next_seat = table.get_seat(direction_to_act)
-        print('is_robot?')
-        print(next_seat.direction)
-        print(next_seat.robot)
-        print(table_id)
-        # print(next_seat.table_as_east)
-        if next_seat.robot:
-            self.Robot_AI(table,direction_to_act)
-            table.next_actor()
-            self.GET_NEXT_ACTOR(table.direction_to_act)
-
 
     def GET_DISTRIBUTIONS(self):
         username = self.message.channel_session['user']
@@ -624,13 +593,11 @@ class SockConsumer(ReduxConsumer):
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
 
-
         if table.contract != None:
             card = action['card']
             user = User.objects.get(username=username)
             seat = user.seat.direction
             direction_to_act = table.direction_to_act
-
 
             # check if card played is valid
             is_valid_card = True
@@ -649,33 +616,16 @@ class SockConsumer(ReduxConsumer):
                 else:
                     is_valid_card = False
 
-
             if is_valid_card:
                 print('valid')
-                table.play_card(seat[0].upper(), card)
+                print('card')
+                print(card)
+
+                # send played card to front end
+                self.play_card_front_end(card)
 
                 # tell front end who is next actor
-                direction_to_act = table.direction_to_act
-                self.GET_NEXT_ACTOR(direction_to_act)
-
-                # send updated trick
-                self.GET_TRICK()
-
-                # update hand frontend
-                hand = table.deal.direction(seat)
-                self.GET_HAND(hand)
-
-                # get dummy's hand
-                declarer = table.contract.declarer
-                dummy_hand = table.deal.direction(find_dummy(declarer))
-                self.GET_DUMMY_HAND(dummy_hand)
-
-                # update distributions
-                self.GET_DISTRIBUTIONS()
-
-                # send updated trick string if trick is complete
-                self.GET_TRICK_STRING()
-
+                self.GET_NEXT_ACTOR()
 
             else:
                 raise ValueError('Must follow suit')
@@ -684,6 +634,33 @@ class SockConsumer(ReduxConsumer):
 
         if table.EW_tricks_taken + table.NS_tricks_taken == 13:
             self.CALC_SCORE()
+
+    def play_card_front_end(self, card, table_id=None):
+        if table_id == None:
+            table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+
+        table.play_card(table.direction_to_act[0].upper(), card)
+
+        # send updated trick
+        self.GET_TRICK()
+
+        # update hand frontend
+        seat = table.direction_to_act
+        hand = table.deal.direction(seat)
+        self.GET_HAND(hand)
+
+        # get dummy's hand
+        declarer = table.contract.declarer
+        dummy_hand = table.deal.direction(find_dummy(declarer))
+        self.GET_DUMMY_HAND(dummy_hand)
+
+        # update distributions
+        self.GET_DISTRIBUTIONS()
+
+        # send updated trick string if trick is complete
+        self.GET_TRICK_STRING()
+
 
     @action('CALC_SCORE')
     def CALC_SCORE(self, action):
@@ -739,6 +716,43 @@ class SockConsumer(ReduxConsumer):
             content['message'] = 'to ' + receiver + ': '  + message
             self.send_to_group(username,content)
 
+    def GET_NEXT_ACTOR(self):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+
+        table = BridgeTable.objects.get(pk=table_id)
+        next_seat = table.get_seat(table.find_next_actor())
+        prev_seat = table.get_seat(table.find_prev_actor())
+        print('is_robot?')
+        print(next_seat.direction)
+        print(next_seat.robot)
+        print(table_id)
+        # print(next_seat.table_as_east)
+        def send_next_actor_to_front_end(self, direction):
+            self.send_to_group(str(table_id), {
+                          'type': 'GET_NEXT_ACTOR',
+                          'direction_to_act': direction
+                          })
+
+            # self.send_to_group(str(table_id), {
+            #               'type': 'GET_NEXT_ACTOR',
+            #               'direction_to_act': table.direction_to_act
+            #               })
+
+        if next_seat.robot:
+            send_next_actor_to_front_end(self, table.direction_to_act)
+            self.Robot_AI(table,table.direction_to_act)
+            table.next_actor()
+            self.GET_NEXT_ACTOR()
+        # elif not prev_seat.robot:
+        else:
+            print('GET_NEXT_ACTOR')
+            print(table.direction_to_act)
+            table.next_actor()
+            print(table.direction_to_act)
+            send_next_actor_to_front_end(self, table.direction_to_act)
+
+
     def Robot_AI(self, table, seat):
 
         if table.phase == 'auction':
@@ -749,4 +763,5 @@ class SockConsumer(ReduxConsumer):
             print(table.id)
             self.auction_front_end_actions(table_id=table.id)
         elif table.phase == 'play':
+            # play random card
             pass
