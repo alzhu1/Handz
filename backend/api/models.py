@@ -666,11 +666,9 @@ class BridgeTable(models.Model):
         auction_string = str(level) + strain + declarer[0].upper()
         self.contract = parse_contract(auction_string)
 
-        # set opening leader to be left of declarer
-        self.direction_to_act = self.contract.declarer
-        # self.next_actor()
-        print('opening leader')
-        print(self.direction_to_act)
+        # # set opening leader to be left of declarer
+        # self.direction_to_act = self.find_next_actor()
+        # self.direction_to_act = self.find_prev_actor()
         self.save()
 
     def find_declarer(self):
@@ -737,6 +735,8 @@ class BridgeTable(models.Model):
 
     def play_card(self, seat, card):
         self.trick = parse_trick(self.trick.trick_string + seat + card)
+        print('model play_card')
+        print(self.trick.trick_string)
         if len(self.trick.trick_string) < 12:
             pass
             # self.next_actor()

@@ -401,13 +401,16 @@ class SockConsumer(ReduxConsumer):
         print(level)
         strain = action['suit']
         declarer = user.seat.direction
-        # if contract is set, send contract
-        self.SET_CONTRACT(level, strain, declarer)
 
         # reset special phase
         self.send_to_group(str(table_id), {
                       'type': 'RESET_PHASE'
                       })
+
+        # if contract is set, send contract
+        self.SET_CONTRACT(level, strain, declarer)
+
+
 
 
     # @action('GET_HAND')
@@ -636,6 +639,10 @@ class SockConsumer(ReduxConsumer):
             table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
 
+        print('play_card_front_end')
+        print(table.direction_to_act)
+        print(card)
+
         table.play_card(table.direction_to_act[0].upper(), card)
 
         # send updated trick
@@ -725,9 +732,7 @@ class SockConsumer(ReduxConsumer):
         print('is_robot?')
         print(next_seat.direction)
         print(next_seat.robot)
-        print(table_id)
 
-        # print(next_seat.table_as_east)
         def send_next_actor_to_front_end(self, direction):
             self.send_to_group(str(table_id), {
                           'type': 'GET_NEXT_ACTOR',
@@ -740,12 +745,13 @@ class SockConsumer(ReduxConsumer):
             #               })
 
         if next_seat.robot:
-            send_next_actor_to_front_end(self, table.direction_to_act)
+            # send_next_actor_to_front_end(self, table.direction_to_act)
+            table.next_actor()
             self.Robot_AI(table_id)
             table = BridgeTable.objects.get(pk=table_id)
-            print('from next actor')
-            print(table.auction)
-            table.next_actor()
+            # print('from next actor')
+            # print(table.auction)
+
             self.GET_NEXT_ACTOR()
         # elif not prev_seat.robot:
         else:
@@ -761,9 +767,9 @@ class SockConsumer(ReduxConsumer):
         if table.phase == 'auction':
             table.update_auction('P')
             table.save()
-            print('from robot ai')
-            print(table.auction)
-            print(table.id)
+            # print('from robot ai')
+            # print(table.auction)
+            # print(table.id)
             self.auction_front_end_actions()
         elif table.phase == 'play':
             # play random card
