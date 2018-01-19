@@ -8,6 +8,8 @@ from .engine import ReduxConsumer, action
 
 from .models import BridgeTable, Deal
 
+from .robot import RobotCardPlay
+
 from numpy import random
 import re
 
@@ -298,7 +300,7 @@ class SockConsumer(ReduxConsumer):
                           })
 
             # get hand
-            self.GET_HAND(hand)
+            self.GET_HAND(hand, seat)
 
             # get trick if in the middle of play
             self.GET_TRICK()
@@ -324,18 +326,16 @@ class SockConsumer(ReduxConsumer):
         # leave seat on backend if sitting
         if hasattr(user, 'seat'):
 
-            print('leave table')
-            print(table)
-            print(table.north)
-            print(table.north.user)
-            print(user.seat.direction)
-
+            print('0')
             seat = user.seat.direction
-            print(seat)
+            direction = user.seat.direction
+            print('1')
+            print(user.seat.user)
+            print(table.get_seat(direction).user)
             table.leave_seat(username, seat)
             print('2')
-            print(user.seat)
-            print(user.seat.direction)
+            print(user.seat.user)
+            print(table.get_seat(direction).user)
             user.seat = None
             user.save()
 
@@ -376,6 +376,8 @@ class SockConsumer(ReduxConsumer):
         # if auction is over, ask declarer for strain
         if table.phase == 'play':
             declarer = table.find_declarer()
+            print('after find declarer')
+            print(table.level)
             self.GET_DECLARER(declarer)
             # ask strain on front end
             self.ASK_STRAIN()
@@ -396,6 +398,7 @@ class SockConsumer(ReduxConsumer):
         user = User.objects.get(username=username)
 
         level = table.level
+        print(level)
         strain = action['suit']
         declarer = user.seat.direction
         # if contract is set, send contract
@@ -408,28 +411,38 @@ class SockConsumer(ReduxConsumer):
 
 
     # @action('GET_HAND')
-    def GET_HAND(self, hand):
+    def GET_HAND(self, hand, seat):
         print('GET_HAND')
         username = self.message.channel_session['user']
-        self.send_to_group(username, {
-                      'type': 'GET_HAND',
-                      'hand': {
-                            'spades':hand.spades,
-                            'hearts':hand.hearts,
-                            'diamonds':hand.diamonds,
-                            'clubs':hand.clubs,
-                        }
-                      })
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        print(username)
+        print(table.get_seat(seat).user)
+        if username == str(table.get_seat(seat).user):
+            self.send_to_group(username, {
+                          'type': 'GET_HAND',
+                          'hand': {
+                                'spades':hand.spades,
+                                'hearts':hand.hearts,
+                                'diamonds':hand.diamonds,
+                                'clubs':hand.clubs,
+                            }
+                          })
 
     def SET_CONTRACT(self, level, strain, declarer):
+        print('SET_CONTRACT')
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
 
+        print(level)
+        print(strain)
+        print(declarer)
+
         table.set_contract(level, strain, declarer)
-        self.GET_NEXT_ACTOR()
 
         contract = table.contract.contract_string
+        print(contract)
 
         self.GET_CONTRACT(contract)
 
@@ -437,6 +450,8 @@ class SockConsumer(ReduxConsumer):
         self.GET_DUMMY_HAND(dummy_hand)
 
         self.GET_DECLARER(declarer)
+
+        self.GET_NEXT_ACTOR()
 
     def ASK_STRAIN(self):
         table_id = self.message.channel_session['table_id']
@@ -597,29 +612,13 @@ class SockConsumer(ReduxConsumer):
             card = action['card']
             user = User.objects.get(username=username)
             seat = user.seat.direction
-            direction_to_act = table.direction_to_act
 
             # check if card played is valid
-            is_valid_card = True
-            # check if first card in trick matches suit
-            if table.trick.trick_string:
-                suit_led = table.trick.trick_string[2]
-                print(suit_led)
-                # check if card matches first card in trick or out of that suit
-                # and check if card played is actually in your hand
-                # print(table.deal.direction(direction_to_act).get_suit(suit_led))
-                # print(table.deal.direction(direction_to_act).hearts)
-                if ((suit_led == card[1] or not
-                    table.deal.direction(direction_to_act).get_suit(suit_led)) and
-                    card[0] in table.deal.direction(direction_to_act).get_suit(card[1])):
-                    pass
-                else:
-                    is_valid_card = False
+            is_valid_card = table.is_valid_card(card)
+            print('is valid?')
+            print(is_valid_card)
 
             if is_valid_card:
-                print('valid')
-                print('card')
-                print(card)
 
                 # send played card to front end
                 self.play_card_front_end(card)
@@ -631,9 +630,6 @@ class SockConsumer(ReduxConsumer):
                 raise ValueError('Must follow suit')
         else:
             raise ValueError('Contract not set, card cannot be played')
-
-        if table.EW_tricks_taken + table.NS_tricks_taken == 13:
-            self.CALC_SCORE()
 
     def play_card_front_end(self, card, table_id=None):
         if table_id == None:
@@ -648,7 +644,7 @@ class SockConsumer(ReduxConsumer):
         # update hand frontend
         seat = table.direction_to_act
         hand = table.deal.direction(seat)
-        self.GET_HAND(hand)
+        self.GET_HAND(hand, seat)
 
         # get dummy's hand
         declarer = table.contract.declarer
@@ -660,6 +656,9 @@ class SockConsumer(ReduxConsumer):
 
         # send updated trick string if trick is complete
         self.GET_TRICK_STRING()
+
+        if table.EW_tricks_taken + table.NS_tricks_taken == 13:
+            self.CALC_SCORE()
 
 
     @action('CALC_SCORE')
@@ -727,6 +726,7 @@ class SockConsumer(ReduxConsumer):
         print(next_seat.direction)
         print(next_seat.robot)
         print(table_id)
+
         # print(next_seat.table_as_east)
         def send_next_actor_to_front_end(self, direction):
             self.send_to_group(str(table_id), {
@@ -741,27 +741,33 @@ class SockConsumer(ReduxConsumer):
 
         if next_seat.robot:
             send_next_actor_to_front_end(self, table.direction_to_act)
-            self.Robot_AI(table,table.direction_to_act)
+            self.Robot_AI(table_id)
+            table = BridgeTable.objects.get(pk=table_id)
+            print('from next actor')
+            print(table.auction)
             table.next_actor()
             self.GET_NEXT_ACTOR()
         # elif not prev_seat.robot:
         else:
-            print('GET_NEXT_ACTOR')
-            print(table.direction_to_act)
+            # print('GET_NEXT_ACTOR')
+            # print(table.direction_to_act)
             table.next_actor()
-            print(table.direction_to_act)
+            # print(table.direction_to_act)
             send_next_actor_to_front_end(self, table.direction_to_act)
 
 
-    def Robot_AI(self, table, seat):
-
+    def Robot_AI(self, table_id):
+        table = BridgeTable.objects.get(pk=table_id)
         if table.phase == 'auction':
             table.update_auction('P')
             table.save()
             print('from robot ai')
             print(table.auction)
             print(table.id)
-            self.auction_front_end_actions(table_id=table.id)
+            self.auction_front_end_actions()
         elif table.phase == 'play':
             # play random card
-            pass
+            card = RobotCardPlay(table)
+            print(card)
+            self.play_card_front_end(card)
+            # self.play_card_front_end()

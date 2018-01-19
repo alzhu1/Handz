@@ -643,6 +643,24 @@ class BridgeTable(models.Model):
     #     self.contract.declarer = direction
     #     self.contract.save()
 
+    def is_valid_card(self, card):
+        # check if first card in trick matches suit
+        print('card')
+        print(card)
+        if self.trick.trick_string:
+            suit_led = self.trick.trick_string[2]
+            print(suit_led)
+            # check if card matches first card in trick or out of that suit
+            # and check if card played is actually in your hand
+            if ((suit_led == card[1] or not
+                self.deal.direction(self.direction_to_act).get_suit(suit_led)) and
+                card[0] in self.deal.direction(self.direction_to_act).get_suit(card[1])):
+                return True
+            else:
+                return False
+        else:
+            return True
+
     def set_contract(self, level, strain, declarer):
         # if auction is not over, do nothing, otherwise set contract and begin play
         auction_string = str(level) + strain + declarer[0].upper()
@@ -656,6 +674,7 @@ class BridgeTable(models.Model):
         self.save()
 
     def find_declarer(self):
+        print('find declarer')
 
         def is_number(s):
             try:
@@ -700,18 +719,21 @@ class BridgeTable(models.Model):
             if is_number(x):
                 level = x
                 pos = i
+        print(self.auction)
+        print(level)
         self.level = level
         self.save()
         declarer = find_winner(dealer, pos)
         return declarer
 
-
-
     def update_auction(self, bid):
+        print('in model auction')
+        print(self.auction)
         self.auction = self.auction + bid
         if len(self.auction)>3 and self.auction[-3:]=='PPP':
             self.phase = 'play'
         self.save()
+        print(self.auction)
 
     def play_card(self, seat, card):
         self.trick = parse_trick(self.trick.trick_string + seat + card)
