@@ -119,19 +119,20 @@ class Hand extends React.Component {
       let cardinal = this.buttonDirection(this.props.position, this.props.seat)
 
       if (this.props.position === 'bottom') {
-        return(
-          <div>
+        var body =
+          (
+            <div>
             <Suit suit='all' direction={cardinal}/>
             <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
               {this.props.table_seats[cardinal]}
             </ButtonBase>
-          </div>
-        )
+            </div>)
+
       }
       else {
-        return (
-          <div>
+        var body =
+          (<div>
             <Suit suit='spades' direction={cardinal}/>
             <Suit suit='hearts' direction={cardinal}/>
             <Suit suit='diamonds' direction={cardinal}/>
@@ -140,9 +141,19 @@ class Hand extends React.Component {
               <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
               {this.props.table_seats[cardinal]}
             </ButtonBase>
-          </div>
-        )
+            </div>)
+
       }
+
+      var card_played = (<Card card={this.props.trick[cardinal]}
+                        key={_.uniqueId()}/>)
+
+      return (
+        <div>
+          {card_played}
+          {body}
+        </div>
+      )
       // return (
       //   <div className={this.props.className}>
       //     <Card card={this.props.trick[cardinal]} key={_.uniqueId()}/>
