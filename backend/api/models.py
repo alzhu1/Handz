@@ -190,15 +190,20 @@ def construct_deal():
 def parse_deal(hand_string):
 
     north, south, east, west = [], [], [], []
-    for i,x in enumerate(hand_string):
-        if x =='N':
-            north.append(i)
-        elif x == 'S':
-            south.append(i)
-        elif x == 'E':
-            east.append(i)
-        elif x == 'W':
-            west.append(i)
+    print('parse deal')
+    print(hand_string)
+    if hand_string == 0:
+        print('hand_string 0')
+    else:
+        for i,x in enumerate(hand_string):
+            if x =='N':
+                north.append(i)
+            elif x == 'S':
+                south.append(i)
+            elif x == 'E':
+                east.append(i)
+            elif x == 'W':
+                west.append(i)
 
     deal = Deal(hand_string=hand_string,
             north=construct_hand(north),
@@ -224,9 +229,14 @@ class DealField(models.Field):
         return 'deal'
 
     def from_db_value(self, value, expression, connection, context):
+        print('from_db_value')
+        print(value)
         if value is None:
             return value
-        return parse_deal(value)
+        elif value == '0':
+            return parse_deal('0000000000000000000000000000000000000000000000000000')
+        else:
+            return parse_deal(value)
 
     def to_python(self, value):
         if isinstance(value, Deal):
@@ -238,9 +248,12 @@ class DealField(models.Field):
         return parse_deal(value)
 
     def get_prep_value(self, value):
+        print('get_prep_value')
+        print(value)
+        print(value.hand_string)
         if isinstance(value, str):
             return value
-        return value.hand_string
+        return str(value.hand_string)
 
     def formfield(self, **kwargs):
         # This is a fairly standard way to set up some defaults
@@ -607,6 +620,7 @@ class BridgeTable(models.Model):
             self.direction_to_act = 'west'
         elif self.direction_to_act == 'west':
             self.direction_to_act = 'north'
+        self.evaluate_trick()
         self.save()
 
     def find_next_actor(self):
@@ -737,63 +751,75 @@ class BridgeTable(models.Model):
         self.trick = parse_trick(self.trick.trick_string + seat + card)
         print('model play_card')
         print(self.trick.trick_string)
-        if len(self.trick.trick_string) < 12:
-            pass
-            # self.next_actor()
-        else:
-            self.evaluate_trick()
+        # if len(self.trick.trick_string) < 12:
+        #     pass
+        #     # self.next_actor()
+        # else:
+        #     self.evaluate_trick()
 
         # update dealer
         self.deal = parse_deal(remove_card_from_hand_string(self.deal.hand_string, card))
+        print('self.deal')
+        print(self.deal.hand_string)
         self.save()
+
+
+    def trick_winner(self):
+        if len(self.trick.trick_string) == 12:
+            card1 = self.trick.trick_string[:3]
+            card2 = self.trick.trick_string[3:6]
+            card3 = self.trick.trick_string[6:9]
+            card4 = self.trick.trick_string[9:]
+            trick = [card2, card3, card4]
+
+            # rank and suit required to win
+            trump = self.contract.trump[0].upper()
+            rank = card1[1]
+            suit = card1[2]
+            winner = card1[0]
+
+            # rank of cards
+            order = list('AKQJT98765432')
+
+            for t in trick:
+                # print(t)
+                # print(trump)
+                # print(suit)
+                # print(rank)
+                if t[2] == trump and suit != trump:
+                    rank = t[1]
+                    suit = t[2]
+                    winner = t[0]
+                elif t[2] == suit and order.index(t[1]) < order.index(rank):
+                    rank = t[1]
+                    suit = t[2]
+                    winner = t[0]
+
+            print('winning trick')
+            print(suit + rank)
+            print(winner)
+
+            if winner == 'E':
+                return 'east'
+            elif winner == 'W':
+                return 'west'
+            elif winner == 'N':
+                return 'north'
+            elif winner == 'S':
+                return 'south'
 
     def evaluate_trick(self):
-        card1 = self.trick.trick_string[:3]
-        card2 = self.trick.trick_string[3:6]
-        card3 = self.trick.trick_string[6:9]
-        card4 = self.trick.trick_string[9:]
-        trick = [card2, card3, card4]
+        if len(self.trick.trick_string) == 12:
+            print('evaluate_trick')
 
-        # rank and suit required to win
-        trump = self.contract.trump[0].upper()
-        rank = card1[1]
-        suit = card1[2]
-        winner = card1[0]
+            winner = self.trick_winner()
+            self.direction_to_act = winner
+            winner = winner[0].upper()
 
-        # rank of cards
-        order = list('AKQJT98765432')
-
-        for t in trick:
-            print(t)
-            print(trump)
-            print(suit)
-            print(rank)
-            if t[2] == trump and suit != trump:
-                rank = t[1]
-                suit = t[2]
-                winner = t[0]
-            elif t[2] == suit and order.index(t[1]) < order.index(rank):
-                rank = t[1]
-                suit = t[2]
-                winner = t[0]
-
-        print('winning trick')
-        print(suit + rank)
-        print(winner)
-
-        if winner == 'E':
-            self.direction_to_act = 'east'
-        elif winner == 'W':
-            self.direction_to_act = 'west'
-        elif winner == 'N':
-            self.direction_to_act = 'north'
-        elif winner == 'S':
-            self.direction_to_act = 'south'
-
-        if winner == 'W' or winner == 'E':
-            self.EW_tricks_taken += 1
-        elif winner == 'N' or winner == 'S':
-            self.NS_tricks_taken += 1
-        self.trick_string += winner
-        self.trick = parse_trick('')
-        self.save()
+            if winner == 'W' or winner == 'E':
+                self.EW_tricks_taken += 1
+            elif winner == 'N' or winner == 'S':
+                self.NS_tricks_taken += 1
+            self.trick_string += winner
+            self.trick = parse_trick('')
+            self.save()

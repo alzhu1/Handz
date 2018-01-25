@@ -645,31 +645,31 @@ class SockConsumer(ReduxConsumer):
 
         table.play_card(table.direction_to_act[0].upper(), card)
 
-        # send updated trick
-        self.GET_TRICK()
-
-        # update hand frontend
-        seat = table.direction_to_act
-        hand = table.deal.direction(seat)
-        self.GET_HAND(hand, seat)
-
-        # get dummy's hand
-        declarer = table.contract.declarer
-        dummy_hand = table.deal.direction(find_dummy(declarer))
-        self.GET_DUMMY_HAND(dummy_hand)
-
-        # update distributions
-        self.GET_DISTRIBUTIONS()
-
-        # send updated trick string if trick is complete
-        self.GET_TRICK_STRING()
-
-        if table.EW_tricks_taken + table.NS_tricks_taken == 13:
-            self.CALC_SCORE()
+        # # send updated trick
+        # self.GET_TRICK()
+        #
+        # # update hand frontend
+        # seat = table.direction_to_act
+        # hand = table.deal.direction(seat)
+        # self.GET_HAND(hand, seat)
+        #
+        # # get dummy's hand
+        # declarer = table.contract.declarer
+        # dummy_hand = table.deal.direction(find_dummy(declarer))
+        # self.GET_DUMMY_HAND(dummy_hand)
+        #
+        # # update distributions
+        # self.GET_DISTRIBUTIONS()
+        #
+        # # send updated trick string if trick is complete
+        # self.GET_TRICK_STRING()
+        #
+        # if table.EW_tricks_taken + table.NS_tricks_taken == 13:
+        #     self.CALC_SCORE()
 
 
     @action('CALC_SCORE')
-    def CALC_SCORE(self, action):
+    def CALC_SCORE(self):
         print('CALC_SCORE')
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
@@ -682,7 +682,7 @@ class SockConsumer(ReduxConsumer):
         else:
             tricks_taken = table.EW_tricks_taken
 
-        if level + 6 >= tricks_taken:
+        if tricks_taken >= level + 6 :
             print(level * 30)
         else:
             print(((level + 6) - tricks_taken) * 50)
@@ -728,12 +728,39 @@ class SockConsumer(ReduxConsumer):
 
         table = BridgeTable.objects.get(pk=table_id)
         next_seat = table.get_seat(table.find_next_actor())
-        prev_seat = table.get_seat(table.find_prev_actor())
+        if len(table.trick.trick_string) == 12:
+            next_seat = table.get_seat(table.trick_winner())
+            print('next_seat next actor')
+            print(next_seat.direction)
         print('is_robot?')
         print(next_seat.direction)
         print(next_seat.robot)
 
         def send_next_actor_to_front_end(self, direction):
+            # only send information if contract has been set
+            if table.contract:
+                # send updated trick
+                self.GET_TRICK()
+
+                # update hand frontend
+                seat = table.direction_to_act
+                hand = table.deal.direction(seat)
+                self.GET_HAND(hand, seat)
+
+                # get dummy's hand
+                declarer = table.contract.declarer
+                dummy_hand = table.deal.direction(find_dummy(declarer))
+                self.GET_DUMMY_HAND(dummy_hand)
+
+                # update distributions
+                self.GET_DISTRIBUTIONS()
+
+                # send updated trick string if trick is complete
+                self.GET_TRICK_STRING()
+
+                if table.EW_tricks_taken + table.NS_tricks_taken == 13:
+                    self.CALC_SCORE()
+
             self.send_to_group(str(table_id), {
                           'type': 'GET_NEXT_ACTOR',
                           'direction_to_act': direction
@@ -753,7 +780,6 @@ class SockConsumer(ReduxConsumer):
             # print(table.auction)
 
             self.GET_NEXT_ACTOR()
-        # elif not prev_seat.robot:
         else:
             # print('GET_NEXT_ACTOR')
             # print(table.direction_to_act)
