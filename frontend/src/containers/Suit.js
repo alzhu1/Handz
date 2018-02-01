@@ -60,7 +60,7 @@ class Suit extends React.Component {
       const suit_len = this.props.other_hands[this.props.direction][this.props.suit]
       let left = 25
       for (var i = 0; i < suit_len; i++) {
-          cards.push( <Card card={'blue_back'}
+          cards.push( <Card card={'Blue_Back'}
                             key={_.uniqueId()}
                             left={left} />)
           left = left - 25

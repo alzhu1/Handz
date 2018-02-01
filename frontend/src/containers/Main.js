@@ -6,6 +6,7 @@ import LoginContainer from 'containers/LoginContainer';
 import SignupContainer from 'containers/SignupContainer';
 import LobbyContainer from 'containers/LobbyContainer';
 import TableContainer from 'containers/TableContainer';
+import Card from 'components/Card';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
@@ -23,6 +24,9 @@ class Main extends React.Component {
                 <Route exact path='/signup' component={SignupContainer} />
 
                 <Route path='/table' component={TableContainer} />
+
+                <Route exact path='/card'
+                render={() => (<Card card='KS'/>)} />
 
             </Switch>
         );

@@ -5,6 +5,7 @@
   "proxy": "http://localhost:8000",
   "dependencies": {
     "axios": "^0.16.2",
+    "cardsJS": "^1.1.1",
     "jquery": "^3.2.1",
     "material-ui": "^1.0.0-beta.19",
     "react": "^16.0.0",
