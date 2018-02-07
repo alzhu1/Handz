@@ -1,9 +1,7 @@
 import React from 'react';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
-import card from 'cardsJS';
-
-var cardJS = require('cardsJS');
+import cardJS from 'cardsJS/cards';
 
 class Card extends React.Component {
   render() {
@@ -11,7 +9,6 @@ class Card extends React.Component {
       return <div />
     }
     // let src = require('../images/acbl/' + this.props.card + '.png')
-    let src = require('../images/cards/' + this.props.card + '.svg')
     let defaults = {
       height: '15%',
       width: '15%',
@@ -19,7 +16,8 @@ class Card extends React.Component {
     };
 
     return (
-      <img className='card' style={defaults} src={src} />
+      <img className='card' src={require('cardsJS/cards/'+ this.props.card + '.svg')}
+      onClick={() => {this.props.playCardThunk(this.props.card)}} />
     )
   }
 }

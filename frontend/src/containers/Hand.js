@@ -8,6 +8,9 @@ import 'css/table.css'
 import Button from 'material-ui/Button';
 import ButtonBase from 'material-ui/Button';
 
+import BottomHand from 'containers/BottomHand';
+import DummyHand from 'containers/DummyHand';
+
 import {empty_hand} from 'redux/reducers/reducers';
 
 var _ = require('lodash');
@@ -85,44 +88,25 @@ class Hand extends React.Component {
 
     render() {
 
-      // var cardlist = [];
-      //
-      // if (this.props.hand === empty_hand || this.props.position !== 'bottom') {
-      //
-      //     for (var i = 0, len = 13; i < len; i++) {
-      //         cardlist.push('blue_back');
-      //     }
-      //     var card_len = 13
-      //
-      // }
-      // else{
-      //
-      //     // create list of cards e.g. 9S4D...
-      //     cardlist = this.createCardList(this.props.hand)
-      //     var card_len = (this.props.hand['spades'].length +
-      //                     this.props.hand['hearts'].length +
-      //                     this.props.hand['diamonds'].length +
-      //                     this.props.hand['clubs'].length)
-      //
-      //
-      // }
-
-      // console.log(this.props.position)
-
-
-      // const cards = cardlist.map((card) => {
-      //   return <Card
-      //             card={card}
-      //             key={_.uniqueId()}
-      //           />
-      // })
       let cardinal = this.buttonDirection(this.props.position, this.props.seat)
 
       if (this.props.position === 'bottom') {
         var body =
           (
             <div>
-            <Suit suit='all' direction={cardinal}/>
+            <BottomHand />
+            <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
+              <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
+              {this.props.table_seats[cardinal]}
+            </ButtonBase>
+            </div>)
+
+      }
+      else if (this.props.position === 'top' & this.props.show_dummy === true) {
+        var body =
+          (
+            <div>
+            <DummyHand />
             <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
               {this.props.table_seats[cardinal]}
@@ -154,15 +138,6 @@ class Hand extends React.Component {
           {body}
         </div>
       )
-      // return (
-      //   <div className={this.props.className}>
-      //     <Card card={this.props.trick[cardinal]} key={_.uniqueId()}/>
-      //     {cards}
-      //     <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
-      //     {cardinal}
-      //     </ButtonBase>
-      //   </div>
-      // )
     }
 }
 

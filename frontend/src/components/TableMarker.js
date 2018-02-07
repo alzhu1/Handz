@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 class TableMarker extends React.Component {
 
   handStrength = (hcp) => {
-    console.log(hcp)
     if (hcp < 5) {
       return '--'
     }
