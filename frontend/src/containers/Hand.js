@@ -9,7 +9,7 @@ import Button from 'material-ui/Button';
 import ButtonBase from 'material-ui/Button';
 
 import BottomHand from 'containers/BottomHand';
-import DummyHand from 'containers/DummyHand';
+import TopHand from 'containers/TopHand';
 
 import {empty_hand} from 'redux/reducers/reducers';
 
@@ -102,11 +102,11 @@ class Hand extends React.Component {
             </div>)
 
       }
-      else if (this.props.position === 'top' & this.props.show_dummy === true) {
+      else if (this.props.position === 'top') {
         var body =
           (
             <div>
-            <DummyHand />
+            <TopHand direction={cardinal}/>
             <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
               {this.props.table_seats[cardinal]}

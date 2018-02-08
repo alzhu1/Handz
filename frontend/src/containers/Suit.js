@@ -32,31 +32,31 @@ class Suit extends React.Component {
     //   }
     // }
 
-    // show dummy's cards
-    if (this.props.show_dummy && this.props.direction === this.props.dummy){
-      const suit_hand = this.props.dummy_hand[this.props.suit]
-      cards.push(<SuitSymbol suit={this.props.suit} key={_.uniqueId()}/>)
-      for (var i = 0; i < suit_hand.length; i++) {
-        cards.push( <Card card={suit_hand[i] + this.props.suit[0].toUpperCase()}
-                            card_seat = {this.props.direction}
-                            key={_.uniqueId()}/>)
-      }
+    // // show dummy's cards
+    // if (this.props.show_dummy && this.props.direction === this.props.dummy){
+    //   const suit_hand = this.props.dummy_hand[this.props.suit]
+    //   cards.push(<SuitSymbol suit={this.props.suit} key={_.uniqueId()}/>)
+    //   for (var i = 0; i < suit_hand.length; i++) {
+    //     cards.push( <Card card={suit_hand[i] + this.props.suit[0].toUpperCase()}
+    //                         card_seat = {this.props.direction}
+    //                         key={_.uniqueId()}/>)
+    //   }
+    // }
 
-    }
     // other player's cards, face down
-    else {
-      cards.push(<SuitSymbol suit={this.props.suit} key={_.uniqueId()}/>)
       const suit_len = this.props.other_hands[this.props.direction][this.props.suit]
       for (var i = 0; i < suit_len; i++) {
-          cards.push( <Card card={'Blue_Back'}
+          cards.push(<Card card={'Blue_Back'}
                             key={_.uniqueId()}/>)
       }
 
-    }
 
     return (
-      <div className="hand hhand-compact">
-        {cards}
+      <div>
+        <SuitSymbol suit={this.props.suit} key={_.uniqueId()}/>
+        <div className="hand hhand-compact">
+          {cards}
+        </div>
       </div>
     )
 
