@@ -23,39 +23,32 @@ class TableContainer extends React.Component {
   render() {
 
     return (
-
+      <div>
         <div className="Table">
           {/* table div */}
-
             <Auction />
             {this.props.contract}
-
             <div className='HandTop'>
               <Hand position='top'/>
             </div>
-
             <div className="HandLeft">
               <Hand position='left'/>
             </div>
-
             <div className="TableMarker">
               <TableMarker/>
             </div>
-
             <div className="HandRight">
               <Hand position='right'/>
             </div>
-
             <div className="HandBottom">
               <Hand position='bottom'/>
             </div>
-
             <div className="BiddingBox">
               <BiddingBox />
             </div>
-
-
         </div>
+        <ChatContainer/>
+      </div>
       )
     }
 }

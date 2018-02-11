@@ -10,6 +10,7 @@ import ButtonBase from 'material-ui/Button';
 
 import BottomHand from 'containers/BottomHand';
 import TopHand from 'containers/TopHand';
+import SideHand from 'containers/SideHand';
 
 import {empty_hand} from 'redux/reducers/reducers';
 
@@ -115,12 +116,10 @@ class Hand extends React.Component {
 
       }
       else {
+        console.log('side hand')
         var body =
           (<div>
-            <Suit suit='spades' direction={cardinal}/>
-            <Suit suit='hearts' direction={cardinal}/>
-            <Suit suit='diamonds' direction={cardinal}/>
-            <Suit suit='clubs' direction={cardinal}/>
+            <SideHand direction={cardinal}/>
             <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
               {this.props.table_seats[cardinal]}

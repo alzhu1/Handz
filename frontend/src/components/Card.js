@@ -9,14 +9,13 @@ class Card extends React.Component {
       return <div />
     }
     // let src = require('../images/acbl/' + this.props.card + '.png')
-    let defaults = {
-      height: '15%',
-      width: '15%',
-      backgroundColor: 'clear',
+    let styles = {
     };
 
     return (
-      <img className='card' src={require('cardsJS/cards/'+ this.props.card + '.svg')}
+      <img className='card'
+      style={styles}
+      src={require('cardsJS/cards/'+ this.props.card + '.svg')}
       onClick={() => {this.props.playCardThunk(this.props.card)}} />
     )
   }
