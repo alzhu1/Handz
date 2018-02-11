@@ -1,17 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Message from 'components/Message'
+import {mapStateToProps, mapDispatchToProps} from 'redux/map';
+import {connect} from 'react-redux';
 import 'css/index.css'
 
 class MessageList extends React.Component {
-  static propTypes = {
-    messages: PropTypes.arrayOf(PropTypes.object)
-  }
-
-  static defaultProps = {
-    messages: [],
-  }
-
 
   componentDidUpdate = () => {
     this.node.scrollTop = this.node.scrollHeight
@@ -20,7 +13,7 @@ class MessageList extends React.Component {
   render() {
     return (
         <div className="MessageList" ref={(node) => (this.node = node)}>
-          {this.props.messages.map((message, i) => (
+          {this.props.chats.map((message, i) => (
             <Message key={i} {...message} />
           ))}
         </div>
@@ -28,18 +21,4 @@ class MessageList extends React.Component {
     }
   }
 
-  // componentDidUpdate = () => {
-  //   this.node.scrollTop = this.node.scrollHeight
-  // }
-  //
-  // render() {
-  //   return (
-  //     <div className="MessageList" ref={(node) => (this.node = node)}>
-  //       {this.props.messages.map((message, i) => (
-  //         <Message key={i} {...message} />
-  //       ))}
-  //     </div>
-  //   )
-  // }
-
-export default MessageList
+export default connect(mapStateToProps, mapDispatchToProps)(MessageList);

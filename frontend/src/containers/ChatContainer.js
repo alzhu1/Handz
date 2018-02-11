@@ -1,8 +1,6 @@
 import React from 'react';
-
 import Chat from 'components/Chat';
 import UserList from 'components/UserList';
-
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
@@ -12,24 +10,11 @@ import 'css/chat.css'
 
 class ChatContainer extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      messages: [],
-    }
-  }
-
-  handleNewMessage = (text) => {
-    this.setState({
-      messages: [...this.state.messages, { me: true, author: this.props.username, body: text }],
-    })
-  }
-
   render() {
     return (
       <div className="ChatContainer">
-        <MessageList messages={this.state.messages}/>
-        <MessageForm onMessageSend={this.handleNewMessage} />
+        <MessageList />
+        <MessageForm />
       </div>
     )
   }

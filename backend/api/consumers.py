@@ -709,18 +709,18 @@ class SockConsumer(ReduxConsumer):
         table_id = self.message.channel_session['table_id']
         # global chat or table chat
         if receiver == 'all':
-            content['message'] = username + ': ' + content['message']
+            content['author'] = username
             if not table_id:
                 self.send_to_group(receiver,content)
             else:
                 self.send_to_group(str(table_id),content)
         # direct message
-        else:
-            message = content['message']
-            content['message'] = 'from ' + username + ': '  + message
-            self.send_to_group(receiver,content)
-            content['message'] = 'to ' + receiver + ': '  + message
-            self.send_to_group(username,content)
+        # else:
+        #     message = content['message']
+        #     content['message'] = 'from ' + username + ': '  + message
+        #     self.send_to_group(receiver,content)
+        #     content['message'] = 'to ' + receiver + ': '  + message
+        #     self.send_to_group(username,content)
 
     def GET_NEXT_ACTOR(self):
         username = self.message.channel_session['user']

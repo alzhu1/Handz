@@ -6,14 +6,12 @@ import 'css/chat.css'
 class Message extends React.Component {
   static propTypes = {
       author: PropTypes.string,
-      body: PropTypes.string.isRequired,
-      me: PropTypes.bool,
+      body: PropTypes.string.isRequired
     }
 
     render() {
       const classes = classNames('Message', {
-        log: !this.props.author,
-        me: this.props.me
+        log: !this.props.author
       })
 
       return (

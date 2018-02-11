@@ -1,11 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import {mapStateToProps, mapDispatchToProps} from 'redux/map';
+import {connect} from 'react-redux';
 import 'css/chat.css'
 
 class MessageForm extends React.Component {
-  static propTypes = {
-    onMessageSend: PropTypes.func.isRequired,
-  }
 
   componentDidMount = () => {
     this.input.focus()
@@ -13,8 +11,10 @@ class MessageForm extends React.Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault()
-    this.props.onMessageSend(this.input.value)
-    this.input.value = ""
+    if (this.input.value !== "") {
+      this.props.chatThunk(this.input.value,'all')
+      this.input.value = ""
+    }
   }
 
   render() {
@@ -24,7 +24,7 @@ class MessageForm extends React.Component {
           <input
             type="text"
             ref={(node) => (this.input = node)}
-            placeholder="Enter your message…"
+            placeholder={this.props.receiver}
           />
         </div>
         <div className="button-container">
@@ -37,4 +37,4 @@ class MessageForm extends React.Component {
   }
 }
 
-export default MessageForm
+export default connect(mapStateToProps, mapDispatchToProps)(MessageForm);
