@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import Suit from 'containers/Suit';
 
 import 'css/table.css'
-import Button from 'material-ui/Button';
 import ButtonBase from 'material-ui/Button';
 
 import BottomHand from 'containers/BottomHand';
@@ -91,11 +90,14 @@ class Hand extends React.Component {
 
       let cardinal = this.buttonDirection(this.props.position, this.props.seat)
 
+      let styles = {
+      };
+
       if (this.props.position === 'bottom') {
         var body =
           (
             <div>
-            <BottomHand />
+            <BottomHand styles={styles}/>
             <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
               {this.props.table_seats[cardinal]}

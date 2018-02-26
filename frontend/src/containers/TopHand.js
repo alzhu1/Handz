@@ -4,7 +4,7 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import SuitSymbol from 'components/SuitSymbol';
 
-var _ = require('lodash');
+import _ from 'lodash';
 
 class TopHand extends React.Component {
 

@@ -7,8 +7,9 @@ import SignupContainer from 'containers/SignupContainer';
 import LobbyContainer from 'containers/LobbyContainer';
 import TableContainer from 'containers/TableContainer';
 import Card from 'components/Card';
-
-import cardJS from 'cardsJS/cards.css';
+import Demo from 'containers/Demo';
+import BottomHand from 'containers/BottomHand';
+import Test from 'containers/Test';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
@@ -27,26 +28,11 @@ class Main extends React.Component {
 
                 <Route path='/table' component={TableContainer} />
 
-                <Route exact path='/card'
-                render={() => (
-                  <div className="hand hhand-compact active-hand " data-bind='hand: {flow: "vertical"}'>
-                    <div>
-                      <img className='card' src={require('cardsJS/cards/KS.svg')}/>
-                      <img className='card' src={require('cardsJS/cards/QS.svg')}/>
-                      <img className='card' src={require('cardsJS/cards/KH.svg')}/>
-                      <img className='card' src={require('cardsJS/cards/KD.svg')}/>
-                      <img className='card' src={require('cardsJS/cards/KC.svg')}/>
-                      <img className='card' src={require('cardsJS/cards/2S.svg')}/>
-                    </div>
-                    <div className='hand' data-hand='flow: vertical; spacing: 0.5; width: 90'>
-                      <div>
-                        <img className='card' src={require('cardsJS/cards/KS.svg')}/>
-                        <img className='card' src={require('cardsJS/cards/QS.svg')}/>
-                        <Card card='9S' />
-                      </div>
-                    </div>
-                </div>
-                )} />
+                <Route path='/demo' component={Demo} />
+
+                <Route path='/bottom' component={BottomHand} />
+
+                <Route exact path='/card' component={Test} />
 
             </Switch>
         );

@@ -15,9 +15,16 @@ import {createLogger} from 'redux-logger';
 
 import {WebSocketBridge} from 'django-channels'
 
-import 'css/index.css'
+// import cards from 'cardsJS';
+// import 'cardsJS/cards.css'
+import 'css/cardsjs.css'
+// import 'css/index.css'
 
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import indigo from 'material-ui/colors/indigo';
+import pink from 'material-ui/colors/pink';
+import red from 'material-ui/colors/red';
+
 
 const loggerMiddleware = createLogger();
 
@@ -52,7 +59,20 @@ export const store = createStore(rootReducer, initialState,
 // store.dispatch(getUsername('william'));
 // store.dispatch(username('',getUsername('william')));
 // console.log(store.getState());
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  palette: {
+    primary: indigo,
+    secondary: pink,
+    error: red,
+    // Used by `getContrastText()` to maximize the contrast between the background and
+    // the text.
+    contrastThreshold: 3,
+    // Used to shift a color's luminance by approximately
+    // two indexes within its tonal palette.
+    // E.g., shift from Red 500 to Red 300 or Red 700.
+    tonalOffset: 0.2,
+  },
+});
 
 ReactDOM.render((
     <Provider store={store}>

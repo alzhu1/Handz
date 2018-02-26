@@ -3,6 +3,8 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 
+import Button from 'material-ui/Button';
+
 var _ = require('lodash');
 
 class TableList extends React.Component {
@@ -19,15 +21,16 @@ class TableList extends React.Component {
 
       return (
         <div>
-            <button onClick={() =>
+            <Button onClick={() =>
                 {this.props.createTableThunk('standard')}}>Create Table
-            </button>
-            <button onClick={() =>
-                {this.props.createTableThunk('single')}}>
-                <Link to="/table" style={{display: 'block', height: '100%'}}>
+            </Button>
+            <Button component={props => <Link to="/table" {...props} /> }
+                onClick={() => {this.props.createTableThunk('single')}}>
                   Play Single Player
-                </Link>
-            </button>
+            </Button>
+            <Button component={props => <Link to="/card" {...props} /> }>
+                  Test
+            </Button>
             {tables}
         </div>
       )
