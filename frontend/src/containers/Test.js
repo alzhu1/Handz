@@ -15,14 +15,14 @@ class Test extends React.Component {
     return (
       <div>
       <div className="hand vhand-compact active-hand" >
-        <Card card='9S' />
-        <Card card='QH' ref={"blah"}/>
-        <Card card='AH' />
+        <Card card='9S' parentClass= {"hand vhand-compact active-hand"} firstChild={true}/>
+        <Card card='QH' parentClass= {"hand vhand-compact active-hand"}ref={"blah"}/>
+        <Card card='AH' parentClass= {"hand vhand-compact active-hand"} />
       </div>
       <div  className="hhand-compact" >
-        <Card card='9S' />
-        <Card card='QH' />
-        <Card card='AH' />
+        <Card card='9S' parentClass= {"hhand-compact"} firstChild={true}/>
+        <Card card='QH' parentClass= {"hhand-compact"}/>
+        <Card card='AH' parentClass= {"hhand-compact"}/>
       </div>
       <div className="hand active-hand"  data-hand='flow: horizontal; spacing: 0.2; width: 50'>
           <img className='card' src={require('cardsJS/cards/KS.svg')}/>

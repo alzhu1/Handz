@@ -10,7 +10,6 @@ export default class SuitSymbol extends React.Component {
       let styles = {
         height: '10%',
         width: '10%',
-        marginRight: '12%',
         backgroundColor: 'clear'
       };
 

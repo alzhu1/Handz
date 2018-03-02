@@ -10,6 +10,7 @@ import Card from 'components/Card';
 import Demo from 'containers/Demo';
 import BottomHand from 'containers/BottomHand';
 import Test from 'containers/Test';
+import Test2 from 'containers/Test2';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
@@ -33,6 +34,8 @@ class Main extends React.Component {
                 <Route path='/bottom' component={BottomHand} />
 
                 <Route exact path='/card' component={Test} />
+
+                <Route exact path='/test2' component={Test2} />
 
             </Switch>
         );

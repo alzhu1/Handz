@@ -11,7 +11,6 @@ import {connect} from 'react-redux';
 
 import Button from 'material-ui/Button';
 
-import 'css/table.css'
 
 class TableContainer extends React.Component {
 
@@ -23,9 +22,7 @@ class TableContainer extends React.Component {
   render() {
 
     return (
-      <div>
         <div className="Table">
-          {/* table div */}
             <Auction />
             {this.props.contract}
             <div className='HandTop'>
@@ -47,8 +44,6 @@ class TableContainer extends React.Component {
               <BiddingBox />
             </div>
         </div>
-        <ChatContainer/>
-      </div>
       )
     }
 }

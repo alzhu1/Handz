@@ -14,45 +14,54 @@ class SideHand extends React.Component {
     const hearts = []
     const clubs = []
     const diamonds = []
+    const handClass = "hand hhand-compact"
     // show player's cards without ordering
     if (this.props.dummy === this.props.direction && this.props.show_dummy){
         const hand = this.props.dummy_hand
 
         for (var i = 0; i < hand['spades'].length; i++) {
+            let firstChild = (i===0)
             spades.push(<Card card={hand['spades'][i]+ 'S' }
-                              key={_.uniqueId()}/>)
+            parentClass={handClass} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['hearts'].length; i++) {
+            let firstChild = (i===0)
             hearts.push(<Card card={hand['hearts'][i]+ 'H' }
-                              key={_.uniqueId()}/>)
+            parentClass={handClass} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['clubs'].length; i++) {
+            let firstChild = (i===0)
             clubs.push(<Card card={hand['clubs'][i]+ 'C' }
-                                    key={_.uniqueId()}/>)
-              }
+            parentClass={handClass} firstChild={firstChild}/>)
+        }
         for (var i = 0; i < hand['diamonds'].length; i++) {
+            let firstChild = (i===0)
             diamonds.push(<Card card={hand['diamonds'][i]+ 'D' }
-                              key={_.uniqueId()}/>)
+            parentClass={handClass} firstChild={firstChild}/>)
         }
       }
     else {
         const hand = this.props.other_hands[this.props.direction]
 
         for (var i = 0; i < hand['spades']; i++) {
+            let firstChild = (i===0)
             spades.push(<Card card={'Blue_Back'}
-                            key={_.uniqueId()}/>)
+            parentClass={handClass} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['hearts']; i++) {
+            let firstChild = (i===0)
             hearts.push(<Card card={'Blue_Back'}
-                            key={_.uniqueId()}/>)
+            parentClass={handClass} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['clubs']; i++) {
+            let firstChild = (i===0)
             clubs.push(<Card card={'Blue_Back'}
-                            key={_.uniqueId()}/>)
-              }
+            parentClass={handClass} firstChild={firstChild}/>)
+        }
         for (var i = 0; i < hand['diamonds']; i++) {
+            let firstChild = (i===0)
             diamonds.push(<Card card={'Blue_Back'}
-                            key={_.uniqueId()}/>)
+            parentClass={handClass} firstChild={firstChild}/>)
         }
       }
 
@@ -60,26 +69,22 @@ class SideHand extends React.Component {
     return (
       <div>
         <div>
-          <SuitSymbol suit='spade' key={_.uniqueId()}/>
-          <div className="hand hhand-compact active-hand" >
+          <div className={handClass} >
             {spades}
           </div>
         </div>
         <div>
-          <SuitSymbol suit='heart' key={_.uniqueId()}/>
-          <div className="hand hhand-compact active-hand">
+          <div className={handClass}>
             {hearts}
           </div>
         </div>
         <div>
-          <SuitSymbol suit='diamond' key={_.uniqueId()} />
-          <div className="hand hhand-compact active-hand">
+          <div className={handClass}>
             {diamonds}
           </div>
         </div>
         <div>
-          <SuitSymbol suit='club' key={_.uniqueId()} />
-          <div className="hand hhand-compact active-hand">
+          <div className={handClass}>
             {clubs}
           </div>
         </div>
@@ -88,5 +93,7 @@ class SideHand extends React.Component {
 
   }
 }
+
+// <SuitSymbol suit='club' key={_.uniqueId()} />
 
 export default connect(mapStateToProps, mapDispatchToProps)(SideHand);

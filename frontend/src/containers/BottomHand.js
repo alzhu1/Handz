@@ -4,9 +4,6 @@ import Card from 'components/Card';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
-import {Link} from 'react-router-dom';
-
-import Button from 'material-ui/Button';
 var _ = require('lodash');
 
 class BottomHand extends React.Component {
@@ -22,19 +19,27 @@ class BottomHand extends React.Component {
     // show player's cards without ordering
     const hand = this.props.hand
     // const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
-
+    const handClass = "hand hhand-compact active-hand"
+    var firstChild = true
 
     for (var i = 0; i < hand['spades'].length; i++) {
-        cards.push( <Card card={hand['spades'][i]+ 'S' }  />)
+        cards.push( <Card card={hand['spades'][i]+ 'S'}
+        parentClass={handClass} firstChild={firstChild}  />)
+        if (firstChild) {
+          firstChild = false
+        }
     }
     for (var i = 0; i < hand['hearts'].length; i++) {
-        cards.push( <Card card={hand['hearts'][i]+ 'H' }  />)
+        cards.push( <Card card={hand['hearts'][i]+ 'H'}
+        parentClass={handClass} firstChild={firstChild}  />)
     }
     for (var i = 0; i < hand['clubs'].length; i++) {
-              cards.push( <Card card={hand['clubs'][i]+ 'C'}  />)
-          }
+        cards.push( <Card card={hand['clubs'][i]+ 'C'}
+        parentClass={handClass} firstChild={firstChild}/>)
+    }
     for (var i = 0; i < hand['diamonds'].length; i++) {
-        cards.push( <Card ref={"container"} card={hand['diamonds'][i]+ 'D'} />)
+        cards.push( <Card ref={"container"} card={hand['diamonds'][i]+ 'D'}
+        parentClass={handClass} firstChild={firstChild} />)
     }
 
 
@@ -47,12 +52,9 @@ class BottomHand extends React.Component {
 
     return (
       <div>
-      <p className='hand hhand-compact active-hand'>
+      <p className={handClass}>
         {cards}
       </p>
-      <Button component={props => <Link to="/card" {...props} /> }>
-            Test
-      </Button>
       </div>
     )
 

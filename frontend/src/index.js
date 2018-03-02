@@ -17,8 +17,10 @@ import {WebSocketBridge} from 'django-channels'
 
 // import cards from 'cardsJS';
 // import 'cardsJS/cards.css'
+import 'css/index.css'
 import 'css/cardsjs.css'
-// import 'css/index.css'
+import 'css/table.css'
+import 'css/chat.css'
 
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import indigo from 'material-ui/colors/indigo';

@@ -1,9 +1,9 @@
 import React from 'react';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
+import ReactDOM from 'react-dom';
 
 class Card extends React.Component {
-
   constructor(){
     super()
     this.state = {
@@ -21,7 +21,7 @@ class Card extends React.Component {
       window.removeEventListener("resize", this.updateDimensions.bind(this));
   }
   updateDimensions() {
-    let update_width  = window.innerWidth/10
+    let update_width  = window.innerWidth/17
     this.setState({ width: update_width + 'px'});
   }
 
@@ -33,7 +33,16 @@ class Card extends React.Component {
     // let src = require('../images/acbl/' + this.props.card + '.png')
     let styles = {
       width: this.state.width,
-    };
+    }
+
+    if (this.props.parentClass !== undefined && this.props.parentClass.includes('hhand-compact')
+        && this.props.firstChild !== true){
+      styles['marginLeft'] = -window.innerWidth/30 + 'px'
+    }
+    else if (this.props.parentClass !== undefined && this.props.parentClass.includes('vhand-compact')
+        && this.props.firstChild !== true){
+      styles['marginTop'] = -window.innerWidth/17 + 'px'
+    }
 
     console.log(this.state.width)
 

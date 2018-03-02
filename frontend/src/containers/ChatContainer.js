@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import MessageList from 'containers/MessageList'
 import MessageForm from 'components/MessageForm'
-import 'css/chat.css'
+
 
 class ChatContainer extends React.Component {
 

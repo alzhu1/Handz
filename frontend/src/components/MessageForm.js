@@ -1,7 +1,6 @@
 import React from 'react'
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
-import 'css/chat.css'
 
 class MessageForm extends React.Component {
 
