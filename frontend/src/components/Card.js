@@ -3,6 +3,8 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
 
+import _ from 'lodash';
+
 class Card extends React.Component {
   constructor(){
     super()
@@ -21,7 +23,7 @@ class Card extends React.Component {
       window.removeEventListener("resize", this.updateDimensions.bind(this));
   }
   updateDimensions() {
-    let update_width  = window.innerWidth/17
+    let update_width  = window.innerWidth/23 + 10
     this.setState({ width: update_width + 'px'});
   }
 
@@ -35,13 +37,17 @@ class Card extends React.Component {
       width: this.state.width,
     }
 
+    if (this.props.motionStyle !== undefined){
+      styles =_.merge(styles, this.props.motionStyle);
+    }
+
     if (this.props.parentClass !== undefined && this.props.parentClass.includes('hhand-compact')
         && this.props.firstChild !== true){
-      styles['marginLeft'] = -window.innerWidth/30 + 'px'
+      styles['marginLeft'] = -window.innerWidth/33 + 'px'
     }
     else if (this.props.parentClass !== undefined && this.props.parentClass.includes('vhand-compact')
         && this.props.firstChild !== true){
-      styles['marginTop'] = -window.innerWidth/17 + 'px'
+      styles['marginTop'] = -window.innerWidth/23 + 'px'
     }
 
     console.log(this.state.width)

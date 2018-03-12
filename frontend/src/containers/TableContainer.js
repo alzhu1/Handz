@@ -1,10 +1,12 @@
 import React from 'react';
-
-import ChatContainer from 'containers/ChatContainer';
 import Hand from 'containers/Hand';
 import Auction from 'components/Auction';
 import BiddingBox from 'components/BiddingBox';
 import TableMarker from 'components/TableMarker';
+import PlayedCardArea from 'containers/PlayedCardArea';
+
+
+import Test3 from 'containers/Test3';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
@@ -42,6 +44,9 @@ class TableContainer extends React.Component {
             </div>
             <div className="BiddingBox">
               <BiddingBox />
+            </div>
+            <div className="PlayedCardArea">
+              <PlayedCardArea />
             </div>
         </div>
       )

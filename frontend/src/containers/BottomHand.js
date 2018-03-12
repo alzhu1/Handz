@@ -4,7 +4,6 @@ import Card from 'components/Card';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
-var _ = require('lodash');
 
 class BottomHand extends React.Component {
 

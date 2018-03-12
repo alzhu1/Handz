@@ -4,7 +4,6 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import Suit from 'containers/Suit';
 
-import 'css/table.css'
 import ButtonBase from 'material-ui/Button';
 
 import BottomHand from 'containers/BottomHand';
@@ -13,7 +12,6 @@ import SideHand from 'containers/SideHand';
 
 import {empty_hand} from 'redux/reducers/reducers';
 
-var _ = require('lodash');
 
 class Hand extends React.Component {
 
@@ -130,12 +128,8 @@ class Hand extends React.Component {
 
       }
 
-      var card_played = (<Card card={this.props.trick[cardinal]}
-                        key={_.uniqueId()}/>)
-
       return (
         <div>
-          {card_played}
           {body}
         </div>
       )

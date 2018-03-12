@@ -45,4 +45,5 @@ export const GET_TRICK_STRING = 'GET_TRICK_STRING';
 // cardplay actions
 export const PLAY_CARD = 'PLAY_CARD';
 export const GET_TRICK = 'GET_TRICK';
+export const GET_PREV_TRICK = 'GET_PREV_TRICK';
 export const SUIT_LED = 'SUIT_LED';

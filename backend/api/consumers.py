@@ -544,6 +544,21 @@ class SockConsumer(ReduxConsumer):
                             }
                       })
 
+    def GET_PREV_TRICK(self):
+        username = self.message.channel_session['user']
+        table_id = self.message.channel_session['table_id']
+        table = BridgeTable.objects.get(pk=table_id)
+        trick = table.prev_trick
+        self.send_to_group(str(table_id), {
+                      'type': 'GET_PREV_TRICK',
+                      'trick': {
+                                'north': trick.north,
+                                'south': trick.south,
+                                'east': trick.east,
+                                'west': trick.west,
+                            }
+                      })
+
     def GET_TRICK_STRING(self):
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
@@ -741,6 +756,7 @@ class SockConsumer(ReduxConsumer):
             if table.contract:
                 # send updated trick
                 self.GET_TRICK()
+                self.GET_PREV_TRICK()
 
                 # update hand frontend
                 seat = table.direction_to_act

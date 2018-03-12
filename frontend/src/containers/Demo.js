@@ -34,8 +34,8 @@ export default class Demo extends React.Component {
             // `style`
               <img className='card' src={require('cardsJS/cards/2S.svg')}
               style={{
-                WebkitTransform: `translate3d(${x}px, 0, 0)`,
-                transform: `translate3d(${x}px, 0, 0)`,
+                WebkitTransform: 'translate3d(${x}px, 0, 0)',
+                transform: 'translate3d(${x}px, 0, 0)',
               }}/>
           }
         </Motion>

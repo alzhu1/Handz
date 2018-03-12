@@ -533,6 +533,7 @@ class BridgeTable(models.Model):
     auction = models.CharField(max_length=100,default='')
     contract = ContractField(default=None,null=True)
     trick = TrickField(default='')
+    prev_trick = TrickField(default='')
 
     direction_to_act = models.CharField(max_length=5,default='')
     trick_string = models.CharField(max_length=13,default='')
@@ -821,5 +822,8 @@ class BridgeTable(models.Model):
             elif winner == 'N' or winner == 'S':
                 self.NS_tricks_taken += 1
             self.trick_string += winner
+            self.prev_trick = self.trick
             self.trick = parse_trick('')
+            print('prev trick')
+            print(self.prev_trick.trick_string)
             self.save()

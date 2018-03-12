@@ -210,6 +210,18 @@ export const trick = (state = empty_trick, action) => {
     return state;
 }
 
+export const prev_trick = (state = empty_trick, action) => {
+    switch(action.type) {
+        case a.GET_PREV_TRICK:
+          return action.trick;
+        case a.LEAVE_TABLE:
+            return empty_trick;
+        default:
+            break;
+    }
+    return state;
+}
+
 export const suit_led = (state = '', action) => {
     switch(action.type) {
         case a.SUIT_LED:
@@ -362,6 +374,7 @@ declarer,
 dummy,
 dummy_hand,
 trick,
+prev_trick,
 suit_led,
 other_hands,
 invalid_login,
