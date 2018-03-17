@@ -65,7 +65,6 @@ class SideHand extends React.Component {
         }
       }
 
-
     return (
       <div>
         <div>

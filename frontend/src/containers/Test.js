@@ -12,6 +12,12 @@ class Test extends React.Component {
   }
 
   render() {
+
+    var rotate_style= {
+        transform: 'rotate(90deg)',
+        marginBottom: window.innerWidth/-100 + 'px',
+    }
+
     return (
       <div>
       <div className="hand vhand-compact active-hand" >
@@ -21,13 +27,14 @@ class Test extends React.Component {
       </div>
       <div  className="hhand-compact" >
         <Card card='9S' parentClass= {"hhand-compact"} firstChild={true}/>
-        <Card card='QH' parentClass= {"hhand-compact"}/>
-        <Card card='AH' parentClass= {"hhand-compact"}/>
+        <Card card='QH' parentClass= {"hhand-compact"} addStyle={rotate_style}/>
+        <Card card='AH' parentClass= {"hhand-compact"} addStyle={rotate_style}/>
+        <Card card='AS' parentClass= {"hhand-compact"} addStyle={{transform: 'rotate(0deg)'}}/>
       </div>
       <div className="hand active-hand"  data-hand='flow: horizontal; spacing: 0.2; width: 50'>
           <img className='card' src={require('cardsJS/cards/KS.svg')}/>
-          <img className='card' src={require('cardsJS/cards/QS.svg')}/>
-          <img className='card' src={require('cardsJS/cards/KH.svg')}/>
+          <img className='card' src={require('cardsJS/cards/QS.svg')} style={rotate_style}/>
+          <img className='card' src={require('cardsJS/cards/KH.svg')} style={{transform: 'rotate(0deg)'}}/>
           <img className='card' src={require('cardsJS/cards/KD.svg')}/>
           <img className='card' src={require('cardsJS/cards/KC.svg')}/>
           <img className='card' src={require('cardsJS/cards/2S.svg')}/>

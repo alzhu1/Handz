@@ -14,6 +14,8 @@ import Test2 from 'containers/Test2';
 import Test3 from 'containers/Test3';
 import PlayedCardArea from 'containers/PlayedCardArea';
 
+import SvgMaterialIcons from 'containers/SvgMaterialIcons';
+
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
 class Main extends React.Component {
@@ -40,6 +42,8 @@ class Main extends React.Component {
                 <Route exact path='/test2' component={Test2} />
 
                 <Route exact path='/test3' component={Test3} />
+
+                <Route exact path='/icon' component={SvgMaterialIcons} />
 
             </Switch>
         );

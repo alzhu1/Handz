@@ -4,37 +4,37 @@ import Auction from 'components/Auction';
 import BiddingBox from 'components/BiddingBox';
 import TableMarker from 'components/TableMarker';
 import PlayedCardArea from 'containers/PlayedCardArea';
+import TricksArea from 'containers/TricksArea';
+import BackButton from 'containers/BackButton';
 
-
-import Test3 from 'containers/Test3';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
 import Button from 'material-ui/Button';
 
-
 class TableContainer extends React.Component {
+
 
   componentWillUnmount() {
       this.props.leaveSeatThunk(this.props.seat)
       this.props.leaveTableThunk(this.props.table_id)
   }
 
+
   render() {
+
 
     return (
         <div className="Table">
-            <Auction />
-            {this.props.contract}
+            <div className='BottomRight'>
+              <Auction />
+            </div>
             <div className='HandTop'>
               <Hand position='top'/>
             </div>
             <div className="HandLeft">
               <Hand position='left'/>
-            </div>
-            <div className="TableMarker">
-              <TableMarker/>
             </div>
             <div className="HandRight">
               <Hand position='right'/>
@@ -48,6 +48,10 @@ class TableContainer extends React.Component {
             <div className="PlayedCardArea">
               <PlayedCardArea />
             </div>
+            <div className="TricksArea">
+              <TricksArea />
+            </div>
+            <BackButton />
         </div>
       )
     }

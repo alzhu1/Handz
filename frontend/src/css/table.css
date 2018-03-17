@@ -8,21 +8,6 @@
   overflow: hidden;
 }
 
-.Test{
-
-  width: 100vw;
-  height: 100vh;
-  background-color: red;
-}
-
-/*
-.Table {
-  display: grid;
-  grid-template-rows: repeat(6, 1fr);
-  grid-template-columns: repeat(6, 1fr);
-  width: 100vw;
-  height: 100vh;
-}*/
 
 .TableMarker {
   grid-column: 6 / 10;
@@ -38,7 +23,6 @@
 .HandRight {
   grid-column: 9 / 13;
   grid-row: 1 / 5;
-  transform:  scaleX(-1);
 }
 
 .HandLeft {
@@ -49,28 +33,39 @@
 .HandBottom{
   margin: auto;
   grid-column: 4 / 10;
-  grid-row: 9/ 11;
+  grid-row: 10/ 13;
 }
 
 .PlayedCardArea{
   margin: auto;
   grid-column: 4 / 10;
-  grid-row: 4/ 9;
-
+  grid-row: 5/ 10;
 }
+
 .PlayedCardArea2{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
 }
 
-.hidden {
-	display: none;
+.BottomRight{
+  grid-column: 10/ 13;
+  grid-row: 10/ 13;
+}
+
+.Auction{
+
+}
+
+.TricksArea{
+  margin: auto;
+  grid-column: 8/ 13;
+  grid-row: 11/ 13;
 }
 
 .BiddingBox{
   grid-column: 1 / 5;
-  grid-row: 11/ 13;
+  grid-row: 10/ 13;
 }
 
 .ChatContainer{

@@ -4,7 +4,7 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import Suit from 'containers/Suit';
 
-import ButtonBase from 'material-ui/Button';
+import Button from 'material-ui/Button';
 
 import BottomHand from 'containers/BottomHand';
 import TopHand from 'containers/TopHand';
@@ -84,48 +84,92 @@ class Hand extends React.Component {
       }
     }
 
+    handStrength = (hcp) => {
+      if (hcp < 5) {
+        return '--'
+      }
+      else if (hcp < 9) {
+        return '-'
+      }
+      else if (hcp < 12) {
+        return '0'
+      }
+      else if (hcp < 17) {
+        return '+'
+      }
+      else {
+        return '++'
+      }
+    }
+
     render() {
 
       let cardinal = this.buttonDirection(this.props.position, this.props.seat)
-
-      let styles = {
-      };
 
       if (this.props.position === 'bottom') {
         var body =
           (
             <div>
-            <BottomHand styles={styles}/>
-            <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
-              <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
-              {this.props.table_seats[cardinal]}
-            </ButtonBase>
+            <BottomHand/>
+            <Button onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
+              <p align="left">
+                {cardinal}: {this.props.table_seats[cardinal]}
+                <br/>
+                HCP: {this.props.point_counts[cardinal]}
+              </p>
+            </Button>
             </div>)
 
       }
       else if (this.props.position === 'top') {
+        let styles={margin:  'auto'}
         var body =
           (
             <div>
             <TopHand direction={cardinal}/>
-            <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
-              <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
-              {this.props.table_seats[cardinal]}
-            </ButtonBase>
+            <Button style={styles}
+              onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
+              <p align="left">
+                {cardinal}: {this.props.table_seats[cardinal]}
+                <br/>
+                HCP: {this.props.point_counts[cardinal]}
+              </p>
+            </Button>
             </div>)
 
       }
-      else {
-        console.log('side hand')
+      else if (this.props.position === 'left') {
         var body =
           (<div>
-            <SideHand direction={cardinal}/>
-            <ButtonBase onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
-              <div style={{fontWeight: "bold"}}>{cardinal[0]}:</div>
-              {this.props.table_seats[cardinal]}
-            </ButtonBase>
+              <SideHand direction={cardinal}/>
+              <Button onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
+              <p align="left">
+                {cardinal}: {this.props.table_seats[cardinal]}
+                <br/>
+                HCP: {this.props.point_counts[cardinal]}
+              </p>
+              </Button>
             </div>)
 
+      }
+      else if (this.props.position === 'right') {
+        let styles={transform:  'scaleX(-1)'}
+        var body =
+          (<div style={styles}>
+              <SideHand direction={cardinal}/>
+              <Button size='large'
+                style={styles}
+                onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
+                <p align="left">
+                  {cardinal}: {this.props.table_seats[cardinal]}
+                  <br/>
+                  HCP: {this.props.point_counts[cardinal]}
+                </p>
+              </Button>
+            </div>)
+      }
+      else{
+        console.log('error')
       }
 
       return (

@@ -65,10 +65,6 @@ class PlayedCard extends React.Component {
   }
 
   isTrickEmpty(trick) {
-    console.log(trick['north'])
-    console.log(trick['south'])
-    console.log(trick['east'])
-    console.log(trick['west'])
     return (trick['north'].length + trick['south'].length + trick['east'].length + trick['west'].length === 0)
   }
 
@@ -136,7 +132,7 @@ class PlayedCard extends React.Component {
                     }}>
           {({x,y}) =>
             <Card className='card' card={trick[seat]}
-            motionStyle={{
+            addStyle={{
               WebkitTransform: `translate3d(${x}px, ${y}px, 0)`,
               transform: `translate3d(${x}px, ${y}px, 0)`,
             }}/>

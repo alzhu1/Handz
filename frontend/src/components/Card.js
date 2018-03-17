@@ -37,8 +37,8 @@ class Card extends React.Component {
       width: this.state.width,
     }
 
-    if (this.props.motionStyle !== undefined){
-      styles =_.merge(styles, this.props.motionStyle);
+    if (this.props.addStyle !== undefined){
+      styles =_.merge(styles, this.props.addStyle);
     }
 
     if (this.props.parentClass !== undefined && this.props.parentClass.includes('hhand-compact')
