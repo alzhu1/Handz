@@ -15,23 +15,23 @@ import {empty_hand} from 'redux/reducers/reducers';
 
 class Hand extends React.Component {
 
-    createCardList(hand) {
-      var cardlist = {
-      };
-      for (var i = 0, len = hand.spades.length; i < len; i++) {
-          cardlist["spades"].push(this.props.hand.spades[i] + 'S');
-      }
-      for (var i = 0, len = hand.hearts.length; i < len; i++) {
-          cardlist["hearts"].push(this.props.hand.hearts[i] + 'H');
-      }
-      for (var i = 0, len = hand.clubs.length; i < len; i++) {
-          cardlist["diamonds"].push(hand.clubs[i] + 'C');
-      }
-      for (var i = 0, len = hand.diamonds.length; i < len; i++) {
-          cardlist["clubs"].push(hand.diamonds[i] + 'D');
-      }
-      return cardlist
-    }
+    // createCardList(hand) {
+    //   var cardlist = {
+    //   };
+    //   for (var i = 0, len = hand.spades.length; i < len; i++) {
+    //       cardlist["spades"].push(this.props.hand.spades[i] + 'S');
+    //   }
+    //   for (var i = 0, len = hand.hearts.length; i < len; i++) {
+    //       cardlist["hearts"].push(this.props.hand.hearts[i] + 'H');
+    //   }
+    //   for (var i = 0, len = hand.clubs.length; i < len; i++) {
+    //       cardlist["diamonds"].push(hand.clubs[i] + 'C');
+    //   }
+    //   for (var i = 0, len = hand.diamonds.length; i < len; i++) {
+    //       cardlist["clubs"].push(hand.diamonds[i] + 'D');
+    //   }
+    //   return cardlist
+    // }
 
     buttonDirection(position, seat) {
 
@@ -122,12 +122,11 @@ class Hand extends React.Component {
 
       }
       else if (this.props.position === 'top') {
-        let styles={margin:  'auto'}
         var body =
           (
             <div>
-            <TopHand direction={cardinal}/>
-            <Button style={styles}
+            <TopHand direction={cardinal} />
+            <Button
               onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <p align="left">
                 {cardinal}: {this.props.table_seats[cardinal]}

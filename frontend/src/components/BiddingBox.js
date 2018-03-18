@@ -40,7 +40,6 @@ class BiddingBox extends React.Component {
         this.props.contract == '' && this.props.special_phase === '') {
             return (
               <div style={styles}>
-                  <div>It&#39;s your bid!</div>
                   <Button onClick={() =>
                       {this.props.makeBidThunk('P')}}>
                       Pass

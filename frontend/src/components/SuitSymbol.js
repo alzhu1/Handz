@@ -8,9 +8,8 @@ export default class SuitSymbol extends React.Component {
       }
 
       let styles = {
-        height: '10%',
-        width: '10%',
-        backgroundColor: 'clear'
+        height: '100%',
+        width: '50px'
       };
 
       let src = require('../images/SuitSymbols/' + suit + '.svg')

@@ -65,24 +65,29 @@ class SideHand extends React.Component {
         }
       }
 
+
     return (
       <div>
         <div>
+          <SuitSymbol suit='spade'/>
           <div className={handClass} >
             {spades}
           </div>
         </div>
         <div>
+          <SuitSymbol suit='heart'/>
           <div className={handClass}>
             {hearts}
           </div>
         </div>
         <div>
+          <SuitSymbol suit='diamond'/>
           <div className={handClass}>
             {diamonds}
           </div>
         </div>
         <div>
+          <SuitSymbol suit='club'/>
           <div className={handClass}>
             {clubs}
           </div>

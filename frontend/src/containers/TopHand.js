@@ -82,33 +82,44 @@ class TopHand extends React.Component {
         }
       }
 
-
+      let styles = {
+        display: 'flex',
+        justifyContent: 'space-between'
+      }
 
 
     return (
       <div>
-        <div className={this.state.handClass}>
-          {spades}
+        <div style={styles}>
+          <SuitSymbol suit='spade' />
+          <SuitSymbol suit='heart' />
+          <SuitSymbol suit='diamond' />
+          <SuitSymbol suit='club' />
         </div>
-        <div className={this.state.handClass}>
-          {hearts}
-        </div>
-        <div className={this.state.handClass}>
-          {diamonds}
-        </div>
-        <div className={this.state.handClass}>
-          {clubs}
+        <div style={styles}>
+          <div className={this.state.handClass}>
+            {spades}
+          </div>
+          <div className={this.state.handClass}>
+            {hearts}
+          </div>
+          <div className={this.state.handClass}>
+            {diamonds}
+          </div>
+          <div className={this.state.handClass}>
+            {clubs}
+          </div>
         </div>
       </div>
     )
   }
 }
 
-// <div>
-//   <SuitSymbol suit='spade' key={_.uniqueId()}/>
-//   <SuitSymbol suit='heart' key={_.uniqueId()}/>
-//   <SuitSymbol suit='diamond' key={_.uniqueId()} />
-//   <SuitSymbol suit='club' key={_.uniqueId()} />
+// <div style={styles}>
+//   <SuitSymbol suit='spade' />
+//   <SuitSymbol suit='heart' />
+//   <SuitSymbol suit='diamond' />
+//   <SuitSymbol suit='club' />
 // </div>
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopHand);

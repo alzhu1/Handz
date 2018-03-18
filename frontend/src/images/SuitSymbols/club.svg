@@ -1,63 +1,47 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="240"
-   height="260"
-   id="svg2"
-   sodipodi:version="0.32"
-   inkscape:version="0.46"
-   version="1.0"
-   sodipodi:docbase="C:\Documents and Settings\Flanker\Desktop\Temporanei\SVG\Piacentine SVG"
-   sodipodi:docname="SuitClubs.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
-  <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="184.52216"
-     inkscape:cy="135.80548"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     inkscape:showpageshadow="false"
-     width="240px"
-     height="260px"
-     inkscape:window-width="1280"
-     inkscape:window-height="885"
-     inkscape:window-x="22"
-     inkscape:window-y="0"
-     showgrid="false" />
-  <metadata
-     id="metadata7">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Livello 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-288.15635,-348.0625)">
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:3.9994173;stroke-dasharray:none;stroke-opacity:1"
-       d="M 408.15639,368.79905 C 379.39014,368.79906 356.02769,392.16149 356.02769,420.92775 C 356.02772,441.41782 367.85955,459.15021 385.07688,467.65086 C 390.25818,470.20901 384.60395,476.8313 380.79941,472.53939 C 371.24485,461.76088 357.31062,454.95947 341.78513,454.95947 C 313.01888,454.95946 289.65635,478.32191 289.65635,507.08817 C 289.65635,535.85443 313.01903,559.16987 341.78513,559.16987 C 370.33092,559.16987 393.61306,536.20881 393.91384,507.74624 C 393.96721,502.69704 401.7167,502.17398 401.7167,508.96838 C 401.7167,519.66771 391.43054,576.49172 385.92297,587.32595 C 391.9345,585.8101 401.95338,584.55266 408.15639,584.55265 C 414.35941,584.55266 424.37829,585.8101 430.38982,587.32595 C 424.88225,576.49172 414.59609,519.66771 414.59609,508.96838 C 414.59609,502.17398 422.34558,502.69704 422.39895,507.74624 C 422.69973,536.20881 445.98193,559.16987 474.52765,559.16987 C 503.29392,559.16987 526.65632,535.85443 526.65635,507.08817 C 526.65635,478.32191 503.29392,454.95946 474.52765,454.95947 C 459.00226,454.95947 445.06794,461.76088 435.51338,472.53939 C 431.70884,476.8313 426.05461,470.20901 431.23591,467.65086 C 448.45324,459.15021 460.28507,441.41782 460.28509,420.92775 C 460.28509,392.16149 436.92265,368.79906 408.15639,368.79905 z"
-       id="path3211" />
-  </g>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 511.998 511.998" style="enable-background:new 0 0 511.998 511.998;" xml:space="preserve">
+<g>
+	<path d="M419.381,199.229c-26.651-12.378-51.541-12.674-74.177-7.186c18.441-21.827,29.058-50.472,27.396-81.642
+		C369.438,51,320.017,2.36,260.58,0.087c-66.578-2.542-121.353,50.67-121.353,116.682c0,28.699,10.393,54.937,27.567,75.273
+		c-22.636-5.488-47.526-5.192-74.177,7.186c-41.023,19.061-69.569,59.401-70.153,104.628
+		c-0.835,65.204,51.757,118.317,116.763,118.317c31.412,0,59.859-12.459,80.842-32.633v34.403c0,16.501-4.303,32.714-12.495,47.041
+		l-15.755,27.576c-3.422,5.991,0.907,13.438,7.797,13.438h112.766c6.899,0,11.219-7.446,7.797-13.438l-15.755-27.576
+		c-8.183-14.327-12.495-30.54-12.495-47.041V389.54c20.992,20.175,49.439,32.633,80.842,32.633
+		c65.006,0,117.607-53.113,116.763-118.317C488.95,258.629,460.403,218.289,419.381,199.229"/>
+	<path style="fill:#2A2D33;" d="M423.915,355.877c-13.621,13.805-31.752,21.385-51.142,21.385c-4.961,0-8.982,4.022-8.982,8.982
+		c0,4.961,4.022,8.982,8.982,8.982c24.196,0,46.934-9.506,63.927-26.729c16.991-17.2,26.197-40.066,25.888-64.288
+		c-0.063-4.96-4.136-8.93-9.096-8.867c-4.96,0.063-8.93,4.136-8.867,9.096C444.872,323.859,437.529,342.095,423.915,355.877z"/>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
 </svg>

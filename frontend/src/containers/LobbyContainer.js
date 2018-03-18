@@ -11,7 +11,6 @@ export default class LobbyContainer extends React.Component {
           <div>
             <Lobby/>
             <TableList/>
-            <ChatContainer/>
           </div>
         )
     }
