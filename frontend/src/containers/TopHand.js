@@ -82,21 +82,27 @@ class TopHand extends React.Component {
         }
       }
 
-      let styles = {
+      let styles1 = {
         display: 'flex',
         justifyContent: 'space-between'
+      }
+
+      let styles2 = {
+        display: 'flex',
+        justifyContent: 'space-between',
+        paddingRight: '1vw'
       }
 
 
     return (
       <div>
-        <div style={styles}>
+        <div style={styles2}>
           <SuitSymbol suit='spade' />
           <SuitSymbol suit='heart' />
           <SuitSymbol suit='diamond' />
           <SuitSymbol suit='club' />
         </div>
-        <div style={styles}>
+        <div style={styles1}>
           <div className={this.state.handClass}>
             {spades}
           </div>
