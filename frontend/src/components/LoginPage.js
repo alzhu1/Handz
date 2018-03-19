@@ -9,15 +9,21 @@ import Button from 'material-ui/Button';
 
 import InvalidLoginDialog from 'components/InvalidLoginDialog';
 
-class Login extends React.Component {
+class LoginPage extends React.Component {
     render() {
         if (this.props.is_logged_in) {
             return <Redirect to='/' />;
         }
+
+        let textStyles = {
+          textAlign: 'center'
+        }
+
         return (
             <div>
-                <h1>What will your name be?</h1>
-                <form noValidate autoComplete="off" onSubmit={(e) => {
+                <h1 style={textStyles}>Welcome to Handz!</h1>
+                <h2 style={textStyles}>What will your name be?</h2>
+                <form style={textStyles} noValidate autoComplete="off" onSubmit={(e) => {
                     e.preventDefault();
                     this.props.loginThunk(this.props.name, "fakepassword");
                 }}>
@@ -47,4 +53,4 @@ class Login extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

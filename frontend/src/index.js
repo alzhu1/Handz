@@ -62,27 +62,23 @@ export const store = createStore(rootReducer, initialState,
 // store.dispatch(username('',getUsername('william')));
 // console.log(store.getState());
 const theme = createMuiTheme({
+  fontFamily: 'Roboto, sans-serif',
+  borderRadius: 2,
   palette: {
-    primary: indigo,
-    secondary: pink,
-    error: red,
-    // Used by `getContrastText()` to maximize the contrast between the background and
-    // the text.
-    contrastThreshold: 3,
-    // Used to shift a color's luminance by approximately
-    // two indexes within its tonal palette.
-    // E.g., shift from Red 500 to Red 300 or Red 700.
-    tonalOffset: 0.2,
+    alternateTextColor: '#303030',
+    canvasColor: '#303030',
   },
 });
 
 ReactDOM.render((
     <Provider store={store}>
         <BrowserRouter>
-          <MuiThemeProvider theme={theme}>
             <App />
-          </MuiThemeProvider>
         </BrowserRouter>
     </Provider>
 ), document.getElementById('root'));
 registerServiceWorker();
+
+// <MuiThemeProvider theme={theme}>
+//   <App />
+// </MuiThemeProvider>

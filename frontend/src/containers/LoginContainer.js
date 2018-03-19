@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from 'components/Login'
+import LoginPage from 'components/LoginPage'
 
 export default class LoginContainer extends React.Component {
     constructor() {
@@ -17,7 +17,7 @@ export default class LoginContainer extends React.Component {
 
     render() {
         return (
-            <Login
+            <LoginPage
                 name={this.state.name}
                 password={this.state.password}
                 changeName={this.changeName}

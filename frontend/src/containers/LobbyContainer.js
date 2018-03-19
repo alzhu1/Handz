@@ -1,8 +1,6 @@
 import React from 'react';
 
-import ChatContainer from 'containers/ChatContainer';
 import Lobby from 'components/Lobby'
-import TableList from 'components/TableList'
 
 export default class LobbyContainer extends React.Component {
 
@@ -10,7 +8,6 @@ export default class LobbyContainer extends React.Component {
         return(
           <div>
             <Lobby/>
-            <TableList/>
           </div>
         )
     }

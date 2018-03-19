@@ -24,10 +24,6 @@ class TableList extends React.Component {
             <Button onClick={() =>
                 {this.props.createTableThunk('standard')}}>Create Table
             </Button>
-            <Button component={props => <Link to="/table" {...props} /> }
-                onClick={() => {this.props.createTableThunk('single')}}>
-                  Play Single Player
-            </Button>
             <Button component={props => <Link to="/card" {...props} /> }>
                   Test
             </Button>
