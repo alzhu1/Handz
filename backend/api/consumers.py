@@ -762,6 +762,9 @@ class SockConsumer(ReduxConsumer):
                 seat = table.direction_to_act
                 hand = table.deal.direction(seat)
                 self.GET_HAND(hand, seat)
+                other_seat = find_dummy(seat)
+                other_hand = table.deal.direction(other_seat)
+                self.GET_HAND(other_hand, other_seat)
 
                 # get dummy's hand
                 declarer = table.contract.declarer
