@@ -1,7 +1,6 @@
 import random
 
 def RobotCardPlay(table):
-
     suit = None
     if table.trick.trick_string:
         suit = table.trick.trick_string[2]
@@ -9,6 +8,7 @@ def RobotCardPlay(table):
     hand = table.deal.direction(table.direction_to_act)
     trump = table.contract.trump[0].upper()
     suits = ['S','H','D','C']
+
     print('robot card play')
     print(suit)
 
@@ -17,8 +17,6 @@ def RobotCardPlay(table):
 
     def isTrumpPlayed():
         for n in range(0,int(len(table.trick.trick_string)/3 + 1)):
-            print('n')
-            print(n)
             if table.trick.trick_string[(n*3)-1] == trump:
                 return True
         return False
@@ -61,76 +59,95 @@ def RobotCardPlay(table):
         else:
             return False
 
+    def firstSeatPlay():
+        # if sequence exists
+        for s in suits:
+            if existsSequenceInSuit(s):
+                # choose highest card if sequence exists
+                return h[0] + s
+
+        # else low card
+        _suit = []
+        for s in suits:
+            if len(hand.get_suit(s)) > 0:
+                _suit.append(s)
+        _suit = random.choice(_suit)
+        _h = hand.get_suit(_suit)
+        return _h[len(_h)-1] + _suit
+
+    def secondSeatPlay():
+        if existsSequenceInSuit(suit):
+            # choose highest card if sequence exists
+            return h[0] + suit
+        else:
+            # choose lowest card if sequence does not exist
+            return h[len(h)-1] + suit
+
+    def thirdSeatPlay():
+        # if can win trick
+        big = max(cardToValue(table.trick.trick_string[1]),
+                cardToValue(table.trick.trick_string[4]))
+        if cardToValue(h[0]) > big:
+            if existsSequenceInSuit(suit):
+                # choose second highest card if sequence exists
+                return h[1] + suit
+            else:
+                # choose highest card if sequence does not exist
+                return h[0] + suit
+        else:
+            return h[len(h)-1] + suit
+
+    def fourthSeatPlay():
+        # if trump is played, if can follow suit, follow low
+        if isTrumpPlayed() and suit != trump and len(h)>0:
+            return h[len(h)-1] + suit
+        else:
+            big = max(cardToValue(table.trick.trick_string[1]),
+                    cardToValue(table.trick.trick_string[4]),
+                    cardToValue(table.trick.trick_string[7]))
+            for rank in h[::-1]:
+                if cardToValue(rank) > big:
+                    return rank + suit
+            return h[len(h)-1] + suit
+
+    def makeDiscard():
+
+        _suit = []
+        for s in suits:
+            if len(hand.get_suit(s)) > 0:
+                _suit.append(s)
+        _suit = random.choice(_suit)
+        _h = hand.get_suit(_suit)
+        return _h[len(_h)-1] + _suit
 
 
-    # if the hand can follow suit
+    # if the hand must follow suit
     if suit and len(hand.get_suit(suit))>0:
         h = hand.get_suit(suit)
-        print('hand h')
-        print(h)
         t = hand.get_suit(trump)
+
         # if in second seat
         if getSeatNumber() == 2:
-            if existsSequenceInSuit(suit):
-                # choose highest card if sequence exists
-                return h[0] + suit
-            else:
-                # choose lowest card if sequence does not exist
-                return h[len(h)-1] + suit
+            card = secondSeatPlay()
 
         # if in third seat
         elif getSeatNumber() == 3:
-            # if can win trick
-            print(table.trick.trick_string)
-            print(cardToValue(table.trick.trick_string[1]))
-            print(cardToValue(table.trick.trick_string[4]))
-            big = max(cardToValue(table.trick.trick_string[1]),
-                    cardToValue(table.trick.trick_string[4]))
-            print('compare')
-            print(cardToValue(h[0]))
-            print(big)
-            if cardToValue(h[0]) > big:
-                if existsSequenceInSuit(suit):
-                    # choose second highest card if sequence exists
-                    return h[1] + suit
-                else:
-                    # choose highest card if sequence does not exist
-                    return h[0] + suit
-            else:
-                return h[len(h)-1] + suit
+            card = thirdSeatPlay()
 
         # if in fourth seat, try to win cheaply
         elif getSeatNumber() == 4:
-            # if trump is played
-            if isTrumpPlayed() and suit != trump:
-                # if can follow suit, follow low
-                if len(hand.get_suit(suit))>0:
-                    return h[len(h)-1] + suit
-            else:
-                big = max(cardToValue(table.trick.trick_string[1]),
-                        cardToValue(table.trick.trick_string[4]),
-                        cardToValue(table.trick.trick_string[7]))
-                for card in h[::-1]:
-                    if cardToValue(card) > big:
-                        return card + suit
-                return h[len(h)-1] + suit
+            card = fourthSeatPlay()
 
         else:
-            raise ValueError('no card chosen')
-    else:
-        # if in first seat
-        # if len(table.trick.trick_string) == 0:
-        #     if existsSequence(suit):
-        #         # choose highest card if sequence exists
-        #         h = hand.get_suit(suit)
-        #         return h[0] + suit
-        #     else:
-        #         # choose lowest card if sequence does not exist
-        #         return h[len(h)-1] + suit
+            raise ValueError('No card chosen when possible to follow suit')
+    elif getSeatNumber() == 1:
+        # first seat play
+        card = firstSeatPlay()
 
-        suit = []
-        for s in suits:
-            if len(hand.get_suit(s)) > 0:
-                suit.append(s)
-        suit = random.choice(suit)
-        return random.choice(hand.get_suit(suit)) + suit
+    elif suit and len(hand.get_suit(suit)) == 0:
+        # find discard
+        card = makeDiscard()
+    else:
+        raise ValueError('Failed to chose card')
+    print(card)
+    return card
