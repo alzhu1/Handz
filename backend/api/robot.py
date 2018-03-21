@@ -10,7 +10,6 @@ def RobotCardPlay(table):
     suits = ['S','H','D','C']
 
     print('robot card play')
-    print(suit)
 
     def getSeatNumber():
         return len(table.trick.trick_string)/3 + 1
@@ -22,18 +21,30 @@ def RobotCardPlay(table):
         return False
 
     def cardToValue(card):
-        if isinstance(card, int) or card.isdigit():
-            return int(card)
-        elif card == 'T':
-            return 10
-        elif card == 'J':
-            return 11
-        elif card == 'Q':
-            return 12
-        elif card == 'K':
-            return 13
-        elif card == 'A':
-            return 14
+        r = card[0]
+        s = card[1]
+
+        # if not following suit, card cannot win trick
+        if s != suit:
+            return 0
+
+        if r == 'T':
+            r = 10
+        elif r == 'J':
+            r = 11
+        elif r == 'Q':
+            r = 12
+        elif r == 'K':
+            r = 13
+        elif r == 'A':
+            r = 14
+
+        r = int(r)
+        # if trump, can beat all non trump
+        if s == trump:
+            return r + 13
+        # else return rank
+        return r
 
     def valueToCard(value):
         if isinstance(value, int) or value.isdigit():
@@ -48,6 +59,21 @@ def RobotCardPlay(table):
             return 'K'
         elif value == 14:
             return 'A'
+
+    def currentlyWinningCard():
+        big = 0
+        card = None
+        for n in range(0,int(len(table.trick.trick_string)/3)):
+            print(n)
+            c = table.trick.trick_string[(n*3)+1:(n*3)+3]
+            print(c)
+            b = cardToValue(c)
+            if b > big:
+                big = b
+                card = c
+        return card
+
+
 
     def existsSequenceInSuit(suit):
         if ('AK' in suit or
@@ -76,6 +102,8 @@ def RobotCardPlay(table):
         return _h[len(_h)-1] + _suit
 
     def secondSeatPlay():
+        h = hand.get_suit(suit)
+        t = hand.get_suit(trump)
         if existsSequenceInSuit(suit):
             # choose highest card if sequence exists
             return h[0] + suit
@@ -84,10 +112,11 @@ def RobotCardPlay(table):
             return h[len(h)-1] + suit
 
     def thirdSeatPlay():
+        h = hand.get_suit(suit)
+        t = hand.get_suit(trump)
         # if can win trick
-        big = max(cardToValue(table.trick.trick_string[1]),
-                cardToValue(table.trick.trick_string[4]))
-        if cardToValue(h[0]) > big:
+        big_card = currentlyWinningCard()
+        if cardToValue(h[0]+suit) > cardToValue(big_card):
             if existsSequenceInSuit(suit):
                 # choose second highest card if sequence exists
                 return h[1] + suit
@@ -98,19 +127,26 @@ def RobotCardPlay(table):
             return h[len(h)-1] + suit
 
     def fourthSeatPlay():
+        h = hand.get_suit(suit)
+        t = hand.get_suit(trump)
         # if trump is played, if can follow suit, follow low
         if isTrumpPlayed() and suit != trump and len(h)>0:
             return h[len(h)-1] + suit
         else:
-            big = max(cardToValue(table.trick.trick_string[1]),
-                    cardToValue(table.trick.trick_string[4]),
-                    cardToValue(table.trick.trick_string[7]))
+            big_card = currentlyWinningCard()
             for rank in h[::-1]:
-                if cardToValue(rank) > big:
+                if cardToValue(rank + suit) > cardToValue(big_card):
                     return rank + suit
             return h[len(h)-1] + suit
 
     def makeDiscard():
+        # h = hand.get_suit(suit)
+        # t = hand.get_suit(trump)
+        # if len(t) > 0:
+        #     if isTrumpPlayed():
+        #         for c in t[::-1]:
+        #             if cardToValue(c) > big:
+        #                 return rank + suit
 
         _suit = []
         for s in suits:
@@ -123,9 +159,6 @@ def RobotCardPlay(table):
 
     # if the hand must follow suit
     if suit and len(hand.get_suit(suit))>0:
-        h = hand.get_suit(suit)
-        t = hand.get_suit(trump)
-
         # if in second seat
         if getSeatNumber() == 2:
             card = secondSeatPlay()
