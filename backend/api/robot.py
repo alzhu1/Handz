@@ -7,9 +7,20 @@ def RobotCardPlay(table):
 
     hand = table.deal.direction(table.direction_to_act)
     trump = table.contract.trump[0].upper()
+    seat = table.direction_to_act[0].upper()
     suits = ['S','H','D','C']
 
     print('robot card play')
+
+    def getPartnerSeat():
+        if seat == 'E':
+            return 'W'
+        elif seat == 'W':
+            return 'E'
+        elif seat == 'S':
+            return 'N'
+        elif seat == 'N':
+            return 'S'
 
     def getSeatNumber():
         return len(table.trick.trick_string)/3 + 1
@@ -64,15 +75,20 @@ def RobotCardPlay(table):
         big = 0
         card = None
         for n in range(0,int(len(table.trick.trick_string)/3)):
-            print(n)
             c = table.trick.trick_string[(n*3)+1:(n*3)+3]
-            print(c)
             b = cardToValue(c)
             if b > big:
                 big = b
                 card = c
         return card
 
+    def currentlyWinningSeat():
+        card = currentlyWinningCard
+        i = table.trick.trick_string.find(card) - 1
+        return table.trick.trick_string[i]
+
+    def isPartnerWinning():
+        return currentlyWinningSeat() == getPartnerSeat()
 
 
     def existsSequenceInSuit(suit):
@@ -129,8 +145,11 @@ def RobotCardPlay(table):
     def fourthSeatPlay():
         h = hand.get_suit(suit)
         t = hand.get_suit(trump)
-        # if trump is played, if can follow suit, follow low
-        if isTrumpPlayed() and suit != trump and len(h)>0:
+        # if trump is played, follow low
+        if isTrumpPlayed() and suit != trump:
+            return h[len(h)-1] + suit
+        # if partner is winning trick, follow low
+        if isPartnerWinning():
             return h[len(h)-1] + suit
         else:
             big_card = currentlyWinningCard()
@@ -140,21 +159,31 @@ def RobotCardPlay(table):
             return h[len(h)-1] + suit
 
     def makeDiscard():
-        # h = hand.get_suit(suit)
-        # t = hand.get_suit(trump)
-        # if len(t) > 0:
-        #     if isTrumpPlayed():
-        #         for c in t[::-1]:
-        #             if cardToValue(c) > big:
-        #                 return rank + suit
+        h = hand.get_suit(suit)
+        t = hand.get_suit(trump)
 
-        _suit = []
-        for s in suits:
-            if len(hand.get_suit(s)) > 0:
-                _suit.append(s)
-        _suit = random.choice(_suit)
-        _h = hand.get_suit(_suit)
-        return _h[len(_h)-1] + _suit
+        # if have trump
+        if len(t) > 0:
+            if isTrumpPlayed():
+                b = currentlyWinningCard()
+                # overtrump cheaply
+                for c in t[::-1]:
+                    if cardToValue(c + trump) > cardToValue(b):
+                        return c + trump
+            # trump cheaply
+            else:
+                # play lowest trump
+                return t[len(t)-1] + trump
+
+        # else discard lowest from longest non trump suit
+        l = 0
+        discard_suit = None
+        for s in suits.remove(trump):
+            if len(hand.get_suit(s)) > l:
+                l = len(hand.get_suit(s))
+                discard_suit = s
+        _h = hand.get_suit(discard_suit)
+        return _h[len(_h)-1] + discard_suit
 
 
     # if the hand must follow suit

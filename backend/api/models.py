@@ -76,6 +76,8 @@ class Hand(object):
             return self.diamonds
         if suit == 'clubs' or suit =='C':
             return self.clubs
+        if suit =='N':
+            return None
         else:
             raise ValueError ('Not valid suit')
 
