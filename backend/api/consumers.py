@@ -116,8 +116,6 @@ class SockConsumer(ReduxConsumer):
 
         control = self.get_control_channel()
         self.add(control)
-        print('control')
-        print(control)
 
         # get logged in users and dispatch
         # to deprecate
@@ -156,7 +154,7 @@ class SockConsumer(ReduxConsumer):
     def LOGOUT(self, action=None):
         print('LOGOUT')
         username = self.message.channel_session.get('user')
-        print(username)
+
         user = User.objects.get(username=username)
         user.is_logged_in = False
         user.save()
@@ -177,9 +175,9 @@ class SockConsumer(ReduxConsumer):
         if content['table_type'] == 'single':
             # create table and generate deal with robots
             table = BridgeTable.objects.create_deal(robot=True)
-            print('robot')
-            print(table.north.robot)
-            print(table.south.robot)
+            # print('robot')
+            # print(table.north.robot)
+            # print(table.south.robot)
             content['id'] = table.id
             self.JOIN_TABLE(content)
             content['seat'] = 'north'
@@ -187,9 +185,9 @@ class SockConsumer(ReduxConsumer):
         else:
             # create table and generate deal without robots
             table = BridgeTable.objects.create_deal()
-            print('robot')
-            print(table.north.robot)
-            print(table.south.robot)
+            # print('robot')
+            # print(table.north.robot)
+            # print(table.south.robot)
             content['id'] = table.id
             self.send_to_group('all',content)
         table.save()
@@ -212,7 +210,7 @@ class SockConsumer(ReduxConsumer):
     @action('JOIN_TABLE')
     def JOIN_TABLE(self, action):
         print('JOIN_TABLE')
-        print(action)
+        # print(action)
         username = self.message.channel_session['user']
         table_id = action['id']
         self.message.channel_session['table_id'] = table_id
@@ -326,14 +324,14 @@ class SockConsumer(ReduxConsumer):
         # leave seat on backend if sitting
         if hasattr(user, 'seat'):
 
-            print('0')
+            # print('0')
             seat = user.seat.direction
             direction = user.seat.direction
-            print('1')
+            # print('1')
             print(user.seat.user)
             print(table.get_seat(direction).user)
             table.leave_seat(username, seat)
-            print('2')
+            # print('2')
             print(user.seat.user)
             print(table.get_seat(direction).user)
             user.seat = None
@@ -346,7 +344,7 @@ class SockConsumer(ReduxConsumer):
                           'seat': seat
                           })
 
-            print(hasattr(user, 'seat'))
+            # print(hasattr(user, 'seat'))
 
 
     @action('MAKE_BID')
@@ -377,28 +375,27 @@ class SockConsumer(ReduxConsumer):
         if table.phase == 'play':
             declarer = table.find_declarer()
             print('after find declarer')
-            print(table.level)
+            # print(table.level)
             self.GET_DECLARER(declarer)
             # ask strain on front end
             self.ASK_STRAIN()
 
         # send auction
         auction = list(table.auction)
-        print(auction)
+        # print(auction)
         self.GET_AUCTION(auction)
 
 
     @action('CHOOSE_STRAIN')
     def CHOOSE_STRAIN(self, action):
         print('CHOOSE_STRAIN')
-        print(action)
+        # print(action)
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
         user = User.objects.get(username=username)
 
         level = table.level
-        print(level)
         strain = action['suit']
         declarer = user.seat.direction
 
@@ -419,8 +416,6 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
-        print(username)
-        print(table.get_seat(seat).user)
         if username == str(table.get_seat(seat).user):
             self.send_to_group(username, {
                           'type': 'GET_HAND',
@@ -438,14 +433,13 @@ class SockConsumer(ReduxConsumer):
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
 
-        print(level)
-        print(strain)
-        print(declarer)
+        # print(level)
+        # print(strain)
+        # print(declarer)
 
         table.set_contract(level, strain, declarer)
 
         contract = table.contract.contract_string
-        print(contract)
 
         self.GET_CONTRACT(contract)
 
@@ -633,8 +627,8 @@ class SockConsumer(ReduxConsumer):
 
             # check if card played is valid
             is_valid_card = table.is_valid_card(card)
-            print('is valid?')
-            print(is_valid_card)
+            # print('is valid?')
+            # print(is_valid_card)
 
             if is_valid_card:
 
@@ -654,9 +648,9 @@ class SockConsumer(ReduxConsumer):
             table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
 
-        print('play_card_front_end')
-        print(table.direction_to_act)
-        print(card)
+        # print('play_card_front_end')
+        # print(table.direction_to_act)
+        # print(card)
 
         table.play_card(table.direction_to_act[0].upper(), card)
 

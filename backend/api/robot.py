@@ -116,8 +116,7 @@ def RobotCardPlay(table):
                 return h[len(h)-1] + suit
 
         else:
-            print('fail safe card choice')
-            return random.choice(hand.get_suit(suit)) + suit
+            raise ValueError('no card chosen')
     else:
         # if in first seat
         # if len(table.trick.trick_string) == 0:

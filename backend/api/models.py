@@ -154,8 +154,8 @@ def remove_card_from_hand_string(hand_string, card):
     i = map_card_to_int(card)
     hand[i] = '0'
     hand = ''.join(hand)
-    print('hand')
-    print(hand)
+    # print('hand')
+    # print(hand)
     return hand
 
 class Deal(object):
@@ -190,8 +190,8 @@ def construct_deal():
 def parse_deal(hand_string):
 
     north, south, east, west = [], [], [], []
-    print('parse deal')
-    print(hand_string)
+    # print('parse deal')
+    # print(hand_string)
     if hand_string == 0:
         print('hand_string 0')
     else:
@@ -229,8 +229,8 @@ class DealField(models.Field):
         return 'deal'
 
     def from_db_value(self, value, expression, connection, context):
-        print('from_db_value')
-        print(value)
+        # print('from_db_value')
+        # print(value)
         if value is None:
             return value
         elif value == '0':
@@ -248,9 +248,9 @@ class DealField(models.Field):
         return parse_deal(value)
 
     def get_prep_value(self, value):
-        print('get_prep_value')
-        print(value)
-        print(value.hand_string)
+        # print('get_prep_value')
+        # print(value)
+        # print(value.hand_string)
         if isinstance(value, str):
             return value
         return str(value.hand_string)
@@ -577,7 +577,7 @@ class BridgeTable(models.Model):
         self.save()
 
     def leave_seat(self, username, seat):
-        print('leave seat')
+        # print('leave seat')
         if seat == 'north':
             self.north.user = None
             self.north.save()
@@ -607,7 +607,7 @@ class BridgeTable(models.Model):
         # print(user.seat)
         # user.save()
         # print(user.seat)
-        print('left seat')
+        # print('left seat')
         self.save()
         # print(user.seat)
         # print(user.seat.direction)
@@ -660,11 +660,11 @@ class BridgeTable(models.Model):
 
     def is_valid_card(self, card):
         # check if first card in trick matches suit
-        print('card')
-        print(card)
+        # print('card')
+        # print(card)
         if self.trick.trick_string:
             suit_led = self.trick.trick_string[2]
-            print(suit_led)
+            # print(suit_led)
             # check if card matches first card in trick or out of that suit
             # and check if card played is actually in your hand
             if ((suit_led == card[1] or not
@@ -687,7 +687,7 @@ class BridgeTable(models.Model):
         self.save()
 
     def find_declarer(self):
-        print('find declarer')
+        # print('find declarer')
 
         def is_number(s):
             try:
@@ -732,26 +732,26 @@ class BridgeTable(models.Model):
             if is_number(x):
                 level = x
                 pos = i
-        print(self.auction)
-        print(level)
+        # print(self.auction)
+        # print(level)
         self.level = level
         self.save()
         declarer = find_winner(dealer, pos)
         return declarer
 
     def update_auction(self, bid):
-        print('in model auction')
-        print(self.auction)
+        # print('in model auction')
+        # print(self.auction)
         self.auction = self.auction + bid
         if len(self.auction)>3 and self.auction[-3:]=='PPP':
             self.phase = 'play'
         self.save()
-        print(self.auction)
+        # print(self.auction)
 
     def play_card(self, seat, card):
         self.trick = parse_trick(self.trick.trick_string + seat + card)
-        print('model play_card')
-        print(self.trick.trick_string)
+        # print('model play_card')
+        # print(self.trick.trick_string)
         # if len(self.trick.trick_string) < 12:
         #     pass
         #     # self.next_actor()
@@ -760,8 +760,8 @@ class BridgeTable(models.Model):
 
         # update dealer
         self.deal = parse_deal(remove_card_from_hand_string(self.deal.hand_string, card))
-        print('self.deal')
-        print(self.deal.hand_string)
+        # print('self.deal')
+        # print(self.deal.hand_string)
         self.save()
 
 
@@ -796,9 +796,9 @@ class BridgeTable(models.Model):
                     suit = t[2]
                     winner = t[0]
 
-            print('winning trick')
-            print(suit + rank)
-            print(winner)
+            # print('winning trick')
+            # print(suit + rank)
+            # print(winner)
 
             if winner == 'E':
                 return 'east'
@@ -811,7 +811,7 @@ class BridgeTable(models.Model):
 
     def evaluate_trick(self):
         if len(self.trick.trick_string) == 12:
-            print('evaluate_trick')
+            # print('evaluate_trick')
 
             winner = self.trick_winner()
             self.direction_to_act = winner
@@ -824,6 +824,6 @@ class BridgeTable(models.Model):
             self.trick_string += winner
             self.prev_trick = self.trick
             self.trick = parse_trick('')
-            print('prev trick')
-            print(self.prev_trick.trick_string)
+            # print('prev trick')
+            # print(self.prev_trick.trick_string)
             self.save()
