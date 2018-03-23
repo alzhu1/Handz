@@ -117,6 +117,12 @@ def RobotCardPlay(table):
     def secondHandPlay():
         h = hand.get_suit(suit)
         t = hand.get_suit(trump)
+
+        # cover an honor with an honor
+        for c in h:
+            if cardToValue(c + suit) - cardToValue(currentlyWinningCard()) < 3:
+                return c + suit
+
         if existsSequenceInSuit(suit):
             # choose highest card if sequence exists
             return h[0] + suit
