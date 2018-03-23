@@ -1,26 +1,24 @@
 import random
 
 def RobotCardPlay(table):
-    suit = None
-    if table.trick.trick_string:
-        suit = table.trick.trick_string[2]
 
-    hand = table.deal.direction(table.direction_to_act)
-    trump = table.contract.trump[0].upper()
-    seat = table.direction_to_act[0].upper()
-    suits = ['S','H','D','C']
-
-    print('robot card play')
-
-    def getPartnerSeat():
-        if seat == 'E':
+    def getPartnerSeat(s):
+        if s == 'E':
             return 'W'
-        elif seat == 'W':
+        elif s == 'W':
             return 'E'
-        elif seat == 'S':
+        elif s == 'S':
             return 'N'
-        elif seat == 'N':
+        elif s == 'N':
             return 'S'
+        if s == 'east':
+            return 'west'
+        elif s == 'west':
+            return 'east'
+        elif s == 'south':
+            return 'north'
+        elif s == 'north':
+            return 'south'
 
     def getSeatNumber():
         return len(table.trick.trick_string)/3 + 1
@@ -83,13 +81,12 @@ def RobotCardPlay(table):
         return card
 
     def currentlyWinningSeat():
-        card = currentlyWinningCard
+        card = currentlyWinningCard()
         i = table.trick.trick_string.find(card) - 1
         return table.trick.trick_string[i]
 
     def isPartnerWinning():
-        return currentlyWinningSeat() == getPartnerSeat()
-
+        return currentlyWinningSeat() == getPartnerSeat(seat)
 
     def existsSequenceInSuit(suit):
         if ('AK' in suit or
@@ -101,7 +98,7 @@ def RobotCardPlay(table):
         else:
             return False
 
-    def firstSeatPlay():
+    def firstHandPlay():
         # if sequence exists
         for s in suits:
             if existsSequenceInSuit(s):
@@ -117,7 +114,7 @@ def RobotCardPlay(table):
         _h = hand.get_suit(_suit)
         return _h[len(_h)-1] + _suit
 
-    def secondSeatPlay():
+    def secondHandPlay():
         h = hand.get_suit(suit)
         t = hand.get_suit(trump)
         if existsSequenceInSuit(suit):
@@ -127,9 +124,50 @@ def RobotCardPlay(table):
             # choose lowest card if sequence does not exist
             return h[len(h)-1] + suit
 
-    def thirdSeatPlay():
+    def thirdHandPlay():
         h = hand.get_suit(suit)
         t = hand.get_suit(trump)
+
+        # if highest card is equivalent to partner's card, play low
+        if abs(cardToValue(h[0]+suit) - cardToValue(table.trick.trick_string[1:3])) == 1:
+            return h[len(h)-1] + suit
+
+        # if dummy is fourth seat
+        if (seat == 'E' and dummy_seat == 'S') or (seat == 'W' and dummy_seat == 'N'):
+            ds = dummy_hand.get_suit(suit)
+            # if dummy has length in suit
+            if len(ds) > 0 :
+                #  if partner's card is winning and will hold the trick, play low
+                if isPartnerWinning() and cardToValue(currentlyWinningCard()) > cardToValue(ds[0]+suit):
+                    return h[len(h)-1] + suit
+                # win or force cheaply
+                else:
+                    pass
+            else:
+                # win cheaply
+                current_card = h[len(h)-1] + suit
+                for d in ds[::-1]:
+                    for c in h:
+                        if cardToValue(c+suit) > cardToValue(d+suit):
+                            current_card = c + suit
+
+                # check to see if need to cover second hand card
+                if (not isPartnerWinning() and
+                    cardToValue(current_card) < cardToValue(currentlyWinningCard())):
+                    # find lowest card to cover
+                    for c in h:
+                        if cardToValue(c+suit) > cardToValue(currentlyWinningCard()):
+                            current_card = c + suit
+                return current_card
+
+        # if dummy is second seat
+        elif (seat == 'E' and dummy_seat == 'N') or (seat == 'W' and dummy_seat == 'S'):
+            # if dummy has length in suit
+            pass
+                # play high in relation given dummy's holding
+
+
+
         # if can win trick
         big_card = currentlyWinningCard()
         if cardToValue(h[0]+suit) > cardToValue(big_card):
@@ -142,7 +180,7 @@ def RobotCardPlay(table):
         else:
             return h[len(h)-1] + suit
 
-    def fourthSeatPlay():
+    def fourthHandPlay():
         h = hand.get_suit(suit)
         t = hand.get_suit(trump)
         # if trump is played, follow low
@@ -177,34 +215,50 @@ def RobotCardPlay(table):
 
         # else discard lowest from longest non trump suit
         l = 0
+        remaining_suits = suits
+        remaining_suits.remove(trump)
+        print(suits)
         discard_suit = None
-        for s in suits.remove(trump):
+        for s in remaining_suits:
             if len(hand.get_suit(s)) > l:
                 l = len(hand.get_suit(s))
                 discard_suit = s
         _h = hand.get_suit(discard_suit)
         return _h[len(_h)-1] + discard_suit
 
+    suit = None
+    if table.trick.trick_string:
+        suit = table.trick.trick_string[2]
+
+    hand = table.deal.direction(table.direction_to_act)
+    trump = table.contract.trump[0].upper()
+    seat = table.direction_to_act[0].upper()
+    dummy_seat = getPartnerSeat(table.contract.declarer)
+    dummy_hand = table.deal.direction(dummy_seat)
+    print('dummy_hand')
+    print(dummy_hand)
+    print(dummy_seat)
+    suits = ['S','H','D','C']
 
     # if the hand must follow suit
     if suit and len(hand.get_suit(suit))>0:
         # if in second seat
         if getSeatNumber() == 2:
-            card = secondSeatPlay()
+            card = secondHandPlay()
 
         # if in third seat
         elif getSeatNumber() == 3:
-            card = thirdSeatPlay()
+            card = thirdHandPlay()
 
         # if in fourth seat, try to win cheaply
         elif getSeatNumber() == 4:
-            card = fourthSeatPlay()
+            card = fourthHandPlay()
 
         else:
             raise ValueError('No card chosen when possible to follow suit')
     elif getSeatNumber() == 1:
         # first seat play
-        card = firstSeatPlay()
+        card = firstHandPlay()
 
     elif suit and len(hand.get_suit(suit)) == 0:
         # find discard
