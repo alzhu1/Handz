@@ -65,6 +65,9 @@ class SideHand extends React.Component {
         }
       }
 
+    let styles = {
+      marginTop: '-30px'
+    }
 
     return (
       <div>
@@ -74,19 +77,19 @@ class SideHand extends React.Component {
             {spades}
           </div>
         </div>
-        <div>
+        <div style={styles}>
           <SuitSymbol suit='heart'/>
           <div className={handClass}>
             {hearts}
           </div>
         </div>
-        <div>
+        <div style={styles}>
           <SuitSymbol suit='diamond'/>
           <div className={handClass}>
             {diamonds}
           </div>
         </div>
-        <div>
+        <div style={styles}>
           <SuitSymbol suit='club'/>
           <div className={handClass}>
             {clubs}
