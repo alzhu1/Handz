@@ -441,6 +441,9 @@ class SockConsumer(ReduxConsumer):
 
         contract = table.contract.contract_string
 
+        print('contract')
+        print(contract)
+
         self.GET_CONTRACT(contract)
 
         dummy_hand = table.deal.direction(find_dummy(declarer))

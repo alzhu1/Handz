@@ -106,24 +106,24 @@ class PlayedCard extends React.Component {
     var trick;
 
     if (this.isTrickEmpty(this.props.prev_trick)) {
-      console.log('trick 1')
+      // console.log('trick 1')
       trick = this.props.trick
     }
     else if (this.isTrickEmpty(this.props.trick)) {
-      console.log('trick 2')
+      // console.log('trick 2')
       trick = this.props.prev_trick
     }
     else {
-      console.log('trick 3')
+      // console.log('trick 3')
       trick = this.props.trick
     }
 
-    console.log('prev trick')
-    console.log(this.props.trick)
-    console.log(this.isTrickEmpty(this.props.trick))
-    console.log(this.props.trick)
-    console.log(this.props.prev_trick)
-    console.log(trick)
+    // console.log('prev trick')
+    // console.log(this.props.trick)
+    // console.log(this.isTrickEmpty(this.props.trick))
+    // console.log(this.props.trick)
+    // console.log(this.props.prev_trick)
+    // console.log(trick)
 
     return (
       <div style={style}>

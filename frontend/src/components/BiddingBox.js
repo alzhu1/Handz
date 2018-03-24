@@ -14,7 +14,7 @@ class BiddingBox extends React.Component {
       return(
         <div>
           <Button variant="raised" onClick={() =>
-              {this.props.chooseStrainThunk('NT')}}>
+              {this.props.chooseStrainThunk('N')}}>
               NoTrump
           </ Button>
           <Button variant="raised" color="primary" onClick={() =>

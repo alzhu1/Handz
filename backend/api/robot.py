@@ -99,20 +99,53 @@ def RobotCardPlay(table):
             return False
 
     def firstHandPlay():
-        # if sequence exists
-        for s in suits:
-            if existsSequenceInSuit(s):
-                # choose highest card if sequence exists
-                return h[0] + s
 
-        # else low card
-        _suit = []
+        # attack declarer and dummy's shortest suit, unless there is trump and dummy is void
+        current_length = 13
+        current_suit = None
         for s in suits:
-            if len(hand.get_suit(s)) > 0:
-                _suit.append(s)
-        _suit = random.choice(_suit)
-        _h = hand.get_suit(_suit)
-        return _h[len(_h)-1] + _suit
+            new_length = len(dummy_hand.get_suit(s)) + len(declarer_hand.get_suit(s))
+            print('declarer suits')
+            print(dummy_hand.get_suit(s))
+            print(declarer_hand.get_suit(s))
+            if (len(hand.get_suit(s)) > 0 and new_length < current_length and
+                (len(dummy_hand.get_suit(s)) > 0 or trump == 'N')):
+                current_length = new_length
+                current_suit = s
+
+        # if can't pick suit, pick randomly
+        if current_suit == None:
+            _suit = []
+            for s in suits:
+                if len(hand.get_suit(s)) > 0:
+                    _suit.append(s)
+            current_suit = random.choice(_suit)
+
+        h = hand.get_suit(current_suit)
+
+        # if sequence exists
+        if existsSequenceInSuit(current_suit):
+            # choose highest card if sequence exists
+            return h[0] + current_suit
+        # if partner has 2 or more and we have doubleton then play high
+        elif (len(partner_hand.get_suit(current_suit)) > 2 and
+                len(hand.get_suit(current_suit)) < 3):
+            return h[0] + current_suit
+        # both opponents have 2 or fewer
+        elif (len(dummy_hand.get_suit(current_suit)) < 3 and
+                len(declarer_hand.get_suit(current_suit)) < 3):
+            return h[0] + current_suit
+        else:
+            return h[len(h)-1] + current_suit
+
+        # # else low card
+        # _suit = []
+        # for s in suits:
+        #     if len(hand.get_suit(s)) > 0:
+        #         _suit.append(s)
+        # _suit = random.choice(_suit)
+        # _h = hand.get_suit(_suit)
+        # return _h[len(_h)-1] + _suit
 
     def secondHandPlay():
         h = hand.get_suit(suit)
@@ -120,7 +153,7 @@ def RobotCardPlay(table):
 
         # cover an honor with an honor
         for c in h:
-            if cardToValue(c + suit) - cardToValue(currentlyWinningCard()) < 3:
+            if cardToValue(c + suit) - cardToValue(currentlyWinningCard()) == 1:
                 return c + suit
 
         if existsSequenceInSuit(suit):
@@ -207,7 +240,7 @@ def RobotCardPlay(table):
         t = hand.get_suit(trump)
 
         # if have trump
-        if len(t) > 0:
+        if t and len(t) > 0:
             if isTrumpPlayed():
                 b = currentlyWinningCard()
                 # overtrump cheaply
@@ -222,13 +255,15 @@ def RobotCardPlay(table):
         # else discard lowest from longest non trump suit
         l = 0
         remaining_suits = suits
-        remaining_suits.remove(trump)
+        if trump !='N':
+            remaining_suits.remove(trump)
         print(suits)
         discard_suit = None
         for s in remaining_suits:
             if len(hand.get_suit(s)) > l:
                 l = len(hand.get_suit(s))
                 discard_suit = s
+        print(discard_suit)
         _h = hand.get_suit(discard_suit)
         return _h[len(_h)-1] + discard_suit
 
@@ -241,9 +276,14 @@ def RobotCardPlay(table):
     seat = table.direction_to_act[0].upper()
     dummy_seat = getPartnerSeat(table.contract.declarer)
     dummy_hand = table.deal.direction(dummy_seat)
-    print('dummy_hand')
-    print(dummy_hand)
-    print(dummy_seat)
+    partner_seat = getPartnerSeat(table.direction_to_act)
+    partner_hand = table.deal.direction(partner_seat)
+    declarer_seat = table.contract.declarer
+    declarer_hand = table.deal.direction(declarer_seat)
+
+    print('partner_hand')
+    print(partner_seat)
+    print(partner_hand)
     suits = ['S','H','D','C']
 
     # if the hand must follow suit

@@ -18,6 +18,8 @@ def suit_name(abbr):
         return 'diamonds'
     elif abbr =='C':
         return 'clubs'
+    elif abbr =='N':
+        return 'notrump'
     else:
         raise ValueError('not valid suit')
 
@@ -156,8 +158,8 @@ def remove_card_from_hand_string(hand_string, card):
     i = map_card_to_int(card)
     hand[i] = '0'
     hand = ''.join(hand)
-    # print('hand')
-    # print(hand)
+    print('remove card from hand')
+    print(hand)
     return hand
 
 class Deal(object):
@@ -194,8 +196,12 @@ def parse_deal(hand_string):
     north, south, east, west = [], [], [], []
     # print('parse deal')
     # print(hand_string)
+    print(hand_string)
+    print(hand_string == 0)
+
     if hand_string == 0:
         print('hand_string 0')
+        print(hand_string)
     else:
         for i,x in enumerate(hand_string):
             if x =='N':
@@ -231,8 +237,8 @@ class DealField(models.Field):
         return 'deal'
 
     def from_db_value(self, value, expression, connection, context):
-        # print('from_db_value')
-        # print(value)
+        print('from_db_value')
+        print(value)
         if value is None:
             return value
         elif value == '0':
@@ -340,8 +346,8 @@ class Contract(object):
 def parse_contract(contract_string):
 
     level = int(contract_string[0])
-    declarer = declarer_name(contract_string[2])
     trump = suit_name(contract_string[1])
+    declarer = declarer_name(contract_string[2])
     is_doubled = False
     is_redoubled = False
 
@@ -762,8 +768,9 @@ class BridgeTable(models.Model):
 
         # update dealer
         self.deal = parse_deal(remove_card_from_hand_string(self.deal.hand_string, card))
-        # print('self.deal')
-        # print(self.deal.hand_string)
+        print('self.deal')
+        print(card)
+        print(self.deal.hand_string)
         self.save()
 
 
