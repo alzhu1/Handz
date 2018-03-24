@@ -73,10 +73,10 @@ class Auction extends React.Component {
       return(
         <div>
           <div style={auctionStyles}>
-            <div style={this.gridRowColumn(1,1)}>N</div>
-            <div style={this.gridRowColumn(2,1)}>E</div>
-            <div style={this.gridRowColumn(3,1)}>S</div>
-            <div style={this.gridRowColumn(4,1)}>W</div>
+            <div style={this.gridRowColumn(1,1)}>S</div>
+            <div style={this.gridRowColumn(2,1)}>W</div>
+            <div style={this.gridRowColumn(3,1)}>N</div>
+            <div style={this.gridRowColumn(4,1)}>E</div>
             {bids}
           </div>
         </div>

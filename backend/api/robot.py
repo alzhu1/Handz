@@ -109,7 +109,8 @@ def RobotCardPlay(table):
             print(dummy_hand.get_suit(s))
             print(declarer_hand.get_suit(s))
             if (len(hand.get_suit(s)) > 0 and new_length < current_length and
-                (len(dummy_hand.get_suit(s)) > 0 or trump == 'N')):
+                    (len(dummy_hand.get_suit(s)) > 0 or trump == 'N'
+                    or len(dummy_hand.get_suit(trump)) == 0)):
                 current_length = new_length
                 current_suit = s
 

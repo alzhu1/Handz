@@ -180,7 +180,7 @@ class SockConsumer(ReduxConsumer):
             # print(table.south.robot)
             content['id'] = table.id
             self.JOIN_TABLE(content)
-            content['seat'] = 'north'
+            content['seat'] = 'south'
             self.TAKE_SEAT(content)
         else:
             # create table and generate deal without robots

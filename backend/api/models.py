@@ -218,7 +218,7 @@ def parse_deal(hand_string):
             south=construct_hand(south),
             east=construct_hand(east),
             west=construct_hand(west),
-            dealer='north')
+            dealer='south')
 
     return deal
 
@@ -507,9 +507,9 @@ class BridgeTableManager(models.Manager):
     def create_deal(self, robot=False):
         deal = construct_deal()
         # auction = parse_auction('')
-        north = Seat(user=None,direction='north')
+        north = Seat(user=None,direction='north',robot=robot)
         north.save()
-        south = Seat(user=None,direction='south',robot=robot)
+        south = Seat(user=None,direction='south')
         south.save()
         east = Seat(user=None,direction='east',robot=robot)
         east.save()
@@ -716,11 +716,11 @@ class BridgeTable(models.Model):
         def find_winner(dealer, num):
             if dealer == 'north':
                 d = 0
-            elif seat == 'east':
+            elif dealer == 'east':
                 d = 1
-            elif seat == 'south':
+            elif dealer == 'south':
                 d = 2
-            elif seat == 'west':
+            elif dealer == 'west':
                 d = 3
 
             n = (d + num) % 4
