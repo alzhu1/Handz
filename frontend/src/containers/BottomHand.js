@@ -31,14 +31,23 @@ class BottomHand extends React.Component {
     for (var i = 0; i < hand['hearts'].length; i++) {
         cards.push( <Card card={hand['hearts'][i]+ 'H'}
         parentClass={handClass} firstChild={firstChild}  />)
+        if (firstChild) {
+          firstChild = false
+        }
     }
     for (var i = 0; i < hand['clubs'].length; i++) {
         cards.push( <Card card={hand['clubs'][i]+ 'C'}
         parentClass={handClass} firstChild={firstChild}/>)
+        if (firstChild) {
+          firstChild = false
+        }
     }
     for (var i = 0; i < hand['diamonds'].length; i++) {
         cards.push( <Card ref={"container"} card={hand['diamonds'][i]+ 'D'}
         parentClass={handClass} firstChild={firstChild} />)
+        if (firstChild) {
+          firstChild = false
+        }
     }
 
 
