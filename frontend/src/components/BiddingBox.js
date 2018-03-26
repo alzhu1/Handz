@@ -1,14 +1,29 @@
 import React from 'react';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
+import SuitSymbol from 'components/SuitSymbol';
 
 import Button from 'material-ui/Button';
 
 class BiddingBox extends React.Component {
+
+  fullSeat(abbr) {
+    switch(abbr) {
+      case 'S':
+        return 'South'
+      case 'N':
+        return 'North'
+      case 'W':
+        return 'West'
+      case 'E':
+        return 'East'
+      default:
+          break;
+    }
+  }
+
   render() {
-    let styles = {
-      alignSelf: 'center'
-    };
+
     if (this.props.special_phase === 'ask_strain'
              && this.props.declarer === this.props.seat){
       return(
@@ -38,6 +53,11 @@ class BiddingBox extends React.Component {
     }
     else if (this.props.direction_to_act === this.props.seat &&
         this.props.contract == '' && this.props.special_phase === '') {
+
+          let styles = {
+            alignSelf: 'center'
+          }
+
             return (
               <div style={styles}>
                   <Button onClick={() =>
@@ -76,9 +96,16 @@ class BiddingBox extends React.Component {
            )
          }
     else if (this.props.contract !== ''){
+
+      let styles = {
+        marginLeft: '20px'
+      }
+
         return (
-          <div>
-            {this.props.contract}
+          <div style={styles}>
+            {this.props.contract.charAt(0)}
+            <SuitSymbol suit={this.props.contract.charAt(1)}/>
+            by {this.fullSeat(this.props.contract.charAt(2))}
           </div>
         )
     }

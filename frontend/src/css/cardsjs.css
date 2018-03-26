@@ -14,9 +14,9 @@ img.card {
 	padding: 0;
 	margin: 0;
 }
-.active-hand img.card {
+/*.active-hand img.card {
 	cursor: pointer;
-}
+}*/
 
 /*
  * A horizontal hand, class="hand hhand".  The enitire card is visible.
@@ -27,10 +27,10 @@ img.card {
 .hhand img.card {
 	padding-top: 10px;
 }
-.hhand.active-hand img.card:hover {
+/*.hhand.active-hand img.card:hover {
 	padding-top: 0px;
 	padding-bottom: 10px;
-}
+}*/
 
 /*
  * A vertical hand, class="hand vhand".  The enitire card is visible.
@@ -41,10 +41,10 @@ img.card {
 .vhand img.card {
 	padding-right: 10px;
 }
-.vhand.active-hand img.card:hover {
+/*.vhand.active-hand img.card:hover {
 	padding-right: 0px;
 	padding-left: 10px;
-}
+}*/
 
 /*
  * A compact horizontal hand.  Only the last card is entirely visible.
@@ -60,10 +60,10 @@ img.card {
 	margin-left: -52px;
 	padding-top: 10px;
 }
-.hhand-compact.active-hand img.card:hover {
+/*.hhand-compact.active-hand img.card:hover {
 	padding-top: 0px;
 	padding-bottom: 10px;
-}
+}*/
 
 /*
  * A compact vertical hand.  Only the last card is entirely visible.
@@ -82,12 +82,12 @@ img.card {
 	margin-top: -80px;
 	padding-right: 10px;
 }
-.vhand-compact.active-hand img.card:hover,
+/*.vhand-compact.active-hand img.card:hover,
 .active-hand .vhand-compact img.card:hover {
 	display: block;
 	padding-right: 0px;
 	padding-left: 10px;
-}
+}*/
 
 /*
  * A fanned hand.  Only the last card is entirely visible.

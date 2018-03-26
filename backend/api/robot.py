@@ -248,8 +248,8 @@ def RobotCardPlay(table):
                 for c in t[::-1]:
                     if cardToValue(c + trump) > cardToValue(b):
                         return c + trump
-            # trump cheaply
-            else:
+            # trump cheaply if partner is not winning with honor
+            elif isPartnerWinning() and cardToValue(currentlyWinningCard())<10:
                 # play lowest trump
                 return t[len(t)-1] + trump
 
