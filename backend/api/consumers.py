@@ -637,6 +637,10 @@ class SockConsumer(ReduxConsumer):
 
                 # send played card to front end
                 self.play_card_front_end(card)
+                print('table equals update')
+                table = BridgeTable.objects.get(pk=table_id)
+                print('is_valid_card consumers.py')
+                print(table.deal.hand_string)
 
                 # tell front end who is next actor
                 self.GET_NEXT_ACTOR()
@@ -735,10 +739,13 @@ class SockConsumer(ReduxConsumer):
         #     self.send_to_group(username,content)
 
     def GET_NEXT_ACTOR(self):
+        print('GET_NEXT_ACTOR')
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
 
         table = BridgeTable.objects.get(pk=table_id)
+        print('table.deal.hand_string 1')
+        print(table.deal.hand_string)
         next_seat = table.get_seat(table.find_next_actor())
         if len(table.trick.trick_string) == 12:
             next_seat = table.get_seat(table.trick_winner())
@@ -809,7 +816,7 @@ class SockConsumer(ReduxConsumer):
         table = BridgeTable.objects.get(pk=table_id)
         if table.phase == 'auction':
             table.update_auction('P')
-            table.save()
+            # table.save()
             # print('from robot ai')
             # print(table.auction)
             # print(table.id)

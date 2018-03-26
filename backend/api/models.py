@@ -186,6 +186,7 @@ class Deal(object):
 def construct_deal():
     l = list('NNNNNNNNNNNNNEEEEEEEEEEEEESSSSSSSSSSSSSWWWWWWWWWWWWW')
     random.shuffle(l)
+    l = list('SNEESNWW00000000000000000000000000000000000000000000')
     hand_string = ''.join(l)
     deal = parse_deal(hand_string)
 
@@ -757,6 +758,8 @@ class BridgeTable(models.Model):
         # print(self.auction)
 
     def play_card(self, seat, card):
+        print('play card')
+        print(card)
         self.trick = parse_trick(self.trick.trick_string + seat + card)
         # print('model play_card')
         # print(self.trick.trick_string)
@@ -768,10 +771,9 @@ class BridgeTable(models.Model):
 
         # update dealer
         self.deal = parse_deal(remove_card_from_hand_string(self.deal.hand_string, card))
-        print('self.deal')
-        print(card)
         print(self.deal.hand_string)
         self.save()
+
 
 
     def trick_winner(self):
