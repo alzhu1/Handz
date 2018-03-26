@@ -184,9 +184,9 @@ class Deal(object):
 
 
 def construct_deal():
-    l = list('NNNNNNNNNNNNNEEEEEEEEEEEEESSSSSSSSSSSSSWWWWWWWWWWWWW')
+    l = list('NNNNNNNNNNNNNAAAAAAAAAAAAASSSSSSSSSSSSSWWWWWWWWWWWWW')
     random.shuffle(l)
-    l = list('SNEESNWW00000000000000000000000000000000000000000000')
+    l = list('SNAASNWW00000000000000000000000000000000000000000000')
     hand_string = ''.join(l)
     deal = parse_deal(hand_string)
 
@@ -209,7 +209,7 @@ def parse_deal(hand_string):
                 north.append(i)
             elif x == 'S':
                 south.append(i)
-            elif x == 'E':
+            elif x == 'A':
                 east.append(i)
             elif x == 'W':
                 west.append(i)
