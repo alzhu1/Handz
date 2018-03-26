@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 export default class SuitSymbol extends React.Component {
     render() {
@@ -11,6 +12,10 @@ export default class SuitSymbol extends React.Component {
         height: '100%',
         width: '50px'
       };
+
+      if (this.props.additionalStyles !== undefined){
+        styles =_.merge(styles, this.props.additionalStyles);
+      }
 
       let src = require('../images/SuitSymbols/' + suit + '.svg')
       return  (

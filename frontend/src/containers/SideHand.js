@@ -69,28 +69,32 @@ class SideHand extends React.Component {
       marginTop: '-30px'
     }
 
+    let additionalStyles = {
+      marginTop: '30px'
+    }
+
     return (
       <div>
         <div>
-          <SuitSymbol suit='spade'/>
+          <SuitSymbol suit='spade' additionalStyles={additionalStyles}/>
           <div className={handClass} >
             {spades}
           </div>
         </div>
         <div style={styles}>
-          <SuitSymbol suit='heart'/>
+          <SuitSymbol suit='heart' additionalStyles={additionalStyles}/>
           <div className={handClass}>
             {hearts}
           </div>
         </div>
         <div style={styles}>
-          <SuitSymbol suit='diamond'/>
+          <SuitSymbol suit='diamond' additionalStyles={additionalStyles}/>
           <div className={handClass}>
             {diamonds}
           </div>
         </div>
         <div style={styles}>
-          <SuitSymbol suit='club'/>
+          <SuitSymbol suit='club' additionalStyles={additionalStyles}/>
           <div className={handClass}>
             {clubs}
           </div>

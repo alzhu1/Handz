@@ -186,7 +186,7 @@ class Deal(object):
 def construct_deal():
     l = list('NNNNNNNNNNNNNAAAAAAAAAAAAASSSSSSSSSSSSSWWWWWWWWWWWWW')
     random.shuffle(l)
-    l = list('SNAASNWW00000000000000000000000000000000000000000000')
+    # l = list('SNAASNWW00000000000000000000000000000000000000000000')
     hand_string = ''.join(l)
     deal = parse_deal(hand_string)
 
