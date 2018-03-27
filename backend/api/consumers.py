@@ -461,14 +461,15 @@ class SockConsumer(ReduxConsumer):
     def SUIT_LED(self):
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
+        suit = ''
 
         if len(table.trick.trick_string) != 0:
             suit = table.trick.trick_string[2]
 
-            self.send_to_group(str(table_id), {
-                          'type': 'SUIT_LED',
-                          'suit': suit
-                          })
+        self.send_to_group(str(table_id), {
+                      'type': 'SUIT_LED',
+                      'suit': suit
+                      })
 
     def GET_AUCTION(self, auction):
         table_id = self.message.channel_session['table_id']

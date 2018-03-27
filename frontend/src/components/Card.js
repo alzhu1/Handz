@@ -13,6 +13,31 @@ class Card extends React.Component {
     };
   }
 
+  suitName(suit) {
+    switch(suit) {
+      case 'S':
+        return 'spades'
+      case 'H':
+        return 'hearts'
+      case 'C':
+        return 'clubs'
+      case 'D':
+        return 'diamonds'
+      default:
+          return '';
+    }
+  }
+
+  isCardinHand(card,hand){
+    let r = card[0]
+    let s = card[1]
+    let t = hand[this.suitName(s)]
+    if (t.indexOf(r) > -1) {
+      return true
+    }
+    return false
+  }
+
   componentWillMount() {
       this.updateDimensions(this);
   }
@@ -28,6 +53,29 @@ class Card extends React.Component {
   }
 
   render() {
+
+    const suit = this.props.card.charAt(1)
+    var cardClass = 'card'
+
+    // set to hover only if
+    if (this.suitName(suit).length > 0) {
+      // dummy's turn to play and it is a valid card to play
+      if (this.props.dummy === this.props.direction_to_act && this.isCardinHand(this.props.card,this.props.dummy_hand)){
+        if ((this.props.suit_led === suit && this.props.dummy_hand[this.suitName(suit)] != '') ||
+              (this.props.suit_led === '') || (this.props.dummy_hand[this.suitName(this.props.suit_led)].length === 0))
+        {
+            cardClass = 'cardHover'
+        }
+      }
+      // declarer's turn to play and it is a valid card to play
+      else if (this.props.declarer === this.props.direction_to_act && this.isCardinHand(this.props.card,this.props.hand)){
+        if ((this.props.suit_led === suit && this.props.hand[this.suitName(suit)] != '') ||
+              (this.props.suit_led === '') || (this.props.hand[this.suitName(this.props.suit_led)].length === 0))
+        {
+            cardClass = 'cardHover'
+        }
+      }
+    }
 
     if (this.props.card === '') {
       return <div />
@@ -53,10 +101,10 @@ class Card extends React.Component {
     // console.log(this.state.width)
 
     return (
-      <img className= 'card'
+      <img className= {cardClass}
       style={styles}
       src={require('cardsJS/cards/'+ this.props.card + '.svg')}
-      onClick={() => {this.props.playCardThunk(this.props.card)}} />
+      onClick={() => {this.props.playCardThunk(this.props.card)}}/>
     )
   }
 }
