@@ -50,7 +50,7 @@ class Card extends React.Component {
       styles['marginTop'] = -window.innerWidth/23 + 'px'
     }
 
-    console.log(this.state.width)
+    // console.log(this.state.width)
 
     return (
       <img className= 'card'

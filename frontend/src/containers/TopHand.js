@@ -37,24 +37,29 @@ class TopHand extends React.Component {
     // show player's cards without ordering
     if (this.props.dummy === this.props.direction && this.props.show_dummy){
         const hand = this.props.dummy_hand
+
+        let addStyles = {
+          cursor: 'pointer',
+        }
+
         for (var i = 0; i < hand['spades'].length; i++) {
             let firstChild = (i===0)
-            spades.push(<Card card={hand['spades'][i]+ 'S' }
+            spades.push(<Card card={hand['spades'][i]+ 'S' } addStyle={addStyles}
             parentClass={this.state.handClass} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['hearts'].length; i++) {
             let firstChild = (i===0)
-            hearts.push(<Card card={hand['hearts'][i]+ 'H' }
+            hearts.push(<Card card={hand['hearts'][i]+ 'H' } addStyle={addStyles}
             parentClass={this.state.handClass} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['clubs'].length; i++) {
             let firstChild = (i===0)
-            clubs.push(<Card card={hand['clubs'][i]+ 'C' }
+            clubs.push(<Card card={hand['clubs'][i]+ 'C' } addStyle={addStyles}
             parentClass={this.state.handClass} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['diamonds'].length; i++) {
             let firstChild = (i===0)
-            diamonds.push(<Card card={hand['diamonds'][i]+ 'D' }
+            diamonds.push(<Card card={hand['diamonds'][i]+ 'D' } addStyle={addStyles}
             parentClass={this.state.handClass} firstChild={firstChild}/>)
         }
       }

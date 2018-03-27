@@ -158,8 +158,8 @@ def remove_card_from_hand_string(hand_string, card):
     i = map_card_to_int(card)
     hand[i] = '0'
     hand = ''.join(hand)
-    print('remove card from hand')
-    print(hand)
+    # print('remove card from hand')
+    # print(hand)
     return hand
 
 class Deal(object):
@@ -197,12 +197,12 @@ def parse_deal(hand_string):
     north, south, east, west = [], [], [], []
     # print('parse deal')
     # print(hand_string)
-    print(hand_string)
-    print(hand_string == 0)
+    # print(hand_string)
+    # print(hand_string == 0)
 
     if hand_string == 0:
         print('hand_string 0')
-        print(hand_string)
+        # print(hand_string)
     else:
         for i,x in enumerate(hand_string):
             if x =='N':
@@ -238,8 +238,8 @@ class DealField(models.Field):
         return 'deal'
 
     def from_db_value(self, value, expression, connection, context):
-        print('from_db_value')
-        print(value)
+        # print('from_db_value')
+        # print(value)
         if value is None:
             return value
         elif value == '0':
