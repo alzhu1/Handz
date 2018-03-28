@@ -24,7 +24,10 @@ def RobotCardPlay(table):
         return len(table.trick.trick_string)/3 + 1
 
     def isTrumpPlayed():
-        for n in range(0,int(len(table.trick.trick_string)/3 + 1)):
+        print('isTrumpPlayed')
+        for n in range(1,int(len(table.trick.trick_string)/3 + 1)):
+            print('n')
+            print(n)
             if table.trick.trick_string[(n*3)-1] == trump:
                 return True
         return False
@@ -241,7 +244,7 @@ def RobotCardPlay(table):
         t = hand.get_suit(trump)
 
         # if have trump
-        if t and len(t) > 0:
+        if trump != 'N' and len(t) > 0:
             if isTrumpPlayed():
                 b = currentlyWinningCard()
                 # overtrump cheaply

@@ -100,6 +100,27 @@ class Card extends React.Component {
 
     // console.log(this.state.width)
 
+    if (this.props.establishedCard === true) {
+      if (this.props.lastTrick === true)
+      {
+        return (
+          <img className= 'card'
+          style={styles}
+          src={require('cardsJS/cards/'+ this.props.card + '.svg')}
+          onClick={() => {console.log('last trick')}}/>
+        )
+      }
+      else {
+        return (
+          <img className= 'card'
+          style={styles}
+          src={require('cardsJS/cards/'+ this.props.card + '.svg')}
+          />
+        )
+      }
+
+    }
+
     return (
       <img className= {cardClass}
       style={styles}

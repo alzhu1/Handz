@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from 'components/Card';
+import EstablishedCard from 'containers/EstablishedCard';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
@@ -8,24 +9,24 @@ class TricksArea extends React.Component {
   render() {
     const handClass = "hand hhand-compact"
     var tricks = [];
-    var rotate_style;
+    var rotateStyle;
 
     for (var i = 0; i < this.props.trick_string.length; i++) {
-        let firstChild = (i===0)
+        let lastTrick = (i===this.props.trick_string.length - 1)
         if (this.props.trick_string[i]==='W' || this.props.trick_string[i]==='E'){
-          rotate_style= {
+          rotateStyle= {
             transform: 'rotate(90deg)',
             marginBottom:  window.innerWidth/-100 - 4 + 'px',
           }
         }
         else {
-          rotate_style= {
+          rotateStyle= {
             transform: 'rotate(0deg)',
           }
         }
-        tricks.push(<Card card={'Blue_Back'}
-        parentClass={handClass} firstChild={firstChild}
-        addStyle={rotate_style}/>)
+
+        tricks.push(<EstablishedCard lastTrick={lastTrick} parentClass={handClass}
+          addStyle={rotateStyle}/>)
     }
 
     return (
