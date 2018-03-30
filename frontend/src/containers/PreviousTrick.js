@@ -25,9 +25,17 @@ class PreviousTrick extends React.Component {
       gridRow: '3 / 4'
     }
 
+    let wrapper_styles = {
+      wrapper :
+        {
+          cursor: 'default',
+          display: 'inline-block',
+        }
+    }
+    
     return (
       <div className='card' style={{display:'inline-block'}}>
-        <Floater
+        <Floater styles={wrapper_styles}
           content={
             <div className='PlayedCardArea2'>
             <Card card={this.props.prev_trick['north']} addStyle={styles_top}/>

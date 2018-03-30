@@ -1,13 +1,4 @@
-img.card {
-	width: 70px;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	vertical-align: initial;
-	box-sizing: initial;
-}
-
-img.cardHover {
+img.card, img.cardHover {
 	width: 70px;
 	margin: 0;
 	padding: 0;
@@ -34,12 +25,10 @@ img.cardHover {
 .hhand {
 	display: inline-block;
 }
-.hhand img.card {
+.hhand img.card, .hhand img.cardHover {
 	padding-top: 10px;
 }
-.hhand img.cardHover {
-	padding-top: 10px;
-}
+
 .hhand.active-hand img.cardHover:hover {
 	padding-top: 0px;
 	padding-bottom: 10px;
@@ -51,10 +40,7 @@ img.cardHover {
 .vhand {
 	display: block;
 }
-.vhand img.card {
-	padding-right: 10px;
-}
-.vhand img.cardHover {
+.vhand img.card, .vhand img.cardHover {
 	padding-right: 10px;
 }
 
@@ -69,19 +55,11 @@ img.cardHover {
 .hhand-compact {
 	display: inline-block;
 }
-.hhand-compact img.card:first-child {
+.hhand-compact img.card:first-child, .hhand-compact img.cardHover:first-child {
 	margin-left: 0px;
 	padding-top: 10px;
 }
-.hhand-compact img.cardHover:first-child {
-	margin-left: 0px;
-	padding-top: 10px;
-}
-.hhand-compact img.card {
-	margin-left: -52px;
-	padding-top: 10px;
-}
-.hhand-compact img.cardHover {
+.hhand-compact img.card, .hhand-compact img.cardHover {
 	margin-left: -52px;
 	padding-top: 10px;
 }
@@ -97,26 +75,17 @@ img.cardHover {
 	display: inline-block;
 	vertical-align: top;
 }
-.vhand-compact img.card:first-child {
+.vhand-compact img.card:first-child, .vhand-compact img.cardHover:first-child {
 	display: block;
 	margin-top: 0px;
 }
-.vhand-compact img.cardHover:first-child {
-	display: block;
-	margin-top: 0px;
-}
-.vhand-compact img.card
+.vhand-compact img.card, .vhand-compact img.cardHover
 {
 	display: block;
 	margin-top: -80px;
 	padding-right: 10px;
 }
-.vhand-compact img.cardHover
-{
-	display: block;
-	margin-top: -80px;
-	padding-right: 10px;
-}
+
 .vhand-compact.active-hand img.cardHover:hover,
 .active-hand .vhand-compact img.cardHover:hover {
 	display: block;

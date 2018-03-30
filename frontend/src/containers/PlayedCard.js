@@ -7,12 +7,6 @@ import {Motion, spring, presets} from 'react-motion';
 
 class PlayedCard extends React.Component {
 
-  constructor(){
-    super()
-    this.state = {
-    };
-  }
-
   playedCardDirection(position, seat) {
 
     switch(seat) {
@@ -106,24 +100,14 @@ class PlayedCard extends React.Component {
     var trick;
 
     if (this.isTrickEmpty(this.props.prev_trick)) {
-      // console.log('trick 1')
       trick = this.props.trick
     }
     else if (this.isTrickEmpty(this.props.trick)) {
-      // console.log('trick 2')
       trick = this.props.prev_trick
     }
     else {
-      // console.log('trick 3')
       trick = this.props.trick
     }
-
-    // console.log('prev trick')
-    // console.log(this.props.trick)
-    // console.log(this.isTrickEmpty(this.props.trick))
-    // console.log(this.props.trick)
-    // console.log(this.props.prev_trick)
-    // console.log(trick)
 
     return (
       <div style={style}>
@@ -143,20 +127,5 @@ class PlayedCard extends React.Component {
   }
 }
 
-// <Motion style={
-//               {x: spring(this.props.trick[seat]!== '' ? 0 : -200, presets.stiff)},
-//               {y: spring(this.props.trick[seat]!== '' ? 0 : -200, presets.stiff)}
-//             }>
-//   {({x,y}) =>
-//     <Card className='card' card={this.props.trick[seat]}
-//     motionStyle={{
-//       WebkitTransform: `translate3d(${x}px, ${y}px, 0)`,
-//       transform: `translate3d(${x}px, ${y}px, 0)`,
-//       margin: 'auto',
-//       gridColumn: grid_column,
-//       gridRow: grid_row
-//     }}/>
-//   }
-// </Motion>
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayedCard);
