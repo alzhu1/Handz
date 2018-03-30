@@ -15,6 +15,7 @@ import Test3 from 'containers/Test3';
 import PlayedCardArea from 'containers/PlayedCardArea';
 
 import SvgMaterialIcons from 'containers/SvgMaterialIcons';
+import PopperExample from 'demos/PopperExample';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
@@ -44,6 +45,8 @@ class Main extends React.Component {
                 <Route exact path='/test3' component={Test3} />
 
                 <Route exact path='/icon' component={SvgMaterialIcons} />
+
+                <Route exact path='/popper' component={PopperExample} />
 
             </Switch>
         );
