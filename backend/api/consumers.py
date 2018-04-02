@@ -326,23 +326,24 @@ class SockConsumer(ReduxConsumer):
         if hasattr(user, 'seat'):
 
             # print('0')
-            seat = user.seat.direction
             direction = user.seat.direction
             # print('1')
             print(user.seat.user)
             print(table.get_seat(direction).user)
-            table.leave_seat(username, seat)
+            table.leave_seat(direction)
             # print('2')
-            print(user.seat.user)
-            print(table.get_seat(direction).user)
-            user.seat = None
-            user.save()
+            # table = BridgeTable.objects.get(pk=table_id)
+            # user = User.objects.get(username=username)
+            # print(user.seat.user)
+            # print(table.get_seat(direction).user)
+            # user.seat = None
+            # user.save()
 
 
             # send action to frontend
             self.send_to_group(username, {
                           'type': 'LEAVE_SEAT',
-                          'seat': seat
+                          'seat': direction
                           })
 
             # print(hasattr(user, 'seat'))
@@ -756,16 +757,9 @@ class SockConsumer(ReduxConsumer):
         table_id = self.message.channel_session['table_id']
 
         table = BridgeTable.objects.get(pk=table_id)
-        print('table.deal.hand_string 1')
-        print(table.deal.hand_string)
         next_seat = table.get_seat(table.find_next_actor())
         if len(table.trick.trick_string) == 12:
             next_seat = table.get_seat(table.trick_winner())
-        #     print('next_seat next actor')
-        #     print(next_seat.direction)
-        # print('is_robot?')
-        # print(next_seat.direction)
-        # print(next_seat.robot)
 
         def send_next_actor_to_front_end(self, direction):
             # only send information if contract has been set
@@ -807,12 +801,17 @@ class SockConsumer(ReduxConsumer):
             #               'direction_to_act': table.direction_to_act
             #               })
 
-        if next_seat.robot and (not table.contract
+        table = BridgeTable.objects.get(pk=table_id)
+        print('tricks')
+        print(table.EW_tricks_taken + table.NS_tricks_taken)
+        if table.EW_tricks_taken + table.NS_tricks_taken == 13:
+            self.CALC_SCORE()
+        elif next_seat.robot and (not table.contract
                 or find_dummy(table.contract.declarer) != next_seat.direction):
             send_next_actor_to_front_end(self, table.direction_to_act)
             table.next_actor()
             self.Robot_AI(table_id)
-            table = BridgeTable.objects.get(pk=table_id)
+
             # print('from next actor')
             # print(table.auction)
 

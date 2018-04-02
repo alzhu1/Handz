@@ -201,7 +201,8 @@ def parse_deal(hand_string):
     # print(hand_string == 0)
 
     if hand_string == 0:
-        print('hand_string 0')
+        pass
+        # print('hand_string 0')
         # print(hand_string)
     else:
         for i,x in enumerate(hand_string):
@@ -499,7 +500,7 @@ class Seat(models.Model):
         elif direction == 'south':
             return self.table_as_south
         elif direction == 'west':
-            return self.westable_as_westt
+            return self.table_as_west
 
 
 
@@ -585,7 +586,7 @@ class BridgeTable(models.Model):
             raise ValueError('Could not take seat')
         self.save()
 
-    def leave_seat(self, username, seat):
+    def leave_seat(self, seat):
         # print('leave seat')
         if seat == 'north':
             self.north.user = None
@@ -771,7 +772,7 @@ class BridgeTable(models.Model):
 
         # update dealer
         self.deal = parse_deal(remove_card_from_hand_string(self.deal.hand_string, card))
-        print(self.deal.hand_string)
+        # print(self.deal.hand_string)
         self.save()
 
 

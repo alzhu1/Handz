@@ -7,6 +7,58 @@ import {connect} from 'react-redux';
 
 class PreviousTrick extends React.Component {
 
+  playedCardDirection(position, seat) {
+
+    switch(seat) {
+      case '':
+      case 'south':
+        switch (position) {
+          case 'top':
+            return 'north'
+          case 'bottom':
+            return 'south'
+          case 'left':
+            return 'west'
+          case 'right':
+            return 'east'
+        }
+      case 'north':
+        switch (position) {
+          case 'top':
+            return 'south'
+          case 'bottom':
+            return 'north'
+          case 'left':
+            return 'east'
+          case 'right':
+            return 'west'
+        }
+      case 'west':
+        switch (position) {
+          case 'top':
+            return 'east'
+          case 'bottom':
+            return 'west'
+          case 'left':
+            return 'north'
+          case 'right':
+            return 'south'
+        }
+      case 'east':
+        switch (position) {
+          case 'top':
+            return 'west'
+          case 'bottom':
+            return 'east'
+          case 'left':
+            return 'south'
+          case 'right':
+            return 'north'
+        }
+    }
+  }
+
+
   render() {
     let styles_top = {
       gridColumn: '2 / 3',
@@ -32,16 +84,18 @@ class PreviousTrick extends React.Component {
           display: 'inline-block',
         }
     }
-    
+
+    var seat = this.props.seat
+
     return (
       <div className='card' style={{display:'inline-block'}}>
         <Floater styles={wrapper_styles}
           content={
             <div className='PlayedCardArea2'>
-            <Card card={this.props.prev_trick['north']} addStyle={styles_top}/>
-            <Card card={this.props.prev_trick['west']} addStyle={styles_left}/>
-            <Card card={this.props.prev_trick['east']} addStyle={styles_right}/>
-            <Card card={this.props.prev_trick['south']} addStyle={styles_bottom}/>
+            <Card card={this.props.prev_trick[this.playedCardDirection('top',seat)]} addStyle={styles_top}/>
+            <Card card={this.props.prev_trick[this.playedCardDirection('left',seat)]} addStyle={styles_left}/>
+            <Card card={this.props.prev_trick[this.playedCardDirection('right',seat)]} addStyle={styles_right}/>
+            <Card card={this.props.prev_trick[this.playedCardDirection('bottom',seat)]} addStyle={styles_bottom}/>
             </div>
           }
           event="hover"

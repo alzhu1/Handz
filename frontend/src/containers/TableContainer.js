@@ -6,7 +6,7 @@ import TableMarker from 'components/TableMarker';
 import PlayedCardArea from 'containers/PlayedCardArea';
 import TricksArea from 'containers/TricksArea';
 import BackButton from 'containers/BackButton';
-
+import ScoringModal from 'containers/ScoringModal';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
@@ -52,6 +52,7 @@ class TableContainer extends React.Component {
               <TricksArea />
             </div>
             <BackButton />
+            <ScoringModal />
         </div>
       )
     }
