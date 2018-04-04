@@ -41,7 +41,7 @@ class ScoringModal extends React.Component {
   // }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.trick_string !== this.props.trick_string && nextProps.length == 13) {
+    if(nextProps.trick_string !== this.props.trick_string && nextProps.trick_string.length == 13) {
       this.handleOpen()
     }
   }
@@ -64,13 +64,42 @@ class ScoringModal extends React.Component {
 
   resetGame() {
     this.props.leaveSeatThunk(this.props.seat)
+    this.props.leaveTableThunk(this.props.seat)
     this.props.createTableThunk('single')
     this.handleClose()
   }
 
+  tricksTaken() {
+    if (this.props.seat == 'east' || this.props.seat == 'west') {
+      return this.props.trick_string.split("E").length + this.props.trick_string.split("W").length - 2
+    }
+    else {
+      return this.props.trick_string.split("N").length + this.props.trick_string.split("S").length - 2
+    }
+  };
+
+  calcScore() {
+    let tricks = this.tricksTaken()
+    let level = this.props.contract.charAt(0) * 1
+    if (tricks >= level + 6){
+      return (tricks - 6) * 30
+    }
+    else {
+      return (level + 6 - tricks) * -50
+    }
+  }
+
+
 
 
   render() {
+    console.log('render')
+    console.log(this.props.trick_string.length)
+    console.log(this.tricksTaken())
+
+    const modal_text1 = 'You have taken ' + this.tricksTaken() + ' tricks.'
+
+    const modal_text2 = 'You scored ' + this.calcScore() + ' points.'
 
     const { classes } = this.props;
 
@@ -79,9 +108,6 @@ class ScoringModal extends React.Component {
       left: `50%`,
       transform: `translate(-50%, -50%)`,
     };
-
-    console.log('it updated!')
-    console.log(this.state.open)
 
     return (
       <div>
@@ -92,11 +118,11 @@ class ScoringModal extends React.Component {
           onClose={this.handleClose}
         >
           <div style={modalStyle} className={classes.paper}>
-            <Typography variant="title" id="modal-title">
-              Text in a modal
+            <Typography variant="title" id="title">
+              {modal_text1}
             </Typography>
-            <Typography variant="subheading" id="simple-modal-description">
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            <Typography variant="subheading" id="description">
+              {modal_text2}
             </Typography>
             <Button component={props => <Link to="/table" {...props} /> }
                 onClick={() => {this.resetGame()}}>
