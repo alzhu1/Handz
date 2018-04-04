@@ -20,9 +20,39 @@ const styles = theme => ({
 });
 
 class ScoringModal extends React.Component {
-  state = {
-    open: false,
-  };
+  constructor(){
+    super()
+    this.state = {
+      open: false,
+    };
+  }
+
+  // componentWillMount() {
+  //   this.handleOpen()
+  //   console.log('componentWillMount')
+  //   console.log(this.props.trick_string.length)
+  //     if (this.props.trick_string.length === 1) {
+  //       console.log('handleopen')
+  //       this.handleOpen()
+  //     }
+  //     else {
+  //       this.handleClose()
+  //     }
+  // }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.trick_string !== this.props.trick_string && nextProps.length == 13) {
+      this.handleOpen()
+    }
+  }
+
+  // shouldComponentUpdate(nextProps) {
+  //   console.log('nextProps')
+  //   console.log(nextProps)
+  //   console.log(this.props.trick_string.length)
+  //   return this.props.trick_string == nextProps.trick_string;
+  // }
+
 
   handleOpen = () => {
     this.setState({ open: true });
@@ -32,9 +62,16 @@ class ScoringModal extends React.Component {
     this.setState({ open: false });
   };
 
+  resetGame() {
+    this.props.leaveSeatThunk(this.props.seat)
+    this.props.createTableThunk('single')
+    this.handleClose()
+  }
+
 
 
   render() {
+
     const { classes } = this.props;
 
     let modalStyle = {
@@ -43,9 +80,11 @@ class ScoringModal extends React.Component {
       transform: `translate(-50%, -50%)`,
     };
 
+    console.log('it updated!')
+    console.log(this.state.open)
+
     return (
       <div>
-        <Button onClick={this.handleOpen}>Open Modal</Button>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
@@ -60,7 +99,7 @@ class ScoringModal extends React.Component {
               Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
             </Typography>
             <Button component={props => <Link to="/table" {...props} /> }
-                onClick={() => {this.props.createTableThunk('single')}}>
+                onClick={() => {this.resetGame()}}>
                   Play Again!
             </Button>
           </div>

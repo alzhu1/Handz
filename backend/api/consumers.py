@@ -806,16 +806,17 @@ class SockConsumer(ReduxConsumer):
         print(table.EW_tricks_taken + table.NS_tricks_taken)
         if table.EW_tricks_taken + table.NS_tricks_taken == 13:
             self.CALC_SCORE()
-        elif next_seat.robot and (not table.contract
-                or find_dummy(table.contract.declarer) != next_seat.direction):
+        elif (next_seat.robot and
+                (not table.contract or find_dummy(table.contract.declarer) != next_seat.direction)):
             send_next_actor_to_front_end(self, table.direction_to_act)
             table.next_actor()
-            self.Robot_AI(table_id)
-
-            # print('from next actor')
-            # print(table.auction)
-
-            self.GET_NEXT_ACTOR()
+            print('table.EW_tricks_taken + table.NS_tricks_taken')
+            print(table.EW_tricks_taken + table.NS_tricks_taken)
+            if table.EW_tricks_taken + table.NS_tricks_taken == 13:
+                self.CALC_SCORE()
+            else:
+                self.Robot_AI(table_id)
+                self.GET_NEXT_ACTOR()
         else:
             # print('GET_NEXT_ACTOR')
             # print(table.direction_to_act)

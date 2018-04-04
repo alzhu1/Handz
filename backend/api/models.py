@@ -575,7 +575,9 @@ class BridgeTable(models.Model):
             self.east.user = user
             self.east.save()
         elif seat == 'south':
+            print(self.south.user)
             self.south.user = user
+            print(self.south.user)
             self.south.save()
         elif seat == 'west':
             self.west.user = user
