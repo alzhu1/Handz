@@ -85,6 +85,12 @@ class PreviousTrick extends React.Component {
         }
     }
 
+    // let played_card_styles = {
+    //   display: 'grid',
+    //   gridTemplateColumns: 'repeat(3, 1fr)',
+    //   gridTemplateRows: 'repeat(3, 1fr)',
+    // }
+
     var seat = this.props.seat
 
     return (

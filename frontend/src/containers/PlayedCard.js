@@ -7,115 +7,52 @@ import {Motion, spring, presets} from 'react-motion';
 
 class PlayedCard extends React.Component {
 
-  playedCardDirection(position, seat) {
-
-    switch(seat) {
-      case '':
-      case 'south':
-        switch (position) {
-          case 'top':
-            return 'north'
-          case 'bottom':
-            return 'south'
-          case 'left':
-            return 'west'
-          case 'right':
-            return 'east'
-        }
-      case 'north':
-        switch (position) {
-          case 'top':
-            return 'south'
-          case 'bottom':
-            return 'north'
-          case 'left':
-            return 'east'
-          case 'right':
-            return 'west'
-        }
-      case 'west':
-        switch (position) {
-          case 'top':
-            return 'east'
-          case 'bottom':
-            return 'west'
-          case 'left':
-            return 'north'
-          case 'right':
-            return 'south'
-        }
-      case 'east':
-        switch (position) {
-          case 'top':
-            return 'west'
-          case 'bottom':
-            return 'east'
-          case 'left':
-            return 'south'
-          case 'right':
-            return 'north'
-        }
-    }
-  }
-
-  isTrickEmpty(trick) {
-    return (trick['north'].length + trick['south'].length + trick['east'].length + trick['west'].length === 0)
-  }
 
   render(){
-    let seat = this.playedCardDirection(this.props.position, this.props.seat)
-    var grid_column;
-    var grid_row;
+
+    var top;
+    var left;
     var inital_x = 0;
     var inital_y = 0;
 
     if (this.props.position === 'top'){
-      grid_column = '2 / 3'
-      grid_row = '1 / 2'
+      left = '50%'
+      top = '43%'
       inital_y = -200
     }
     else if (this.props.position === 'left'){
-      grid_column = '1 / 2'
-      grid_row = '2 / 3'
+      left = '46%'
+      top = '47%'
       inital_x = -200
     }
     else if (this.props.position === 'right'){
-      grid_column = '3 / 4'
-      grid_row = '2 / 3'
+      left = '54%'
+      top = '47%'
       inital_x = 200
     }
     else if (this.props.position === 'bottom'){
-      grid_column = '2 / 3'
-      grid_row = '3 / 4'
+      left = '50%'
+      top = '50%'
       inital_y = 200
     }
 
     let style = {
       margin: 'auto',
-      gridColumn: grid_column,
-      gridRow: grid_row
+      position: 'absolute',
+      left: left,
+      top: top,
+      zIndex: this.props.z_index,
     }
 
-    const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
-    var trick;
 
-    if (this.isTrickEmpty(this.props.prev_trick)) {
-      trick = this.props.trick
-    }
-    else if (this.isTrickEmpty(this.props.trick)) {
-      trick = this.props.prev_trick
-    }
-    else {
-      trick = this.props.trick
-    }
 
     return (
       <div style={style}>
-        <Motion style={{x: spring(trick[seat]!== '' ? 0 : inital_x, presets.stiff),
-                        y: spring(trick[seat]!== '' ? 0 : inital_y, presets.stiff),
+        <Motion style={{x: spring(this.props.card !== '' ? 0 : inital_x, presets.stiff),
+                        y: spring(this.props.card !== '' ? 0 : inital_y, presets.stiff),
                     }}>
           {({x,y}) =>
-            <Card className='card' card={trick[seat]}
+            <Card className='card' card={this.props.card}
             addStyle={{
               WebkitTransform: `translate3d(${x}px, ${y}px, 0)`,
               transform: `translate3d(${x}px, ${y}px, 0)`,

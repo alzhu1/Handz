@@ -36,11 +36,11 @@
   grid-row: 9/ 13;
 }
 
-.PlayedCardArea{
+/*.PlayedCardArea{
   text-align: center;
   grid-column: 4 / 10;
   grid-row: 5/ 10;
-}
+}*/
 
 .PlayedCardArea2{
   display: grid;
