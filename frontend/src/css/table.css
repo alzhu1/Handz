@@ -48,6 +48,10 @@
   grid-template-rows: repeat(3, 1fr);
 }
 
+.hidden{
+  display: none;
+}
+
 .BottomRight{
   grid-column: 10/ 13;
   grid-row: 10/ 13;

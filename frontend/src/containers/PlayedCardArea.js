@@ -3,9 +3,60 @@ import PlayedCard from 'containers/PlayedCard';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
-
+const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
 
 class PlayedCardArea extends React.Component {
+
+  constructor(){
+    super()
+    this.state = {
+      delay: '',
+      trick: empty_trick
+    };
+  }
+
+
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.trick != this.props.trick || nextProps.prev_trick != this.props.prev_trick) {
+      if (this.didRobotLead(nextProps)) {
+        this.setState({trick : empty_trick})
+        setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 5000);
+      }
+      else {
+        this.changeTrick(nextProps)
+      }
+    }
+  }
+
+  changeTrick(nextProps) {
+    if (this.isTrickEmpty(nextProps.prev_trick)) {
+      this.setState({trick : nextProps.trick})
+    }
+    else if (this.isTrickEmpty(nextProps.trick)) {
+      this.setState({trick : nextProps.prev_trick})
+      setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 5000);
+    }
+    else {
+      this.setState({trick : nextProps.trick})
+    }
+  }
+
+  didRobotLead(nextProps) {
+    if (nextProps.trick['west']!='' && nextProps.trick['north']=='' &&
+        nextProps.trick['east']=='' && nextProps.trick['south']=='') {
+      console.log(nextProps.trick)
+      return true
+    }
+    else if (nextProps.trick['east']!='' && nextProps.trick['north']=='' &&
+              nextProps.trick['west']=='' && nextProps.trick['south']=='') {
+      console.log(nextProps.trick)
+      return true
+    }
+    else {
+      return false
+    }
+  }
 
   playedCardDirection(position, seat) {
 
@@ -144,27 +195,11 @@ class PlayedCardArea extends React.Component {
     var left_seat_z_index = this.findSeatNumber(first_seat, left_seat)
     var right_seat_z_index = this.findSeatNumber(first_seat, right_seat)
 
-    // let styles = {
-    //   display: 'grid',
-    //   gridTemplateColumns: 'repeat(3, 1fr)',
-    //   gridTemplateRows: 'repeat(3, 1fr)'
-    // }
 
-    const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
-    var trick;
-
-    if (this.isTrickEmpty(this.props.prev_trick)) {
-      trick = this.props.trick
-    }
-    else if (this.isTrickEmpty(this.props.trick)) {
-      trick = this.props.prev_trick
-    }
-    else {
-      trick = this.props.trick
-    }
+    let trick = this.state.trick
 
     return (
-          <div>
+          <div className={this.state.delay}>
             <PlayedCard position='top' card={trick[top_seat]} z_index={top_seat_z_index}/>
             <PlayedCard position='left' card={trick[left_seat]} z_index={left_seat_z_index}/>
             <PlayedCard position='right' card={trick[right_seat]} z_index={right_seat_z_index}/>

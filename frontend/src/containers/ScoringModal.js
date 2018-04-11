@@ -93,10 +93,6 @@ class ScoringModal extends React.Component {
 
 
   render() {
-    console.log('render')
-    console.log(this.props.trick_string.length)
-    console.log(this.tricksTaken())
-
     const modal_text1 = 'You have taken ' + this.tricksTaken() + ' tricks.'
 
     const modal_text2 = 'You scored ' + this.calcScore() + ' points.'
