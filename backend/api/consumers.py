@@ -764,6 +764,10 @@ class SockConsumer(ReduxConsumer):
         def send_next_actor_to_front_end(self, direction):
             # only send information if contract has been set
             if table.contract:
+
+                # send updated trick string if trick is complete
+                self.GET_TRICK_STRING()
+
                 # send updated trick
                 self.GET_TRICK()
                 self.GET_PREV_TRICK()
@@ -784,9 +788,6 @@ class SockConsumer(ReduxConsumer):
 
                 # update distributions
                 self.GET_DISTRIBUTIONS()
-
-                # send updated trick string if trick is complete
-                self.GET_TRICK_STRING()
 
                 if table.EW_tricks_taken + table.NS_tricks_taken == 13:
                     self.CALC_SCORE()
@@ -813,6 +814,7 @@ class SockConsumer(ReduxConsumer):
             print('table.EW_tricks_taken + table.NS_tricks_taken')
             print(table.EW_tricks_taken + table.NS_tricks_taken)
             if table.EW_tricks_taken + table.NS_tricks_taken == 13:
+                send_next_actor_to_front_end(self, table.direction_to_act)
                 self.CALC_SCORE()
             else:
                 self.Robot_AI(table_id)

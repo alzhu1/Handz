@@ -17,6 +17,7 @@ import PlayedCardArea from 'containers/PlayedCardArea';
 import SvgMaterialIcons from 'containers/SvgMaterialIcons';
 import PopperExample from 'demos/PopperExample';
 import SimpleModalWrapped from 'demos/ModalDemo';
+import MotionDemo from 'demos/MotionDemo';
 
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
@@ -50,6 +51,8 @@ class Main extends React.Component {
                 <Route exact path='/popper' component={PopperExample} />
 
                 <Route exact path='/modal' component={SimpleModalWrapped} />
+
+                <Route exact path='/motion' component={MotionDemo} />
 
             </Switch>
         );

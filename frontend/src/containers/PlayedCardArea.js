@@ -2,6 +2,7 @@ import React from 'react';
 import PlayedCard from 'containers/PlayedCard';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
+import ReactDOM from 'react-dom';
 
 const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
 
@@ -11,17 +12,45 @@ class PlayedCardArea extends React.Component {
     super()
     this.state = {
       delay: '',
-      trick: empty_trick
+      trick: empty_trick,
+      collapse: false
     };
   }
 
+  componentWillMount() {
+    document.addEventListener('click', this.handleClick, false);
+  }
 
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClick, false);
+  }
+
+  handleClick = e => {
+    if(!ReactDOM.findDOMNode(this).contains(e.target)) {
+      if (this.isTrickFull(this.state.trick)){
+        console.log('clicked outside!')
+        this.setState({collapse : true})
+        setTimeout(function() {this.setState({trick : empty_trick})}.bind(this), 1000);
+        setTimeout(function() {this.setState({trick : this.props.trick})}.bind(this), 1500);
+        setTimeout(function() {this.setState({collapse : false})}.bind(this), 1000);
+      }
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
+
     if(nextProps.trick != this.props.trick || nextProps.prev_trick != this.props.prev_trick) {
-      if (this.didRobotLead(nextProps)) {
-        this.setState({trick : empty_trick})
-        setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 5000);
+      // if trick is not full, uncollapse
+      // this.setState({collapse : false})
+      // if (!this.isTrickFull(this.state.trick)){
+      //   this.setState({collapse : false})
+      // }
+
+      if (this.didRobotLead(nextProps) && nextProps.trick_string.length > 0) {
+        // this.setState({trick : nextProps.trick})
+        this.setState({trick : nextProps.prev_trick})
+        // this.setState({trick : empty_trick})
+        // setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 1000);
       }
       else {
         this.changeTrick(nextProps)
@@ -34,8 +63,9 @@ class PlayedCardArea extends React.Component {
       this.setState({trick : nextProps.trick})
     }
     else if (this.isTrickEmpty(nextProps.trick)) {
+      // this.setState({trick : nextProps.trick})
       this.setState({trick : nextProps.prev_trick})
-      setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 5000);
+      // setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 1000);
     }
     else {
       this.setState({trick : nextProps.trick})
@@ -58,7 +88,20 @@ class PlayedCardArea extends React.Component {
     }
   }
 
-  playedCardDirection(position, seat) {
+  seatAbbr(s){
+    switch(s) {
+      case 'S':
+        return 'south'
+      case 'E':
+        return 'east'
+      case 'W':
+        return 'west'
+      case 'N':
+        return 'north'
+    }
+  }
+
+  seatDirection(position, seat) {
 
     switch(seat) {
       case '':
@@ -182,29 +225,44 @@ class PlayedCardArea extends React.Component {
     return (trick['north'].length + trick['south'].length + trick['east'].length + trick['west'].length === 0)
   }
 
-  render() {
-    var top_seat = this.playedCardDirection('top', this.props.seat)
-    var bottom_seat = this.playedCardDirection('bottom', this.props.seat)
-    var left_seat = this.playedCardDirection('left', this.props.seat)
-    var right_seat = this.playedCardDirection('right', this.props.seat)
+  isTrickFull(trick) {
+    return (trick['north'].length + trick['south'].length + trick['east'].length + trick['west'].length === 8)
+  }
 
+  setZIndex(seat){
     let first_seat = this.findFirstSeat()
+    var z = this.findSeatNumber(first_seat, seat)
+    if (this.isTrickFull(this.state.trick)){
+      if (seat === this.seatAbbr(this.props.trick_string[this.props.trick_string.length - 1])){
+        z = z + 5
+      }
+    }
+    return z
+  }
 
-    var top_seat_z_index = this.findSeatNumber(first_seat, top_seat)
-    var bottom_seat_z_index = this.findSeatNumber(first_seat, bottom_seat)
-    var left_seat_z_index = this.findSeatNumber(first_seat, left_seat)
-    var right_seat_z_index = this.findSeatNumber(first_seat, right_seat)
+  render() {
+    var top_seat = this.seatDirection('top', this.props.seat)
+    var bottom_seat = this.seatDirection('bottom', this.props.seat)
+    var left_seat = this.seatDirection('left', this.props.seat)
+    var right_seat = this.seatDirection('right', this.props.seat)
 
+    var top_seat_z_index = this.setZIndex(top_seat)
+    var bottom_seat_z_index = this.setZIndex(bottom_seat)
+    var left_seat_z_index = this.setZIndex(left_seat)
+    var right_seat_z_index = this.setZIndex(right_seat)
 
     let trick = this.state.trick
+    let collapse = this.state.collapse
+    console.log('collapse 2')
+    console.log(collapse)
 
     return (
-          <div className={this.state.delay}>
-            <PlayedCard position='top' card={trick[top_seat]} z_index={top_seat_z_index}/>
-            <PlayedCard position='left' card={trick[left_seat]} z_index={left_seat_z_index}/>
-            <PlayedCard position='right' card={trick[right_seat]} z_index={right_seat_z_index}/>
-            <PlayedCard position='bottom' card={trick[bottom_seat]} z_index={bottom_seat_z_index}/>
-          </div>
+        <div>
+          <PlayedCard position='top' card={trick[top_seat]} zIndex={top_seat_z_index} collapse={collapse}/>
+          <PlayedCard position='left' card={trick[left_seat]} zIndex={left_seat_z_index} collapse={collapse}/>
+          <PlayedCard position='right' card={trick[right_seat]} zIndex={right_seat_z_index} collapse={collapse}/>
+          <PlayedCard position='bottom' card={trick[bottom_seat]} zIndex={bottom_seat_z_index} collapse={collapse}/>
+        </div>
       )
     }
 }
