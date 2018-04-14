@@ -171,6 +171,58 @@ class PlayedCardArea extends React.Component {
     }
   }
 
+  seatPosition(direction, seat) {
+
+    switch(seat) {
+      case '':
+      case 'south':
+        switch (direction) {
+          case 'north':
+            return 'top'
+          case 'south':
+            return 'bottom'
+          case 'west':
+            return 'left'
+          case 'east':
+            return 'right'
+        }
+      case 'north':
+        switch (direction) {
+          case 'south':
+            return 'top'
+          case 'north':
+            return 'bottom'
+          case 'east':
+            return 'left'
+          case 'west':
+            return 'right'
+        }
+      case 'west':
+        switch (direction) {
+          case 'east':
+            return 'top'
+          case 'west':
+            return 'bottom'
+          case 'north':
+            return 'left'
+          case 'south':
+            return 'right'
+        }
+      case 'east':
+        switch (direction) {
+          case 'west':
+            return 'top'
+          case 'east':
+            return 'bottom'
+          case 'south':
+            return 'left'
+          case 'north':
+            return 'right'
+        }
+    }
+  }
+
+
   findFirstSeat() {
     if (this.props.trick['west']=='' && this.props.trick['north']!=''){
       return 'north'
@@ -272,15 +324,23 @@ class PlayedCardArea extends React.Component {
 
     let trick = this.state.trick
     let collapse = this.state.collapse
+    let winner = this.seatPosition(this.seatAbbr(this.props.trick_string[this.props.trick_string.length - 1],this.props.seat),
+                  this.props.seat)
 
-    // console.log(trick)
+    console.log(this.props.trick_string[this.props.trick_string.length - 1],this.props.sea)
+    console.log(this.seatAbbr(this.props.trick_string[this.props.trick_string.length - 1],this.props.seat))
+    console.log(winner)
 
     return (
         <div>
-          <PlayedCard position='top' card={trick[top_seat]} zIndex={top_seat_z_index} collapse={collapse}/>
-          <PlayedCard position='left' card={trick[left_seat]} zIndex={left_seat_z_index} collapse={collapse}/>
-          <PlayedCard position='right' card={trick[right_seat]} zIndex={right_seat_z_index} collapse={collapse}/>
-          <PlayedCard position='bottom' card={trick[bottom_seat]} zIndex={bottom_seat_z_index} collapse={collapse}/>
+          <PlayedCard position='top' card={trick[top_seat]}
+              zIndex={top_seat_z_index} collapse={collapse} winner={winner}/>
+          <PlayedCard position='left' card={trick[left_seat]}
+              zIndex={left_seat_z_index} collapse={collapse} winner={winner}/>
+          <PlayedCard position='right' card={trick[right_seat]}
+              zIndex={right_seat_z_index} collapse={collapse} winner={winner}/>
+          <PlayedCard position='bottom' card={trick[bottom_seat]}
+              zIndex={bottom_seat_z_index} collapse={collapse} winner={winner}/>
         </div>
       )
     }

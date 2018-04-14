@@ -9,6 +9,39 @@ const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
 
 class PlayedCard extends React.Component {
 
+  winningTrickX(w) {
+
+    switch (this.props.winner) {
+      case 'top':
+        return 0
+      case 'bottom':
+        return 0
+      case 'left':
+        return -w
+      case 'right':
+        return w
+      default:
+        return 0
+    }
+
+  }
+
+  winningTrickY(h) {
+
+    switch (this.props.winner) {
+      case 'top':
+        return -h
+      case 'bottom':
+        return h
+      case 'left':
+        return 0
+      case 'right':
+        return 0
+      default:
+        return 0
+    }
+
+  }
 
   render(){
     var p = 200
@@ -41,15 +74,23 @@ class PlayedCard extends React.Component {
     else{
       if (this.props.position === 'top'){
         inital_y = -h
+        end_x = this.winningTrickX(w)
+        end_y = this.winningTrickY(h)
       }
       else if (this.props.position === 'left'){
         inital_x = -w
+        end_x = this.winningTrickX(w)
+        end_y = this.winningTrickY(h)
       }
       else if (this.props.position === 'right'){
         inital_x = w
+        end_x = this.winningTrickX(w)
+        end_y = this.winningTrickY(h)
       }
       else if (this.props.position === 'bottom'){
         inital_y = h
+        end_x = this.winningTrickX(w)
+        end_y = this.winningTrickY(h)
       }
     }
 
