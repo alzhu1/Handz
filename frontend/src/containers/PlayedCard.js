@@ -19,8 +19,6 @@ class PlayedCard extends React.Component {
     var end_x = 0;
     var end_y = 0;
 
-    console.log('this.props.collapse')
-    console.log(this.props.collapse)
 
     if (!this.props.collapse){
       if (this.props.position === 'top'){

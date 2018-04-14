@@ -29,12 +29,17 @@ class PlayedCardArea extends React.Component {
     if(!ReactDOM.findDOMNode(this).contains(e.target)) {
       if (this.isTrickFull(this.state.trick)){
         console.log('clicked outside!')
-        this.setState({collapse : true})
-        setTimeout(function() {this.setState({trick : empty_trick})}.bind(this), 1000);
-        setTimeout(function() {this.setState({trick : this.props.trick})}.bind(this), 1500);
-        setTimeout(function() {this.setState({collapse : false})}.bind(this), 1000);
+        // this.collapseTrick()
       }
     }
+  }
+
+  collapseTrick() {
+    console.log('collapse trick')
+    this.setState({collapse : true})
+    setTimeout(function() {this.setState({trick : empty_trick})}.bind(this), 1000);
+    setTimeout(function() {this.setState({trick : this.props.trick})}.bind(this), 1500);
+    setTimeout(function() {this.setState({collapse : false})}.bind(this), 1000);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,25 +54,37 @@ class PlayedCardArea extends React.Component {
       if (this.didRobotLead(nextProps) && nextProps.trick_string.length > 0) {
         // this.setState({trick : nextProps.trick})
         this.setState({trick : nextProps.prev_trick})
+        setTimeout(function() {this.collapseTrick()}.bind(this), 2000);
         // this.setState({trick : empty_trick})
         // setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 1000);
       }
       else {
         this.changeTrick(nextProps)
       }
+
     }
   }
 
+
+
   changeTrick(nextProps) {
+    // first trick only
     if (this.isTrickEmpty(nextProps.prev_trick)) {
+      console.log('1')
       this.setState({trick : nextProps.trick})
+
     }
     else if (this.isTrickEmpty(nextProps.trick)) {
+      console.log('2')
+      // console.log(nextProps.prev_trick)
       // this.setState({trick : nextProps.trick})
       this.setState({trick : nextProps.prev_trick})
+      setTimeout(function() {this.collapseTrick()}.bind(this), 2000);
+      // console.log(this.state.trick)
       // setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 1000);
     }
     else {
+      console.log('3')
       this.setState({trick : nextProps.trick})
     }
   }
@@ -75,12 +92,12 @@ class PlayedCardArea extends React.Component {
   didRobotLead(nextProps) {
     if (nextProps.trick['west']!='' && nextProps.trick['north']=='' &&
         nextProps.trick['east']=='' && nextProps.trick['south']=='') {
-      console.log(nextProps.trick)
+      // console.log(nextProps.trick)
       return true
     }
     else if (nextProps.trick['east']!='' && nextProps.trick['north']=='' &&
               nextProps.trick['west']=='' && nextProps.trick['south']=='') {
-      console.log(nextProps.trick)
+      // console.log(nextProps.trick)
       return true
     }
     else {
@@ -253,8 +270,8 @@ class PlayedCardArea extends React.Component {
 
     let trick = this.state.trick
     let collapse = this.state.collapse
-    console.log('collapse 2')
-    console.log(collapse)
+
+    // console.log(trick)
 
     return (
         <div>
