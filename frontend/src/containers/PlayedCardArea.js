@@ -10,6 +10,7 @@ class PlayedCardArea extends React.Component {
 
   constructor(){
     super()
+    this.timer = null;
     this.state = {
       delay: '',
       trick: empty_trick,
@@ -50,11 +51,12 @@ class PlayedCardArea extends React.Component {
       // if (!this.isTrickFull(this.state.trick)){
       //   this.setState({collapse : false})
       // }
+      clearTimeout(this.timer);
 
       if (this.didRobotLead(nextProps) && nextProps.trick_string.length > 0) {
         // this.setState({trick : nextProps.trick})
         this.setState({trick : nextProps.prev_trick})
-        setTimeout(function() {this.collapseTrick()}.bind(this), 2000);
+        this.timer = setTimeout(function() {this.collapseTrick()}.bind(this), 2000);
         // this.setState({trick : empty_trick})
         // setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 1000);
       }
@@ -79,7 +81,7 @@ class PlayedCardArea extends React.Component {
       // console.log(nextProps.prev_trick)
       // this.setState({trick : nextProps.trick})
       this.setState({trick : nextProps.prev_trick})
-      setTimeout(function() {this.collapseTrick()}.bind(this), 2000);
+      this.timer = setTimeout(function() {this.collapseTrick()}.bind(this), 2000);
       // console.log(this.state.trick)
       // setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 1000);
     }
