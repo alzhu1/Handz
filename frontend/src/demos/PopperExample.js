@@ -1,7 +1,6 @@
 import React from 'react';
 import Floater from 'react-floater';
 import Card from 'components/Card';
-import PlayedCard from 'containers/PlayedCard';
 // import styled from 'styled-components';
 
 export default class PopperExample extends React.Component {

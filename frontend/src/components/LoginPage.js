@@ -1,11 +1,10 @@
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import {connect} from 'react-redux';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
 import TextField from 'material-ui/TextField';
-import Button from 'material-ui/Button';
 
 import InvalidLoginDialog from 'components/InvalidLoginDialog';
 

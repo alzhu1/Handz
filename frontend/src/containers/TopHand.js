@@ -4,7 +4,6 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import SuitSymbol from 'components/SuitSymbol';
 
-import _ from 'lodash';
 
 class TopHand extends React.Component {
 
@@ -21,7 +20,7 @@ class TopHand extends React.Component {
       this.setState({ handClass: 'hand vhand-compact active-hand'});
       console.log('active!')
     }
-    else if (this.props.dummy != this.props.direction  &&
+    else if (this.props.dummy !== this.props.direction  &&
       this.state.handClass === 'hand vhand-compact active-hand') {
       this.setState({ handClass: 'hand vhand-compact'});
       console.log('not active!')

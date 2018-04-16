@@ -1,5 +1,4 @@
 import React from 'react';
-import Card from 'components/Card';
 import EstablishedCard from 'containers/EstablishedCard';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';

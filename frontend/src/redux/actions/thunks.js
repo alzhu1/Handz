@@ -73,7 +73,7 @@ export const playCardThunk = (card) => (
         console.log(card)
         console.log(getState().seat)
         console.log(findDummy(getState().seat))
-        if ((getState().contract != '') && (getState().seat != getState().dummy) &&
+        if ((getState().contract !== '') && (getState().seat !== getState().dummy) &&
             ((getState().seat === getState().direction_to_act && getState().hand[suitName(card[1])].indexOf(card[0]) > -1) ||
             (getState().dummy === getState().direction_to_act && findDummy(getState().seat)===getState().dummy && getState().hand[suitName(card[1])].indexOf(card[0]) === -1))) {
           return(emit(a.playCard(card)));

@@ -41,7 +41,7 @@ class ScoringModal extends React.Component {
   // }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.trick_string !== this.props.trick_string && nextProps.trick_string.length == 13) {
+    if(nextProps.trick_string !== this.props.trick_string && nextProps.trick_string.length === 13) {
       this.handleOpen()
     }
   }
@@ -70,7 +70,7 @@ class ScoringModal extends React.Component {
   }
 
   tricksTaken() {
-    if (this.props.seat == 'east' || this.props.seat == 'west') {
+    if (this.props.seat === 'east' || this.props.seat === 'west') {
       return this.props.trick_string.split("E").length + this.props.trick_string.split("W").length - 2
     }
     else {

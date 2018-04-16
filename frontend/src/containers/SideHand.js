@@ -4,8 +4,6 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import SuitSymbol from 'components/SuitSymbol';
 
-var _ = require('lodash');
-
 class SideHand extends React.Component {
 
   render() {

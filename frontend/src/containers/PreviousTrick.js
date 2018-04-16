@@ -1,7 +1,6 @@
 import React from 'react';
 import Floater from 'react-floater';
 import Card from 'components/Card';
-import PlayedCard from 'containers/PlayedCard';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
@@ -10,7 +9,7 @@ class PreviousTrick extends React.Component {
   playedCardDirection(position, seat) {
 
     switch(seat) {
-      case '':
+      default:
       case 'south':
         switch (position) {
           case 'top':
@@ -21,7 +20,9 @@ class PreviousTrick extends React.Component {
             return 'west'
           case 'right':
             return 'east'
+          default:
         }
+      break;
       case 'north':
         switch (position) {
           case 'top':
@@ -32,7 +33,9 @@ class PreviousTrick extends React.Component {
             return 'east'
           case 'right':
             return 'west'
+          default:
         }
+      break;
       case 'west':
         switch (position) {
           case 'top':
@@ -43,7 +46,9 @@ class PreviousTrick extends React.Component {
             return 'north'
           case 'right':
             return 'south'
+          default:
         }
+      break;
       case 'east':
         switch (position) {
           case 'top':
@@ -54,6 +59,7 @@ class PreviousTrick extends React.Component {
             return 'south'
           case 'right':
             return 'north'
+          default:
         }
     }
   }

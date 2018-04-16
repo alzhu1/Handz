@@ -4,9 +4,6 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import {Motion, spring, presets} from 'react-motion';
 
-
-const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
-
 class PlayedCard extends React.Component {
 
   winningTrickX(w) {

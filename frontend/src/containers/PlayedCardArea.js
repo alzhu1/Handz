@@ -45,7 +45,7 @@ class PlayedCardArea extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
-    if(nextProps.trick != this.props.trick || nextProps.prev_trick != this.props.prev_trick) {
+    if(nextProps.trick !== this.props.trick || nextProps.prev_trick !== this.props.prev_trick) {
       // if trick is not full, uncollapse
       // this.setState({collapse : false})
       // if (!this.isTrickFull(this.state.trick)){
@@ -92,13 +92,13 @@ class PlayedCardArea extends React.Component {
   }
 
   didRobotLead(nextProps) {
-    if (nextProps.trick['west']!='' && nextProps.trick['north']=='' &&
-        nextProps.trick['east']=='' && nextProps.trick['south']=='') {
+    if (nextProps.trick['west']!=='' && nextProps.trick['north']==='' &&
+        nextProps.trick['east']==='' && nextProps.trick['south']==='') {
       // console.log(nextProps.trick)
       return true
     }
-    else if (nextProps.trick['east']!='' && nextProps.trick['north']=='' &&
-              nextProps.trick['west']=='' && nextProps.trick['south']=='') {
+    else if (nextProps.trick['east']!=='' && nextProps.trick['north']==='' &&
+              nextProps.trick['west']==='' && nextProps.trick['south']==='') {
       // console.log(nextProps.trick)
       return true
     }
@@ -224,16 +224,16 @@ class PlayedCardArea extends React.Component {
 
 
   findFirstSeat() {
-    if (this.props.trick['west']=='' && this.props.trick['north']!=''){
+    if (this.props.trick['west']==='' && this.props.trick['north']!==''){
       return 'north'
     }
-    else if (this.props.trick['north']=='' && this.props.trick['east']!=''){
+    else if (this.props.trick['north']==='' && this.props.trick['east']!==''){
       return 'east'
     }
-    else if (this.props.trick['east']=='' && this.props.trick['south']!=''){
+    else if (this.props.trick['east']==='' && this.props.trick['south']!==''){
       return 'south'
     }
-    else if (this.props.trick['south']=='' && this.props.trick['west']!=''){
+    else if (this.props.trick['south']==='' && this.props.trick['west']!==''){
       return 'west'
     }
     else {

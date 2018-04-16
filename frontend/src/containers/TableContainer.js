@@ -2,7 +2,6 @@ import React from 'react';
 import Hand from 'containers/Hand';
 import Auction from 'components/Auction';
 import BiddingBox from 'components/BiddingBox';
-import TableMarker from 'components/TableMarker';
 import PlayedCardArea from 'containers/PlayedCardArea';
 import TricksArea from 'containers/TricksArea';
 import BackButton from 'containers/BackButton';
@@ -11,20 +10,14 @@ import ScoringModal from 'containers/ScoringModal';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 
-import Button from 'material-ui/Button';
-
 class TableContainer extends React.Component {
-
 
   componentWillUnmount() {
       this.props.leaveSeatThunk(this.props.seat)
       this.props.leaveTableThunk(this.props.table_id)
   }
 
-
   render() {
-
-
     return (
         <div className="Table">
             <div className='BottomRight'>

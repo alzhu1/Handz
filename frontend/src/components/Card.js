@@ -1,8 +1,6 @@
 import React from 'react';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
-import ReactDOM from 'react-dom';
-
 import _ from 'lodash';
 
 class Card extends React.Component {
@@ -61,7 +59,7 @@ class Card extends React.Component {
     if (this.suitName(suit).length > 0) {
       // dummy's turn to play and it is a valid card to play
       if (this.props.dummy === this.props.direction_to_act && this.isCardinHand(this.props.card,this.props.dummy_hand)){
-        if ((this.props.suit_led === suit && this.props.dummy_hand[this.suitName(suit)] != '') ||
+        if ((this.props.suit_led === suit && this.props.dummy_hand[this.suitName(suit)] !== '') ||
               (this.props.suit_led === '') || (this.props.dummy_hand[this.suitName(this.props.suit_led)].length === 0))
         {
             cardClass = 'cardHover'
@@ -69,7 +67,7 @@ class Card extends React.Component {
       }
       // declarer's turn to play and it is a valid card to play
       else if (this.props.declarer === this.props.direction_to_act && this.isCardinHand(this.props.card,this.props.hand)){
-        if ((this.props.suit_led === suit && this.props.hand[this.suitName(suit)] != '') ||
+        if ((this.props.suit_led === suit && this.props.hand[this.suitName(suit)] !== '') ||
               (this.props.suit_led === '') || (this.props.hand[this.suitName(this.props.suit_led)].length === 0))
         {
             cardClass = 'cardHover'
@@ -107,7 +105,7 @@ class Card extends React.Component {
           <img className= 'card'
           style={styles}
           src={require('cardsJS/cards/'+ this.props.card + '.svg')}
-          onClick={() => {console.log('last trick')}}/>
+          />
         )
       }
       else {

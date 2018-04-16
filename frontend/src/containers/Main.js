@@ -6,15 +6,14 @@ import LoginContainer from 'containers/LoginContainer';
 import SignupContainer from 'containers/SignupContainer';
 import LobbyContainer from 'containers/LobbyContainer';
 import TableContainer from 'containers/TableContainer';
-import Card from 'components/Card';
-import Demo from 'containers/Demo';
-import BottomHand from 'containers/BottomHand';
-import Test from 'containers/Test';
-import Test2 from 'containers/Test2';
-import Test3 from 'containers/Test3';
-import PlayedCardArea from 'containers/PlayedCardArea';
 
-import SvgMaterialIcons from 'containers/SvgMaterialIcons';
+import BottomHand from 'containers/BottomHand';
+
+import Test from 'demos/Test';
+import Test2 from 'demos/Test2';
+import Test3 from 'demos/Test3';
+import Demo from 'demos/Demo';
+import SvgMaterialIcons from 'demos/SvgMaterialIcons';
 import PopperExample from 'demos/PopperExample';
 import SimpleModalWrapped from 'demos/ModalDemo';
 import MotionDemo from 'demos/MotionDemo';

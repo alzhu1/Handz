@@ -1,17 +1,12 @@
 import React from 'react';
-import Card from 'components/Card';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
-import Suit from 'containers/Suit';
 
 import Button from 'material-ui/Button';
 
 import BottomHand from 'containers/BottomHand';
 import TopHand from 'containers/TopHand';
 import SideHand from 'containers/SideHand';
-
-import {empty_hand} from 'redux/reducers/reducers';
-
 
 class Hand extends React.Component {
 
@@ -105,9 +100,10 @@ class Hand extends React.Component {
     render() {
 
       let cardinal = this.buttonDirection(this.props.position, this.props.seat)
+      var body;
 
       if (this.props.position === 'bottom') {
-        var body =
+         body =
           (
             <div>
             <BottomHand/>
@@ -122,7 +118,7 @@ class Hand extends React.Component {
 
       }
       else if (this.props.position === 'top') {
-        var body =
+         body =
           (
             <div>
             <TopHand direction={cardinal} />
@@ -138,7 +134,7 @@ class Hand extends React.Component {
 
       }
       else if (this.props.position === 'left') {
-        var body =
+         body =
           (<div>
               <SideHand direction={cardinal}/>
               <Button onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
@@ -153,7 +149,7 @@ class Hand extends React.Component {
       }
       else if (this.props.position === 'right') {
         let styles={transform:  'scaleX(-1)'}
-        var body =
+         body =
           (<div style={styles}>
               <SideHand direction={cardinal}/>
               <Button size='large'

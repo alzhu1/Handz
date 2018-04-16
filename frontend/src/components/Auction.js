@@ -13,16 +13,16 @@ class Auction extends React.Component {
   }
 
   declarerN(direction){
-    if (direction ='north'){
+    if (direction === 'north'){
       return 0
     }
-    else if (direction ='south'){
+    else if (direction === 'south'){
       return 2
     }
-    else if (direction ='east'){
+    else if (direction === 'east'){
       return 1
     }
-    else if (direction ='west'){
+    else if (direction === 'west'){
       return 3
     }
   }
@@ -54,9 +54,9 @@ class Auction extends React.Component {
 
       // if last 3 bids were not passes, have a question mark
       if (this.props.auction.length > 3 &&
-          (this.props.auction[this.props.auction.length - 1] == 'P' &&
-          this.props.auction[this.props.auction.length - 2] == 'P' &&
-          this.props.auction[this.props.auction.length - 3] == 'P')){
+          (this.props.auction[this.props.auction.length - 1] === 'P' &&
+          this.props.auction[this.props.auction.length - 2] === 'P' &&
+          this.props.auction[this.props.auction.length - 3] === 'P')){
             // empty
           }
       else {
