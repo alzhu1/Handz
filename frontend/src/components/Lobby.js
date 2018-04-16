@@ -9,7 +9,6 @@ class Lobby extends React.Component {
     render() {
             return (
                 <div>
-                    <h1>This is the Home page!</h1>
                     <Button onClick={() =>
                         {this.props.logoutThunk()}}>Logout</Button>
                     <Button component={props => <Link to="/table" {...props} /> }

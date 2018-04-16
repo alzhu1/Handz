@@ -28,10 +28,13 @@ class BiddingBox extends React.Component {
              && this.props.declarer === this.props.seat){
       return(
         <div>
+          <div>
           <Button variant="raised" onClick={() =>
               {this.props.chooseStrainThunk('N')}}>
               NoTrump
           </ Button>
+          </div>
+          <div>
           <Button variant="raised" color="primary" onClick={() =>
               {this.props.chooseStrainThunk('S')}}>
               Spades
@@ -40,6 +43,8 @@ class BiddingBox extends React.Component {
               {this.props.chooseStrainThunk('H')}}>
               Hearts
           </ Button>
+          </div>
+          <div>
           <Button variant="raised" color="primary" onClick={() =>
               {this.props.chooseStrainThunk('C')}}>
               Clubs
@@ -48,11 +53,12 @@ class BiddingBox extends React.Component {
               {this.props.chooseStrainThunk('D')}}>
               Diamonds
           </ Button>
+          </div>
         </div>
       )
     }
     else if (this.props.direction_to_act === this.props.seat &&
-        this.props.contract == '' && this.props.special_phase === '') {
+        this.props.contract === '' && this.props.special_phase === '') {
 
           let styles = {
             alignSelf: 'center'

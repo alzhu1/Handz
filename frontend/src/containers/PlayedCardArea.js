@@ -29,14 +29,14 @@ class PlayedCardArea extends React.Component {
   handleClick = e => {
     if(!ReactDOM.findDOMNode(this).contains(e.target)) {
       if (this.isTrickFull(this.state.trick)){
-        console.log('clicked outside!')
+        // console.log('clicked outside!')
         // this.collapseTrick()
       }
     }
   }
 
   collapseTrick() {
-    console.log('collapse trick')
+    // console.log('collapse trick')
     this.setState({collapse : true})
     setTimeout(function() {this.setState({trick : empty_trick})}.bind(this), 1000);
     setTimeout(function() {this.setState({trick : this.props.trick})}.bind(this), 1500);
@@ -72,12 +72,12 @@ class PlayedCardArea extends React.Component {
   changeTrick(nextProps) {
     // first trick only
     if (this.isTrickEmpty(nextProps.prev_trick)) {
-      console.log('1')
+      // console.log('1')
       this.setState({trick : nextProps.trick})
 
     }
     else if (this.isTrickEmpty(nextProps.trick)) {
-      console.log('2')
+      // console.log('2')
       // console.log(nextProps.prev_trick)
       // this.setState({trick : nextProps.trick})
       this.setState({trick : nextProps.prev_trick})
@@ -86,7 +86,7 @@ class PlayedCardArea extends React.Component {
       // setTimeout(function() {this.setState({trick : nextProps.trick})}.bind(this), 1000);
     }
     else {
-      console.log('3')
+      // console.log('3')
       this.setState({trick : nextProps.trick})
     }
   }
@@ -326,10 +326,6 @@ class PlayedCardArea extends React.Component {
     let collapse = this.state.collapse
     let winner = this.seatPosition(this.seatAbbr(this.props.trick_string[this.props.trick_string.length - 1],this.props.seat),
                   this.props.seat)
-
-    console.log(this.props.trick_string[this.props.trick_string.length - 1],this.props.sea)
-    console.log(this.seatAbbr(this.props.trick_string[this.props.trick_string.length - 1],this.props.seat))
-    console.log(winner)
 
     return (
         <div>

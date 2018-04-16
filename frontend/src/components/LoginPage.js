@@ -16,13 +16,13 @@ class LoginPage extends React.Component {
         }
 
         let textStyles = {
-          textAlign: 'center'
+          // textAlign: 'center'
         }
 
         return (
             <div>
-                <h1 style={textStyles}>Welcome to Handz!</h1>
-                <h2 style={textStyles}>What will your name be?</h2>
+                <h1 style={textStyles}>Handz!</h1>
+                <h2 style={textStyles}>Choose Your Name</h2>
                 <form style={textStyles} noValidate autoComplete="off" onSubmit={(e) => {
                     e.preventDefault();
                     this.props.loginThunk(this.props.name, "fakepassword");

@@ -105,8 +105,8 @@ class PlayedCard extends React.Component {
 
     return (
       <div style={styles}>
-        <Motion style={{x: spring(this.props.card !== '' ? end_x : inital_x, presets.stiff),
-                        y: spring(this.props.card !== '' ? end_y : inital_y, presets.stiff),
+        <Motion style={{x: spring(this.props.card !== '' ? end_x : inital_x, presets.noWobble),
+                        y: spring(this.props.card !== '' ? end_y : inital_y, presets.noWobble),
                     }}>
           {({x,y}) =>
             <Card className='card' card={this.props.card}
