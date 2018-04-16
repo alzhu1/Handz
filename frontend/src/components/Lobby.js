@@ -9,9 +9,11 @@ class Lobby extends React.Component {
     render() {
             return (
                 <div>
-                    <Button onClick={() =>
+                    <Button size='large'
+                        onClick={() =>
                         {this.props.logoutThunk()}}>Logout</Button>
-                    <Button component={props => <Link to="/table" {...props} /> }
+                    <Button size='large'
+                        component={props => <Link to="/table" {...props} /> }
                         onClick={() => {this.props.createTableThunk('single')}}>
                           Play!
                     </Button>
