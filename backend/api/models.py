@@ -236,7 +236,7 @@ class DealField(models.Field):
         return name, path, args, kwargs
 
     def db_type(self, connection):
-        return 'deal'
+        return 'text'
 
     def from_db_value(self, value, expression, connection, context):
         # print('from_db_value')
@@ -379,7 +379,7 @@ class ContractField(models.Field):
         return name, path, args, kwargs
 
     def db_type(self, connection):
-        return 'contract'
+        return 'text'
 
     def from_db_value(self, value, expression, connection, context):
         if value is None:
@@ -427,7 +427,7 @@ class Trick(object):
 class TrickField(models.Field):
 
     def db_type(self, connection):
-        return 'trick'
+        return 'text'
 
     def from_db_value(self, value, expression, connection, context):
         if value is None:
