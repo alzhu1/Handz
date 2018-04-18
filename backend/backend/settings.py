@@ -4,12 +4,12 @@ import asgi_redis
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'u!g9pmx)(ts+)dd29r77dzsfn9lq$3f6pgpiab%uv%^kmt2ogd'
+SECRET_KEY = 'btAhFz4vy0htestFxgCahW9kcHEsafafds'
 
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'handz-backend-dev.us-west-1.elasticbeanstalk.com']
 
 
 
