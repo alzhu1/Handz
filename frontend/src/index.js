@@ -31,7 +31,7 @@ import red from 'material-ui/colors/red';
 const loggerMiddleware = createLogger();
 
 let sock = new WebSocketBridge();
-sock.connect('ws://localhost:8000/');
+sock.connect('ws://handz-backend-dev.us-west-1.elasticbeanstalk.com');
 sock.listen((payload, stream) => {
     store.dispatch(payload)
 });
