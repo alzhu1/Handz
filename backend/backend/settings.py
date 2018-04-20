@@ -141,7 +141,7 @@ if 'RDS_DB_NAME' in os.environ:
      "default": {
       "BACKEND": "asgi_redis.RedisChannelLayer",
       "CONFIG": {
-       "hosts": ["redis://handz-redis.ebuevd.0001.usw1.cache.amazonaws.com:6379"],
+       "hosts": ["redis://handz-redis-2.ebuevd.0001.usw1.cache.amazonaws.com:6379"],
       },
      "ROUTING": "backend.routing.channel_routing",
      }
