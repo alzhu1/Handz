@@ -9,7 +9,7 @@ SECRET_KEY = 'btAhFz4vy0htestFxgCahW9kcHEsafafds'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'handz-backend-dev.us-west-1.elasticbeanstalk.com', '172.31.6.103]'
+ALLOWED_HOSTS = ['localhost', 'handz-backend-dev.us-west-1.elasticbeanstalk.com', '172.31.6.103']
 
 
 
