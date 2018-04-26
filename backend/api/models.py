@@ -183,12 +183,20 @@ class Deal(object):
             return self.west
 
 
-def construct_deal():
+def construct_deal(NS_min=False):
+
     l = list('NNNNNNNNNNNNNAAAAAAAAAAAAASSSSSSSSSSSSSWWWWWWWWWWWWW')
     random.shuffle(l)
     # l = list('SNAASNWW00000000000000000000000000000000000000000000')
     hand_string = ''.join(l)
     deal = parse_deal(hand_string)
+
+    # if NS have set min, make sure NS have at least that many points
+    while NS_min and (deal.north.hcp + deal.south.hcp) < 17:
+        random.shuffle(l)
+        hand_string = ''.join(l)
+        deal = parse_deal(hand_string)
+
 
     return deal
 
@@ -506,8 +514,8 @@ class Seat(models.Model):
 
 class BridgeTableManager(models.Manager):
 
-    def create_deal(self, robot=False):
-        deal = construct_deal()
+    def create_deal(self, robot=False, NS_min=False):
+        deal = construct_deal(NS_min = NS_min)
         # auction = parse_auction('')
         north = Seat(user=None,direction='north',robot=robot)
         north.save()
