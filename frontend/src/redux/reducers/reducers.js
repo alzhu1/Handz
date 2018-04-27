@@ -4,16 +4,12 @@ import {combineReducers} from "redux";
 export function findDummy(seat) {
   switch(seat) {
     case 'south':
-    case 'S':
       return 'north'
     case 'north':
-    case 'N':
       return 'south'
     case 'west':
-    case 'W':
       return 'east'
     case 'east':
-    case 'E':
       return 'west'
     default:
         break;
