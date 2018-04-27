@@ -348,6 +348,8 @@ export const special_phase = (state = '', action) => {
     switch(action.type) {
         case a.ASK_STRAIN:
           return 'ask_strain'
+        case a.SINGLE_PLAYER:
+          return 'single'
         case a.RESET_PHASE:
           return ''
         case a.LEAVE_TABLE:

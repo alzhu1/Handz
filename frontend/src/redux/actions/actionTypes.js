@@ -32,6 +32,7 @@ export const GET_CONTRACT = 'GET_CONTRACT';
 export const GET_DECLARER = 'GET_DECLARER';
 
 export const ASK_STRAIN = 'ASK_STRAIN';
+export const SINGLE_PLAYER = 'SINGLE_PLAYER';
 export const RESET_PHASE = 'RESET_PHASE';
 export const CHOOSE_STRAIN = 'CHOOSE_STRAIN';
 

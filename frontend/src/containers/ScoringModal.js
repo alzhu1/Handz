@@ -93,9 +93,14 @@ class ScoringModal extends React.Component {
 
 
   render() {
+    const tricks_needed = this.props.contract.charAt(0) * 1 + 6
+
     const modal_text1 = 'You have taken ' + this.tricksTaken() + ' tricks.'
 
-    const modal_text2 = 'You scored ' + this.calcScore() + ' points.'
+    const make_contract_text = 'Congratulations, you made your contract!'
+
+    const went_down_text = ('Sorry, you didn&#39;t make your contract. You needed ' +
+                (tricks_needed - this.tricksTaken()) + ' more tricks!')
 
     const { classes } = this.props;
 
@@ -104,6 +109,15 @@ class ScoringModal extends React.Component {
       left: `50%`,
       transform: `translate(-50%, -50%)`,
     };
+
+    var modal_text2;
+
+    if (this.tricksTaken() >= tricks_needed) {
+      modal_text2 = make_contract_text
+    }
+    else {
+      modal_text2 = went_down_text
+    }
 
     return (
       <div>

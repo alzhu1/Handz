@@ -57,8 +57,9 @@ class BiddingBox extends React.Component {
         </div>
       )
     }
+    // since only single player in effect for now, no bidding box
     else if (this.props.direction_to_act === this.props.seat &&
-        this.props.contract === '' && this.props.special_phase === '') {
+        this.props.contract === '' && this.props.special_phase === 'bidding') {
 
           let styles = {
             alignSelf: 'center'

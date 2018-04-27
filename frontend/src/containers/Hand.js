@@ -110,8 +110,6 @@ class Hand extends React.Component {
             <Button onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <p align="left">
                 {cardinal}: {this.props.table_seats[cardinal]}
-                <br/>
-                HCP: {this.props.point_counts[cardinal]}
               </p>
             </Button>
             </div>)
@@ -122,12 +120,10 @@ class Hand extends React.Component {
           (
             <div>
             <TopHand direction={cardinal} />
-            <Button
+            <Button disabled
               onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <p align="left">
                 {cardinal}: {this.props.table_seats[cardinal]}
-                <br/>
-                HCP: {this.props.point_counts[cardinal]}
               </p>
             </Button>
             </div>)
@@ -137,11 +133,9 @@ class Hand extends React.Component {
          body =
           (<div>
               <SideHand direction={cardinal}/>
-              <Button onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
+              <Button disabled onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <p align="left">
                 {cardinal}: {this.props.table_seats[cardinal]}
-                <br/>
-                HCP: {this.props.point_counts[cardinal]}
               </p>
               </Button>
             </div>)
@@ -152,13 +146,10 @@ class Hand extends React.Component {
          body =
           (<div style={styles}>
               <SideHand direction={cardinal}/>
-              <Button size='large'
-                style={styles}
-                onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
+              <Button disabled onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)} size='large'
+                style={styles}>
                 <p align="left">
                   {cardinal}: {this.props.table_seats[cardinal]}
-                  <br/>
-                  HCP: {this.props.point_counts[cardinal]}
                 </p>
               </Button>
             </div>)
@@ -174,5 +165,16 @@ class Hand extends React.Component {
       )
     }
 }
+
+// <Button size='large'
+//   style={styles}
+//   onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
+//   <p align="left">
+//     {cardinal}: {this.props.table_seats[cardinal]}
+//     <br/>
+//     HCP: {this.props.point_counts[cardinal]}
+//   </p>
+// </Button>
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Hand);

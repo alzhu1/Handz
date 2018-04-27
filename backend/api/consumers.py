@@ -207,6 +207,7 @@ class SockConsumer(ReduxConsumer):
             table.update_auction('PPPP')
             contract_tuple = assign_contract(table.deal.north,table.deal.south)
             self.SET_CONTRACT(*contract_tuple, seat)
+            self.SINGLE_PLAYER()
             table = BridgeTable.objects.get(pk=table.id)
         else:
             # create table and generate deal without robots
@@ -330,12 +331,12 @@ class SockConsumer(ReduxConsumer):
             # update table members
             self.UPDATE_TABLE_SEATS()
 
-            # if table.contract != None:
-            #     self.GET_CONTRACT(table.contract.contract_string)
-            #     declarer = table.contract.declarer
-            #     dummy_hand = table.deal.direction(find_dummy(declarer))
-            #     self.GET_DUMMY_HAND(dummy_hand)
-            #     self.GET_DECLARER(declarer)
+            if table.contract != None:
+                self.GET_CONTRACT(table.contract.contract_string)
+                declarer = table.contract.declarer
+                dummy_hand = table.deal.direction(find_dummy(declarer))
+                self.GET_DUMMY_HAND(dummy_hand)
+                self.GET_DECLARER(declarer)
 
     @action('LEAVE_SEAT')
     def LEAVE_SEAT(self, action):
@@ -489,6 +490,12 @@ class SockConsumer(ReduxConsumer):
         table_id = self.message.channel_session['table_id']
         self.send_to_group(str(table_id), {
                       'type': 'ASK_STRAIN'
+                      })
+
+    def SINGLE_PLAYER(self):
+        table_id = self.message.channel_session['table_id']
+        self.send_to_group(str(table_id), {
+                      'type': 'SINGLE_PLAYER'
                       })
 
     def SUIT_LED(self):

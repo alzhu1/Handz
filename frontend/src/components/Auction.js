@@ -28,7 +28,8 @@ class Auction extends React.Component {
   }
 
   render() {
-    if (this.props.contract === ''){
+    // since only single player in effect for now, no auction
+    if (false && this.props.contract === ''){
 
       var bids = []
       var declarer_n = this.declarerN(this.props.declarer)
@@ -51,6 +52,7 @@ class Auction extends React.Component {
             </div>
           )
       }
+
 
       // if last 3 bids were not passes, have a question mark
       if (this.props.auction.length > 3 &&
