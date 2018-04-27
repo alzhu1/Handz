@@ -13,6 +13,8 @@ export default class SuitSymbol extends React.Component {
           return 'club'
         case 'D':
           return 'diamond'
+        case 'N':
+          return 'notrump'
         default:
             break;
       }

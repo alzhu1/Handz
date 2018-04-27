@@ -72,9 +72,23 @@ def find_dummy(seat):
 #     elif n % 4 == 3:
 #         return 'west'
 
-def assign_contract():
+def assign_contract(n,s):
+    hcp = n.hcp + s.hcp
+    d = {}
+    d['spade_fit'] = len(n.spades) + len(s.spades)
+    d['heart_fit'] = len(n.hearts) + len(s.hearts)
+    d['diamond_fit'] = len(n.diamonds) + len(s.diamonds)
+    d['club_fit'] = len(n.clubs) + len(s.clubs)
+    biggest_fit = max(d, key=d.get)
 
-    return (1,'S','S')
+    if d[biggest_fit] > 7:
+        strain = biggest_fit[0].upper()
+    else:
+        strain = 'N'
+
+    level = max(1,int((hcp - 16)/3))
+    # return (1,'S')
+    return (level,strain)
 
 
 class SockConsumer(ReduxConsumer):
@@ -191,9 +205,8 @@ class SockConsumer(ReduxConsumer):
 
             # set contract for single player (south)
             table.update_auction('PPPP')
-            # contract_tuple = assign_contract()
-            # print(*contract_tuple)
-            self.SET_CONTRACT(1,'S','S')
+            contract_tuple = assign_contract(table.deal.north,table.deal.south)
+            self.SET_CONTRACT(*contract_tuple, seat)
             table = BridgeTable.objects.get(pk=table.id)
         else:
             # create table and generate deal without robots

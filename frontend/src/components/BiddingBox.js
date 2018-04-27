@@ -107,13 +107,30 @@ class BiddingBox extends React.Component {
         marginLeft: '20px'
       }
 
+      let font_styles = {
+        fontSize: 'xx-large',
+        fontWeight: 'bold'
+      }
+
+
+      if (this.props.contract.charAt(1) === 'N'){
         return (
           <div style={styles}>
-            {this.props.contract.charAt(0)}
+            <span style={font_styles}>{this.props.contract.charAt(0)}NT </span>
+            by {this.fullSeat(this.props.contract.charAt(2))}
+          </div>
+        )
+      }
+      else {
+        return (
+          <div style={styles}>
+            <span style={font_styles}>{this.props.contract.charAt(0)}</span>
             <SuitSymbol suit={this.props.contract.charAt(1)}/>
             by {this.fullSeat(this.props.contract.charAt(2))}
           </div>
         )
+      }
+
     }
     else {
       return <div />
