@@ -700,7 +700,6 @@ class BridgeTable(models.Model):
         # if auction is not over, do nothing, otherwise set contract and begin play
         auction_string = str(level) + strain + declarer[0].upper()
         self.contract = parse_contract(auction_string)
-
         # # set opening leader to be left of declarer
         # self.direction_to_act = self.find_next_actor()
         # self.direction_to_act = self.find_prev_actor()

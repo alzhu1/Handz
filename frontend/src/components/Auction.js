@@ -14,16 +14,16 @@ class Auction extends React.Component {
 
   declarerN(direction){
     if (direction === 'north'){
-      return 0
-    }
-    else if (direction === 'south'){
       return 2
     }
+    else if (direction === 'south'){
+      return 0
+    }
     else if (direction === 'east'){
-      return 1
+      return 3
     }
     else if (direction === 'west'){
-      return 3
+      return 1
     }
   }
 
@@ -59,6 +59,13 @@ class Auction extends React.Component {
           this.props.auction[this.props.auction.length - 3] === 'P')){
             // empty
           }
+      else if (this.props.auction.length === 0){
+        bids.push(
+          <div style={this.gridRowColumn(0,2)}>
+            ?
+          </div>
+        )
+      }
       else {
         let i = this.props.auction.length
         let c = (i % 4 + declarer_n) + 1

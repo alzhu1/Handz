@@ -72,6 +72,11 @@ def find_dummy(seat):
 #     elif n % 4 == 3:
 #         return 'west'
 
+def assign_contract():
+
+    return (1,'S','S')
+
+
 class SockConsumer(ReduxConsumer):
     channel_session_user = True
     http_user = True
@@ -175,19 +180,24 @@ class SockConsumer(ReduxConsumer):
         if content['table_type'] == 'single':
             # create table and generate deal with robots
             table = BridgeTable.objects.create_deal(robot=True, NS_min=17)
-            # print('robot')
-            # print(table.north.robot)
-            # print(table.south.robot)
+
+            # set seat to South
+            seat = 'south'
+
             content['id'] = table.id
             self.JOIN_TABLE(content)
-            content['seat'] = 'south'
+            content['seat'] = seat
             self.TAKE_SEAT(content)
+
+            # set contract for single player (south)
+            table.update_auction('PPPP')
+            # contract_tuple = assign_contract()
+            # print(*contract_tuple)
+            self.SET_CONTRACT(1,'S','S')
+            table = BridgeTable.objects.get(pk=table.id)
         else:
             # create table and generate deal without robots
             table = BridgeTable.objects.create_deal()
-            # print('robot')
-            # print(table.north.robot)
-            # print(table.south.robot)
             content['id'] = table.id
             self.send_to_group('all',content)
         table.save()
@@ -307,12 +317,12 @@ class SockConsumer(ReduxConsumer):
             # update table members
             self.UPDATE_TABLE_SEATS()
 
-            if table.contract != None:
-                self.GET_CONTRACT(table.contract.contract_string)
-                declarer = table.contract.declarer
-                dummy_hand = table.deal.direction(find_dummy(declarer))
-                self.GET_DUMMY_HAND(dummy_hand)
-                self.GET_DECLARER(declarer)
+            # if table.contract != None:
+            #     self.GET_CONTRACT(table.contract.contract_string)
+            #     declarer = table.contract.declarer
+            #     dummy_hand = table.deal.direction(find_dummy(declarer))
+            #     self.GET_DUMMY_HAND(dummy_hand)
+            #     self.GET_DECLARER(declarer)
 
     @action('LEAVE_SEAT')
     def LEAVE_SEAT(self, action):
@@ -431,23 +441,32 @@ class SockConsumer(ReduxConsumer):
         print('SET_CONTRACT')
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
-        table = BridgeTable.objects.get(pk=table_id)
 
-        # print(level)
-        # print(strain)
-        # print(declarer)
+        # BridgeTable.objects.get(pk=table_id).set_contract(level, strain, declarer)
 
-        table.set_contract(level, strain, declarer)
+        t = BridgeTable.objects.get(pk=table_id)
+        t.set_contract(level, strain, declarer)
 
-        contract = table.contract.contract_string
+        # print(table.contract.contract_string)
+        # table.save()
+        # print(table.contract.contract_string)
+        # table = BridgeTable.objects.get(pk=table_id)
+        # print(table.contract.contract_string)
+        # table = BridgeTable.objects.get(pk=table_id)
+        # print(table.contract.contract_string)
 
-        print('contract')
-        print(contract)
+        contract = t.contract.contract_string
+
+        # print('contract')
+        # print(contract)
+        print('declarer')
+        print(declarer)
 
         self.GET_CONTRACT(contract)
 
-        dummy_hand = table.deal.direction(find_dummy(declarer))
-        self.GET_DUMMY_HAND(dummy_hand)
+        # dummy_hand = t.deal.direction(find_dummy(declarer))
+        # self.GET_DUMMY_HAND(dummy_hand)
+
 
         self.GET_DECLARER(declarer)
 
@@ -502,6 +521,8 @@ class SockConsumer(ReduxConsumer):
                   })
 
     def GET_DECLARER(self, declarer):
+        print('GET_DECLARER')
+        print(declarer)
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
         self.send_to_group(str(table_id), {
@@ -635,6 +656,8 @@ class SockConsumer(ReduxConsumer):
         username = self.message.channel_session['user']
         table_id = self.message.channel_session['table_id']
         table = BridgeTable.objects.get(pk=table_id)
+        print(table_id)
+        print(table.auction)
 
         if table.contract != None:
             card = action['card']
@@ -758,6 +781,7 @@ class SockConsumer(ReduxConsumer):
 
         table = BridgeTable.objects.get(pk=table_id)
         next_seat = table.get_seat(table.find_next_actor())
+        print(next_seat.direction)
         if len(table.trick.trick_string) == 12:
             next_seat = table.get_seat(table.trick_winner())
 
@@ -803,12 +827,13 @@ class SockConsumer(ReduxConsumer):
             #               })
 
         table = BridgeTable.objects.get(pk=table_id)
-        print('tricks')
-        print(table.EW_tricks_taken + table.NS_tricks_taken)
+        # print('tricks')
+        # print(table.EW_tricks_taken + table.NS_tricks_taken)
         if table.EW_tricks_taken + table.NS_tricks_taken == 13:
             self.CALC_SCORE()
         elif (next_seat.robot and
-                (not table.contract or find_dummy(table.contract.declarer) != next_seat.direction)):
+                (not table.contract or find_dummy(table.contract.declarer)
+                                                != next_seat.direction)):
             send_next_actor_to_front_end(self, table.direction_to_act)
             table.next_actor()
             print('table.EW_tricks_taken + table.NS_tricks_taken')
@@ -831,14 +856,9 @@ class SockConsumer(ReduxConsumer):
         table = BridgeTable.objects.get(pk=table_id)
         if table.phase == 'auction':
             table.update_auction('P')
-            # table.save()
-            # print('from robot ai')
-            # print(table.auction)
-            # print(table.id)
             self.auction_front_end_actions()
         elif table.phase == 'play':
             # play random card
             card = RobotCardPlay(table)
             print(card)
             self.play_card_front_end(card)
-            # self.play_card_front_end()

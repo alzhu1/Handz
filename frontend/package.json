@@ -5,6 +5,7 @@
   "dependencies": {
     "aws-amplify": "^0.3.0",
     "aws-amplify-react": "^0.1.39",
+    "awsmobile-cli": "^1.1.1",
     "axios": "^0.16.2",
     "cardsJS": "^1.1.1",
     "classnames": "^2.2.5",
