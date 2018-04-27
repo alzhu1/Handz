@@ -174,7 +174,7 @@ class SockConsumer(ReduxConsumer):
         # send action to frontend
         if content['table_type'] == 'single':
             # create table and generate deal with robots
-            table = BridgeTable.objects.create_deal(robot=True, NS_min=True)
+            table = BridgeTable.objects.create_deal(robot=True, NS_min=17)
             # print('robot')
             # print(table.north.robot)
             # print(table.south.robot)
