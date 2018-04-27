@@ -1,26 +1,11 @@
 import React from 'react';
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
-import SuitSymbol from 'components/SuitSymbol';
 
 import Button from 'material-ui/Button';
+import Contract from 'components/Contract';
 
 class BiddingBox extends React.Component {
-
-  fullSeat(abbr) {
-    switch(abbr) {
-      case 'S':
-        return 'South'
-      case 'N':
-        return 'North'
-      case 'W':
-        return 'West'
-      case 'E':
-        return 'East'
-      default:
-          break;
-    }
-  }
 
   render() {
 
@@ -103,35 +88,7 @@ class BiddingBox extends React.Component {
            )
          }
     else if (this.props.contract !== ''){
-
-      let styles = {
-        marginLeft: '20px'
-      }
-
-      let font_styles = {
-        fontSize: 'xx-large',
-        fontWeight: 'bold'
-      }
-
-
-      if (this.props.contract.charAt(1) === 'N'){
-        return (
-          <div style={styles}>
-            <span style={font_styles}>{this.props.contract.charAt(0)}NT </span>
-            by {this.fullSeat(this.props.contract.charAt(2))}
-          </div>
-        )
-      }
-      else {
-        return (
-          <div style={styles}>
-            <span style={font_styles}>{this.props.contract.charAt(0)}</span>
-            <SuitSymbol suit={this.props.contract.charAt(1)}/>
-            by {this.fullSeat(this.props.contract.charAt(2))}
-          </div>
-        )
-      }
-
+      return <Contract />
     }
     else {
       return <div />
