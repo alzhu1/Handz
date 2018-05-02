@@ -16,6 +16,7 @@ class BottomHand extends React.Component {
     const cards = []
     // show player's cards without ordering
     const hand = this.props.hand
+    console.log(this.props.hand)
     // const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
     const handClass = "hand hhand-compact active-hand"
     var firstChild = true

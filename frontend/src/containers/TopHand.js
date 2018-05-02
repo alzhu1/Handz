@@ -18,12 +18,12 @@ class TopHand extends React.Component {
     if (this.props.dummy === this.props.direction && this.props.show_dummy &&
       this.state.handClass === 'hand vhand-compact'){
       this.setState({ handClass: 'hand vhand-compact active-hand'});
-      console.log('active!')
+      // console.log('active!')
     }
     else if (this.props.dummy !== this.props.direction  &&
       this.state.handClass === 'hand vhand-compact active-hand') {
       this.setState({ handClass: 'hand vhand-compact'});
-      console.log('not active!')
+      // console.log('not active!')
     }
   }
 

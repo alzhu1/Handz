@@ -298,6 +298,8 @@ export const show_dummy = (state = false, action) => {
           else {
             return true
           }
+        case a.SHOW_DUMMY:
+            return true;
         default:
             break;
     }

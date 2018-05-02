@@ -77,5 +77,17 @@ export const mapDispatchToProps = (dispatch,emit) => {
       chooseStrainThunk: (suit) => {
         dispatch(th.chooseStrainThunk(suit));
       },
+      getHand: (hand) => {
+        dispatch(a.getHand(hand));
+      },
+      getDummyHand: (hand) => {
+        dispatch(a.getDummyHand(hand));
+      },
+      showDummy: () => {
+        dispatch(a.showDummy());
+      },
+      getDeclarer: (declarer) => {
+        dispatch(a.getDeclarer(declarer));
+      },
     }
 };

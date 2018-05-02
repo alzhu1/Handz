@@ -75,6 +75,11 @@ export const getHand = (hand) => ({
     hand
 })
 
+export const getDummyHand = (hand) => ({
+    type: a.GET_DUMMY_HAND,
+    hand
+})
+
 
 export const takeSeat = (seat) => ({
     type: a.TAKE_SEAT,

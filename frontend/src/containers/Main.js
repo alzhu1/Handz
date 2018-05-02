@@ -18,6 +18,8 @@ import PopperExample from 'demos/PopperExample';
 import SimpleModalWrapped from 'demos/ModalDemo';
 import MotionDemo from 'demos/MotionDemo';
 
+import Tutorial from 'containers/tutorial/Tutorial';
+
 import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 
 class Main extends React.Component {
@@ -52,6 +54,8 @@ class Main extends React.Component {
                 <Route exact path='/modal' component={SimpleModalWrapped} />
 
                 <Route exact path='/motion' component={MotionDemo} />
+
+                <Route exact path='/tutorial' component={Tutorial} />
 
             </Switch>
         );
