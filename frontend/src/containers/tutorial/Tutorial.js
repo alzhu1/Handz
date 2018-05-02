@@ -29,15 +29,15 @@ class Tutorial extends React.Component {
       n: 1,
     };
   }
-
-  componentWillMount() {
-    const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
-    const dummy_hand = {'spades': "234", 'hearts': "234",'diamonds': "234", 'clubs': "2345"}
-    this.props.getHand(hand)
-    this.props.getDummyHand(dummy_hand)
-    this.props.getDeclarer('south')
-    this.props.showDummy()
-  }
+  
+  // componentWillMount() {
+  //   const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
+  //   const dummy_hand = {'spades': "234", 'hearts': "234",'diamonds': "234", 'clubs': "2345"}
+  //   this.props.getHand(hand)
+  //   this.props.getDummyHand(dummy_hand)
+  //   this.props.getDeclarer('south')
+  //   this.props.showDummy()
+  // }
 
   handleOpen = () => {
     this.setState({ open: true });

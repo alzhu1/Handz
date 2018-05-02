@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import Button from 'material-ui/Button';
 
 import BottomHand from 'containers/BottomHand';
-import TopHand from 'containers/TopHand';
+import TopHandContainer from 'containers/TopHandContainer';
 import SideHand from 'containers/SideHand';
 
 class Hand extends React.Component {
@@ -106,7 +106,7 @@ class Hand extends React.Component {
          body =
           (
             <div>
-            <BottomHand/>
+            <BottomHand hand={this.props.hand}/>
             <Button onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <p align="left">
                 {cardinal}: {this.props.table_seats[cardinal]}
@@ -119,7 +119,7 @@ class Hand extends React.Component {
          body =
           (
             <div>
-            <TopHand direction={cardinal} />
+            <TopHandContainer direction={cardinal} />
             <Button disabled
               onClick={()=> this.props.takeSeatThunk(cardinal,this.props.table_id)}>
               <p align="left">

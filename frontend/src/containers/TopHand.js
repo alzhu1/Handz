@@ -1,31 +1,9 @@
 import React from 'react';
 import Card from 'components/Card';
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
 import SuitSymbol from 'components/SuitSymbol';
 
 
 class TopHand extends React.Component {
-
-  constructor(){
-    super()
-    this.state = {
-      handClass: 'hand vhand-compact'
-    };
-  }
-
-  componentWillUpdate() {
-    if (this.props.dummy === this.props.direction && this.props.show_dummy &&
-      this.state.handClass === 'hand vhand-compact'){
-      this.setState({ handClass: 'hand vhand-compact active-hand'});
-      // console.log('active!')
-    }
-    else if (this.props.dummy !== this.props.direction  &&
-      this.state.handClass === 'hand vhand-compact active-hand') {
-      this.setState({ handClass: 'hand vhand-compact'});
-      // console.log('not active!')
-    }
-  }
 
   render() {
     const spades = []
@@ -33,9 +11,14 @@ class TopHand extends React.Component {
     const clubs = []
     const diamonds = []
 
+    const hand_class = this.props.hand_class
+
+    console.log('hand_dist')
+    console.log(this.props.hand_dist)
+
     // show player's cards without ordering
-    if (this.props.dummy === this.props.direction && this.props.show_dummy){
-        const hand = this.props.dummy_hand
+    if (this.props.is_dummy && this.props.show_dummy){
+        const hand = this.props.hand
 
         let addStyles = {
           cursor: 'pointer',
@@ -44,45 +27,45 @@ class TopHand extends React.Component {
         for (var i = 0; i < hand['spades'].length; i++) {
             let firstChild = (i===0)
             spades.push(<Card card={hand['spades'][i]+ 'S' } addStyle={addStyles}
-            parentClass={this.state.handClass} firstChild={firstChild}/>)
+            parentClass={hand_class} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['hearts'].length; i++) {
             let firstChild = (i===0)
             hearts.push(<Card card={hand['hearts'][i]+ 'H' } addStyle={addStyles}
-            parentClass={this.state.handClass} firstChild={firstChild}/>)
+            parentClass={hand_class} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['clubs'].length; i++) {
             let firstChild = (i===0)
             clubs.push(<Card card={hand['clubs'][i]+ 'C' } addStyle={addStyles}
-            parentClass={this.state.handClass} firstChild={firstChild}/>)
+            parentClass={hand_class} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['diamonds'].length; i++) {
             let firstChild = (i===0)
             diamonds.push(<Card card={hand['diamonds'][i]+ 'D' } addStyle={addStyles}
-            parentClass={this.state.handClass} firstChild={firstChild}/>)
+            parentClass={hand_class} firstChild={firstChild}/>)
         }
       }
     else {
-        const hand = this.props.other_hands[this.props.direction]
+        const hand = this.props.hand_dist
         for (var i = 0; i < hand['spades']; i++) {
             let firstChild = (i===0)
             spades.push(<Card card={'Blue_Back'}
-            parentClass={this.state.handClass} firstChild={firstChild}/>)
+            parentClass={hand_class} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['hearts']; i++) {
             let firstChild = (i===0)
             hearts.push(<Card card={'Blue_Back'}
-            parentClass={this.state.handClass} firstChild={firstChild}/>)
+            parentClass={hand_class} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['clubs']; i++) {
             let firstChild = (i===0)
             clubs.push(<Card card={'Blue_Back'}
-            parentClass={this.state.handClass} firstChild={firstChild}/>)
+            parentClass={hand_class} firstChild={firstChild}/>)
         }
         for (var i = 0; i < hand['diamonds']; i++) {
             let firstChild = (i===0)
             diamonds.push(<Card card={'Blue_Back'}
-            parentClass={this.state.handClass} firstChild={firstChild}/>)
+            parentClass={hand_class} firstChild={firstChild}/>)
         }
       }
 
@@ -97,39 +80,34 @@ class TopHand extends React.Component {
         paddingRight: '1vw'
       }
 
+    console.log(hand_class)  
+
 
     return (
-      <div>
-        <div style={styles2}>
-          <SuitSymbol suit='spade' />
-          <SuitSymbol suit='heart' />
-          <SuitSymbol suit='diamond' />
-          <SuitSymbol suit='club' />
-        </div>
         <div style={styles1}>
-          <div className={this.state.handClass}>
+          <div className={hand_class}>
             {spades}
           </div>
-          <div className={this.state.handClass}>
+          <div className={hand_class}>
             {hearts}
           </div>
-          <div className={this.state.handClass}>
+          <div className={hand_class}>
             {diamonds}
           </div>
-          <div className={this.state.handClass}>
+          <div className={hand_class}>
             {clubs}
           </div>
         </div>
-      </div>
     )
   }
 }
 
-// <div style={styles}>
+// <div style={styles2}>
 //   <SuitSymbol suit='spade' />
 //   <SuitSymbol suit='heart' />
 //   <SuitSymbol suit='diamond' />
 //   <SuitSymbol suit='club' />
 // </div>
 
-export default connect(mapStateToProps, mapDispatchToProps)(TopHand);
+
+export default (TopHand);

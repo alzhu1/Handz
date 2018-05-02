@@ -11,6 +11,7 @@ const T3 = () => {
 
   }
 
+  const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
   const title = 'There is a second hand you control directly facing you. \
                   You will use your two hands to work together to win tricks.'
 
@@ -20,7 +21,7 @@ const T3 = () => {
         {title}
       </Typography>
       <TopHand direction='north'/>
-      <BottomHand/>
+      <BottomHand hand={hand}/>
     </div>
   )
 }

@@ -1,7 +1,5 @@
 import React from 'react';
 import Card from 'components/Card';
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
 
 
 class BottomHand extends React.Component {
@@ -71,6 +69,6 @@ class BottomHand extends React.Component {
 // <div className='hand' data-hand='flow: horizontal; spacing: 0.2; width: 110'>
 // <div className='hand hhand-compact active-hand'>
 // {cards}
-export default connect(mapStateToProps, mapDispatchToProps)(BottomHand);
+export default (BottomHand);
 
 // key={_.uniqueId()}
