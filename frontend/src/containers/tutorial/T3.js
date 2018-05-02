@@ -2,13 +2,19 @@ import React from 'react';
 import Typography from 'material-ui/Typography';
 import BottomHand from 'containers/BottomHand';
 import TopHand from 'containers/TopHand';
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
-
 const T3 = () => {
 
   const textStyle = {
 
+  }
+
+  const bottomHandStyle = {
+    textAlign: 'center'
+  }
+
+  const topHandStyle = {
+    textAlign: 'center',
+    margin: 'auto'
   }
 
   const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
@@ -20,10 +26,17 @@ const T3 = () => {
       <Typography style={textStyle} variant="title">
         {title}
       </Typography>
-      <TopHand direction='north'/>
-      <BottomHand hand={hand}/>
+      <div style={topHandStyle}>
+        <TopHand show_dummy={true}
+                is_dummy={true}
+                hand={hand}
+                hand_class={'hand vhand-compact active-hand'}/>
+      </div>
+      <div style={bottomHandStyle}>
+        <BottomHand hand={hand}/>
+      </div>
     </div>
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(T3);
+export default (T3);

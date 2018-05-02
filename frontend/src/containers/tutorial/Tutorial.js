@@ -7,8 +7,6 @@ import T1 from 'containers/tutorial/T1';
 import T2 from 'containers/tutorial/T2';
 import T3 from 'containers/tutorial/T3';
 
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
 
 const styles = theme => ({
   paper: {
@@ -29,7 +27,7 @@ class Tutorial extends React.Component {
       n: 1,
     };
   }
-  
+
   // componentWillMount() {
   //   const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
   //   const dummy_hand = {'spades': "234", 'hearts': "234",'diamonds': "234", 'clubs': "2345"}
@@ -119,4 +117,4 @@ Tutorial.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Tutorial));
+export default (withStyles(styles)(Tutorial));

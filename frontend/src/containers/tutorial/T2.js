@@ -1,13 +1,15 @@
 import React from 'react';
 import Typography from 'material-ui/Typography';
 import BottomHand from 'containers/BottomHand';
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
 
 const T2 = () => {
 
   const textStyle = {
 
+  }
+
+  const handStyle = {
+    textAlign: 'center'
   }
 
   const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
@@ -22,9 +24,11 @@ const T2 = () => {
       <Typography style={textStyle} variant="title">
         {body}
       </Typography>
-      <BottomHand hand={hand}/>
+      <div style={handStyle}>
+        <BottomHand hand={hand}/>
+      </div>
     </div>
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(T2);
+export default (T2);

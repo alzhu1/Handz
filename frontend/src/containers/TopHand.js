@@ -70,8 +70,8 @@ class TopHand extends React.Component {
       }
 
       let styles1 = {
-        display: 'flex',
-        justifyContent: 'space-between'
+        // display: 'flex',
+        // justifyContent: 'space-between'
       }
 
       let styles2 = {
@@ -80,7 +80,7 @@ class TopHand extends React.Component {
         paddingRight: '1vw'
       }
 
-    console.log(hand_class)  
+    console.log(hand_class)
 
 
     return (
