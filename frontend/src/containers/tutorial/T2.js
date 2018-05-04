@@ -13,8 +13,11 @@ const T2 = () => {
   }
 
   const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
-  const title = 'Each person is dealt 13 cards from a standard 52 card deck.'
-  const body = 'There are 4 suits, spades hearts diamonds and clubs. '
+  const title = 'A hand consists of 13 cards from a standard 52 card deck. \
+                There are 4 suits, spades hearts diamonds and clubs.'
+  const body = 'Four hands is dealt to four different seats, named after \
+                the directions of a compass: North, East, South, and West.\
+                You will be sitting South.'
 
   return (
     <div>

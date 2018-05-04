@@ -6,7 +6,8 @@ import Button from 'material-ui/Button';
 import T1 from 'containers/tutorial/T1';
 import T2 from 'containers/tutorial/T2';
 import T3 from 'containers/tutorial/T3';
-
+import T4 from 'containers/tutorial/T4';
+import T5 from 'containers/tutorial/T5';
 
 const styles = theme => ({
   paper: {
@@ -59,8 +60,22 @@ class Tutorial extends React.Component {
       case 3:
         return <T3/>
       case 4:
-        return <div/>
+        return <T4/>
       case 5:
+        return <T5/>
+      case 6:
+        return <T2/>
+      case 7:
+        return <T3/>
+      case 8:
+        return <T4/>
+      case 9:
+        return <T2/>
+      case 10:
+        return <T3/>
+      case 11:
+        return <T4/>
+      case 12:
         this.setState({ n: 1 });
         this.handleClose()
       default:

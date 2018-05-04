@@ -39,7 +39,10 @@ class TableContainer extends React.Component {
               <BiddingBox />
             </div>
             <div className="PlayedCardArea">
-              <PlayedCardArea />
+              <PlayedCardArea seat={this.props.seat}
+                              trick={this.props.trick}
+                              prev_trick={this.props.prev_trick}
+                              trick_string={this.props.trick_string}/>
             </div>
             <div className="TricksArea">
               <TricksArea />

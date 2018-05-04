@@ -1,7 +1,5 @@
 import React from 'react';
 import Card from 'components/Card';
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
 import {Motion, spring, presets} from 'react-motion';
 
 class PlayedCard extends React.Component {
@@ -119,4 +117,4 @@ class PlayedCard extends React.Component {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayedCard);
+export default (PlayedCard);

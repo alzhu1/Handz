@@ -88,7 +88,7 @@ class BiddingBox extends React.Component {
            )
          }
     else if (this.props.contract !== ''){
-      return <Contract />
+      return <Contract contract={this.props.contract}/>
     }
     else {
       return <div />

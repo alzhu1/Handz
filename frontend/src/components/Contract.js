@@ -1,6 +1,4 @@
 import React from 'react';
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
 import SuitSymbol from 'components/SuitSymbol';
 import Tooltip from 'material-ui/Tooltip';
 
@@ -57,4 +55,4 @@ class Contract extends React.Component {
 }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Contract);
+export default (Contract);

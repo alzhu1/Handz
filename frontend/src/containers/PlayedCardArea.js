@@ -1,7 +1,5 @@
 import React from 'react';
 import PlayedCard from 'containers/PlayedCard';
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
 
 const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
@@ -19,6 +17,7 @@ class PlayedCardArea extends React.Component {
   }
 
   componentWillMount() {
+    this.setState({trick : this.props.trick})
     document.addEventListener('click', this.handleClick, false);
   }
 
@@ -66,8 +65,6 @@ class PlayedCardArea extends React.Component {
 
     }
   }
-
-
 
   changeTrick(nextProps) {
     // first trick only
@@ -327,6 +324,8 @@ class PlayedCardArea extends React.Component {
     let winner = this.seatPosition(this.seatAbbr(this.props.trick_string[this.props.trick_string.length - 1],this.props.seat),
                   this.props.seat)
 
+    console.log(winner)
+
     return (
         <div>
           <PlayedCard position='top' card={trick[top_seat]}
@@ -343,4 +342,4 @@ class PlayedCardArea extends React.Component {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayedCardArea);
+export default (PlayedCardArea);
