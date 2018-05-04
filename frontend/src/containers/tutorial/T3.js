@@ -25,7 +25,7 @@ const T3 = () => {
 
   return (
     <div>
-      <Typography style={textStyle} variant="title">
+      <Typography style={textStyle}>
         {title}
       </Typography>
       <div style={topHandStyle}>

@@ -12,10 +12,10 @@ const T1 = () => {
 
   return (
     <div>
-      <Typography style={textStyle} variant="title">
+      <Typography style={textStyle}>
         {title}
       </Typography>
-      <Typography style={textStyle} variant="title">
+      <Typography style={textStyle}>
         {body}
       </Typography>
     </div>
