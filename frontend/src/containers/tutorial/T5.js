@@ -2,30 +2,43 @@ import React from 'react';
 import Typography from 'material-ui/Typography';
 import PlayedCardArea from 'containers/PlayedCardArea';
 
+const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
+
 class T5 extends React.Component {
 
   constructor(){
     super()
     this.timer = null;
     this.state = {
-      trick: {'north': '', 'south': '', 'east': '', 'west': ''},
-      prev_trick: {'north': '', 'south': '', 'east': '', 'west': ''},
-      collapse: false
+      trick: empty_trick,
+      prev_trick: empty_trick,
+      collapse: false,
+      trick_string: ''
     };
   }
 
   trickAnimation() {
     var trick1 = {'north': '', 'south': '', 'east': '', 'west': 'QS'}
-    setTimeout(function() {this.setState({trick : trick1})}.bind(this), 1000);
     var trick2 = {'north': 'KS', 'south': '', 'east': '', 'west': 'QS'}
-    setTimeout(function() {this.setState({trick : trick2})}.bind(this), 2000);
     var trick3 = {'north': 'KS', 'south': '', 'east': 'AS', 'west': 'QS'}
-    setTimeout(function() {this.setState({trick : trick3})}.bind(this), 3000);
     var trick4 = {'north': 'KS', 'south': '2S', 'east': 'AS', 'west': 'QS'}
+
+    this.setState({prev_trick : empty_trick})
+    this.setState({trick : empty_trick})
+    this.setState({trick_string : ''})
+
+    setTimeout(function() {this.setState({trick : trick1})}.bind(this), 1000);
+
+    setTimeout(function() {this.setState({trick : trick2})}.bind(this), 2000);
+
+    setTimeout(function() {this.setState({trick : trick3})}.bind(this), 3000);
+
     // setTimeout(function() {this.setState({trick : trick4})}.bind(this), 4000);
     setTimeout(function() {this.setState({prev_trick : trick4})}.bind(this), 3000);
-    var empty = {'north': '', 'south': '', 'east': '', 'west': ''}
-    setTimeout(function() {this.setState({trick : empty})}.bind(this), 4000);
+    setTimeout(function() {this.setState({trick_string : 'E'})}.bind(this), 3000);
+
+
+    setTimeout(function() {this.setState({trick : empty_trick})}.bind(this), 4000);
   }
 
   componentWillMount() {
@@ -66,7 +79,7 @@ class T5 extends React.Component {
         <PlayedCardArea seat={'south'}
                         trick={this.state.trick}
                         prev_trick={this.state.prev_trick}
-                        trick_string={''}/>
+                        trick_string={this.state.trick_string}/>
         </div>
         <Typography style={textStyle}>
           {body}
