@@ -59,6 +59,13 @@ class T9 extends React.Component {
 
   }
 
+  const contractStyle = {
+    margin: 'auto',
+    position: 'absolute',
+    left: '0%',
+    top: '40%',
+  }
+
 
   const title = 'In this example, the contract is 1 Spade, which means spades \
                 is the trump suit'
@@ -70,7 +77,7 @@ class T9 extends React.Component {
         <Typography style={textStyle}>
           {title}
         </Typography>
-        <div>
+        <div style={contractStyle}>
           <Contract contract={contract}/>
         </div>
         <div>

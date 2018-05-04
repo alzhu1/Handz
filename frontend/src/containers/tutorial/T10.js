@@ -59,6 +59,13 @@ class T10 extends React.Component {
 
   }
 
+  const contractStyle = {
+    margin: 'auto',
+    position: 'absolute',
+    left: '0%',
+    top: '40%',
+  }
+
 
   const title = 'And you can beat trump cards with higher trump cards!'
   const body = '(Remember you still have to follow suit, you cannot trump a \
@@ -71,7 +78,7 @@ class T10 extends React.Component {
         <Typography style={textStyle}>
           {title}
         </Typography>
-        <div>
+        <div style={contractStyle}>
           <Contract contract={contract}/>
         </div>
         <div>

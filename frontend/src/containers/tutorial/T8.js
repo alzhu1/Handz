@@ -8,6 +8,12 @@ const T8 = () => {
 
   }
 
+  const contractStyle = {
+    margin: 'auto',
+    position: 'absolute',
+    left: '0%',
+    top: '40%',
+  }
 
   const title = 'The contract you are assigned in the beginning will also \
                 indicate what the trump suit is.'
@@ -20,7 +26,7 @@ const T8 = () => {
       <Typography style={textStyle}>
         {title}
       </Typography>
-      <div>
+      <div style={contractStyle}>
         <Contract contract={contract}/>
       </div>
       <Typography style={textStyle}>

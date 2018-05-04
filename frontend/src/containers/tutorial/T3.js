@@ -18,7 +18,8 @@ const T3 = () => {
     margin: 'auto'
   }
 
-  const hand = {'spades': "AKQJ", 'hearts': "AKQ",'diamonds': "AKQ", 'clubs': "AKQ"}
+  const hand1 = {'spades': "KT84", 'hearts': "Q93",'diamonds': "JT65", 'clubs': "K4"}
+  const hand2 = {'spades': "AQ3", 'hearts': "J432",'diamonds': "Q3", 'clubs': "T983"}
   const title = 'You will also control the North hand, the hand directly facing you. \
                   You will use your two hands to work together to win tricks.'
 
@@ -30,14 +31,14 @@ const T3 = () => {
       <div style={topHandStyle}>
         <TopHand show_dummy={true}
                 is_dummy={true}
-                hand={hand}
+                hand={hand2}
                 hand_class={'hand vhand-compact active-hand'}/>
       </div>
       <br />
       <br />
       <br />
       <div style={bottomHandStyle}>
-        <BottomHand hand={hand}/>
+        <BottomHand hand={hand1}/>
       </div>
     </div>
   )

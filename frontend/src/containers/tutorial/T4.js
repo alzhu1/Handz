@@ -8,6 +8,13 @@ const T4 = () => {
 
   }
 
+  const contractStyle = {
+    margin: 'auto',
+    position: 'absolute',
+    left: '0%',
+    top: '40%',
+  }
+
 
   const title = 'At the beginning of each hand, you will be assigned a \
             contract consisting of a number (the level) and a suit. \
@@ -21,7 +28,7 @@ const T4 = () => {
       <Typography style={textStyle}>
         {title}
       </Typography>
-      <div>
+      <div style={contractStyle}>
         <Contract contract={contract}/>
       </div>
       <Typography style={textStyle}>

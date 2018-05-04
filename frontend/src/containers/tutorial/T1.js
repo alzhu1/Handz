@@ -4,7 +4,6 @@ import Typography from 'material-ui/Typography';
 const T1 = () => {
 
   const textStyle = {
-    fontSize: 'xx-large'
   }
 
   const title = 'Welcome to Handz!'
