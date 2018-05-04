@@ -13,8 +13,6 @@ class TopHand extends React.Component {
 
     const hand_class = this.props.hand_class
 
-    console.log('hand_dist')
-    console.log(this.props.hand_dist)
 
     // show player's cards without ordering
     if (this.props.is_dummy && this.props.show_dummy){
@@ -79,9 +77,6 @@ class TopHand extends React.Component {
         justifyContent: 'space-between',
         paddingRight: '1vw'
       }
-
-    console.log(hand_class)
-
 
     return (
         <div style={styles1}>

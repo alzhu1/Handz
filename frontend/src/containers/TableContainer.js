@@ -45,7 +45,7 @@ class TableContainer extends React.Component {
                               trick_string={this.props.trick_string}/>
             </div>
             <div className="TricksArea">
-              <TricksArea />
+              <TricksArea trick_string={this.props.trick_string}/>
             </div>
             <BackButton />
             <ScoringModal />

@@ -1,10 +1,11 @@
 import React from 'react';
 import Typography from 'material-ui/Typography';
 import PlayedCardArea from 'containers/PlayedCardArea';
+import Contract from 'components/Contract';
 
 const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
 
-class T5 extends React.Component {
+class T9 extends React.Component {
 
   constructor(){
     super()
@@ -18,10 +19,10 @@ class T5 extends React.Component {
   }
 
   trickAnimation() {
-    var trick1 = {'north': '', 'south': '', 'east': '', 'west': 'QS'}
-    var trick2 = {'north': 'KS', 'south': '', 'east': '', 'west': 'QS'}
-    var trick3 = {'north': 'KS', 'south': '', 'east': 'AS', 'west': 'QS'}
-    var trick4 = {'north': 'KS', 'south': '2S', 'east': 'AS', 'west': 'QS'}
+    var trick1 = {'north': '', 'south': '', 'east': '', 'west': '2H'}
+    var trick2 = {'north': 'KH', 'south': '', 'east': '', 'west': '2H'}
+    var trick3 = {'north': 'KH', 'south': '', 'east': '2S', 'west': '2H'}
+    var trick4 = {'north': 'KH', 'south': '4H', 'east': '2S', 'west': '2H'}
 
     this.setState({prev_trick : empty_trick})
     this.setState({trick : empty_trick})
@@ -59,19 +60,19 @@ class T5 extends React.Component {
   }
 
 
-  const title = 'At the start of the hand, your left hand opponent (East) \
-                will choose a card to play. The play will proceed clockwise, \
-                with each hand playing a card. The result of a complete \
-                revolution of cards is called a trick.'
-  const body = 'EVERYONE MUST FOLLOW SUIT TO THE FIRST PLAYED CARD. \
-                This is the most important rule of the game!'
-
+  const title = 'In this example, the contract is 1 Spade, which means spades \
+                is the trump suit'
+  const body = 'Any spade will win the trick compared to every other suit.'
+  const contract = '1SS'
 
     return (
       <div>
         <Typography style={textStyle}>
           {title}
         </Typography>
+        <div>
+          <Contract contract={contract}/>
+        </div>
         <div>
         <PlayedCardArea seat={'south'}
                         trick={this.state.trick}
@@ -86,4 +87,4 @@ class T5 extends React.Component {
   }
 }
 
-export default (T5);
+export default (T9);

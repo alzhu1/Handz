@@ -1,10 +1,11 @@
 import React from 'react';
 import Typography from 'material-ui/Typography';
 import PlayedCardArea from 'containers/PlayedCardArea';
+import Contract from 'components/Contract';
 
 const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
 
-class T5 extends React.Component {
+class T10 extends React.Component {
 
   constructor(){
     super()
@@ -18,10 +19,10 @@ class T5 extends React.Component {
   }
 
   trickAnimation() {
-    var trick1 = {'north': '', 'south': '', 'east': '', 'west': 'QS'}
-    var trick2 = {'north': 'KS', 'south': '', 'east': '', 'west': 'QS'}
-    var trick3 = {'north': 'KS', 'south': '', 'east': 'AS', 'west': 'QS'}
-    var trick4 = {'north': 'KS', 'south': '2S', 'east': 'AS', 'west': 'QS'}
+    var trick1 = {'north': '', 'south': '', 'east': '', 'west': '2H'}
+    var trick2 = {'north': 'KH', 'south': '', 'east': '', 'west': '2H'}
+    var trick3 = {'north': 'KH', 'south': '', 'east': '2S', 'west': '2H'}
+    var trick4 = {'north': 'KH', 'south': '3S', 'east': '2S', 'west': '2H'}
 
     this.setState({prev_trick : empty_trick})
     this.setState({trick : empty_trick})
@@ -35,7 +36,7 @@ class T5 extends React.Component {
 
     // setTimeout(function() {this.setState({trick : trick4})}.bind(this), 4000);
     setTimeout(function() {this.setState({prev_trick : trick4})}.bind(this), 3000);
-    setTimeout(function() {this.setState({trick_string : 'E'})}.bind(this), 3000);
+    setTimeout(function() {this.setState({trick_string : 'S'})}.bind(this), 3000);
 
 
     setTimeout(function() {this.setState({trick : empty_trick})}.bind(this), 4000);
@@ -59,19 +60,20 @@ class T5 extends React.Component {
   }
 
 
-  const title = 'At the start of the hand, your left hand opponent (East) \
-                will choose a card to play. The play will proceed clockwise, \
-                with each hand playing a card. The result of a complete \
-                revolution of cards is called a trick.'
-  const body = 'EVERYONE MUST FOLLOW SUIT TO THE FIRST PLAYED CARD. \
-                This is the most important rule of the game!'
-
+  const title = 'And you can beat trump cards with higher trump cards!'
+  const body = '(Remember you still have to follow suit, you cannot trump a \
+                  trick until you run out of the suit of the the \
+                  first card in the trick)'
+  const contract = '1SS'
 
     return (
       <div>
         <Typography style={textStyle}>
           {title}
         </Typography>
+        <div>
+          <Contract contract={contract}/>
+        </div>
         <div>
         <PlayedCardArea seat={'south'}
                         trick={this.state.trick}
@@ -86,4 +88,4 @@ class T5 extends React.Component {
   }
 }
 
-export default (T5);
+export default (T10);

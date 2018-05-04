@@ -4,7 +4,7 @@ import PlayedCardArea from 'containers/PlayedCardArea';
 
 const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
 
-class T5 extends React.Component {
+class T6 extends React.Component {
 
   constructor(){
     super()
@@ -18,10 +18,10 @@ class T5 extends React.Component {
   }
 
   trickAnimation() {
-    var trick1 = {'north': '', 'south': '', 'east': '', 'west': 'QS'}
-    var trick2 = {'north': 'KS', 'south': '', 'east': '', 'west': 'QS'}
-    var trick3 = {'north': 'KS', 'south': '', 'east': 'AS', 'west': 'QS'}
-    var trick4 = {'north': 'KS', 'south': '2S', 'east': 'AS', 'west': 'QS'}
+    var trick1 = {'north': '', 'south': '', 'east': '', 'west': '2S'}
+    var trick2 = {'north': '3S', 'south': '', 'east': '', 'west': '2S'}
+    var trick3 = {'north': '3S', 'south': '', 'east': '4S', 'west': '2S'}
+    var trick4 = {'north': '3S', 'south': '5D', 'east': '4S', 'west': '2S'}
 
     this.setState({prev_trick : empty_trick})
     this.setState({trick : empty_trick})
@@ -54,17 +54,18 @@ class T5 extends React.Component {
 
   render(){
 
+
   const textStyle = {
 
   }
 
 
-  const title = 'At the start of the hand, your left hand opponent (East) \
-                will choose a card to play. The play will proceed clockwise, \
-                with each hand playing a card. The result of a complete \
-                revolution of cards is called a trick.'
-  const body = 'EVERYONE MUST FOLLOW SUIT TO THE FIRST PLAYED CARD. \
-                This is the most important rule of the game!'
+  const title = 'If have no more cards of the suit that was led and \
+                  therefore cannot follow suit, you must “discard” a \
+                  card from another suit. Unfortunately, discards cannot \
+                  win the trick.'
+  const body = 'The biggest card (that follows suit) wins, with the Ace \
+                being the highest and the 2 the lowest'
 
 
     return (
@@ -86,4 +87,4 @@ class T5 extends React.Component {
   }
 }
 
-export default (T5);
+export default (T6);

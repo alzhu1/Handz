@@ -324,7 +324,6 @@ class PlayedCardArea extends React.Component {
     let winner = this.seatPosition(this.seatAbbr(this.props.trick_string[this.props.trick_string.length - 1],this.props.seat),
                   this.props.seat)
 
-    console.log(winner)
 
     return (
         <div>

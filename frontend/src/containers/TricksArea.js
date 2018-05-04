@@ -1,7 +1,5 @@
 import React from 'react';
 import EstablishedCard from 'containers/EstablishedCard';
-import {mapStateToProps, mapDispatchToProps} from 'redux/map';
-import {connect} from 'react-redux';
 
 class TricksArea extends React.Component {
 
@@ -37,4 +35,4 @@ class TricksArea extends React.Component {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(TricksArea);
+export default (TricksArea);

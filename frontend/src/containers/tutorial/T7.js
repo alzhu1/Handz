@@ -4,7 +4,7 @@ import PlayedCardArea from 'containers/PlayedCardArea';
 
 const empty_trick = {'north': '', 'south': '', 'east': '', 'west': ''}
 
-class T5 extends React.Component {
+class T7 extends React.Component {
 
   constructor(){
     super()
@@ -18,10 +18,11 @@ class T5 extends React.Component {
   }
 
   trickAnimation() {
-    var trick1 = {'north': '', 'south': '', 'east': '', 'west': 'QS'}
-    var trick2 = {'north': 'KS', 'south': '', 'east': '', 'west': 'QS'}
-    var trick3 = {'north': 'KS', 'south': '', 'east': 'AS', 'west': 'QS'}
-    var trick4 = {'north': 'KS', 'south': '2S', 'east': 'AS', 'west': 'QS'}
+    var trick1 = {'north': '', 'south': '', 'east': '', 'west': '2S'}
+    var trick2 = {'north': '3S', 'south': '', 'east': '', 'west': '2S'}
+    var trick3 = {'north': '3S', 'south': '', 'east': 'QS', 'west': '2S'}
+    var trick4 = {'north': '3S', 'south': '5D', 'east': 'QS', 'west': '2S'}
+    var trick5 = {'north': '', 'south': '', 'east': 'KC', 'west': ''}
 
     this.setState({prev_trick : empty_trick})
     this.setState({trick : empty_trick})
@@ -39,11 +40,13 @@ class T5 extends React.Component {
 
 
     setTimeout(function() {this.setState({trick : empty_trick})}.bind(this), 4000);
+
+    setTimeout(function() {this.setState({trick : trick5})}.bind(this), 7000);
   }
 
   componentWillMount() {
     this.trickAnimation()
-    var intervalId = setInterval(() => this.trickAnimation(), 7000);
+    var intervalId = setInterval(() => this.trickAnimation(), 9000);
     this.timer = intervalId
   }
 
@@ -54,17 +57,15 @@ class T5 extends React.Component {
 
   render(){
 
+
   const textStyle = {
 
   }
 
 
-  const title = 'At the start of the hand, your left hand opponent (East) \
-                will choose a card to play. The play will proceed clockwise, \
-                with each hand playing a card. The result of a complete \
-                revolution of cards is called a trick.'
-  const body = 'EVERYONE MUST FOLLOW SUIT TO THE FIRST PLAYED CARD. \
-                This is the most important rule of the game!'
+  const title = 'The hand that played the winning card can choose any card \
+                to start the next trick.'
+  const body = ''
 
 
     return (
@@ -86,4 +87,4 @@ class T5 extends React.Component {
   }
 }
 
-export default (T5);
+export default (T7);

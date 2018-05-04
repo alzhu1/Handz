@@ -4,6 +4,7 @@ import {mapStateToProps, mapDispatchToProps} from 'redux/map';
 import {connect} from 'react-redux';
 import Button from 'material-ui/Button';
 import {Link} from 'react-router-dom';
+import Tutorial from 'containers/tutorial/Tutorial';
 
 class Lobby extends React.Component {
     render() {
@@ -17,6 +18,7 @@ class Lobby extends React.Component {
                         onClick={() => {this.props.createTableThunk('single')}}>
                           Play!
                     </Button>
+                    <Tutorial />
                 </div>
             );
     }
