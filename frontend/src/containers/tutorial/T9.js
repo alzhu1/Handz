@@ -68,7 +68,7 @@ class T9 extends React.Component {
 
 
   const title = 'In this example, the contract is 1 Spade, which means spades \
-                is the trump suit'
+                is the supersuit'
   const body = 'Any spade will win the trick compared to every other suit.'
   const contract = '1SS'
 

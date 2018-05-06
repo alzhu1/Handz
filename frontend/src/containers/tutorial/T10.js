@@ -67,9 +67,9 @@ class T10 extends React.Component {
   }
 
 
-  const title = 'And you can beat trump cards with higher trump cards!'
-  const body = '(Remember you still have to follow suit, you cannot trump a \
-                  trick until you run out of the suit of the the \
+  const title = 'And you can beat supersuit cards with higher supersuit cards!'
+  const body = '(Remember you still have to follow suit, you cannot play supersuit \
+                until you run out of the suit of the the \
                   first card in the trick)'
   const contract = '1SS'
 

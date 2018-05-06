@@ -7,8 +7,10 @@ const T1 = () => {
   }
 
   const title = 'Welcome to Handz!'
-  const body = 'This tutorial will show you how to play Handz,\
-              a simplified take on contract bridge.'
+  const body = 'In this tutorial you’ll learn how to play a fun new card game.'
+
+  // This tutorial will show you how to play Handz,\
+  //             a simplified take on contract bridge.
 
   return (
     <div>

@@ -16,8 +16,8 @@ const T8 = () => {
   }
 
   const title = 'The contract you are assigned in the beginning will also \
-                indicate what the trump suit is.'
-  const body = 'Playing a card in the trump suit will win the trick \
+                indicate what the ‘supersuit’ suit is.'
+  const body = 'Playing a supersuit card will win the trick \
                 even if it’s not the same suit as the first played card.'
   const contract = '1SS'
 
