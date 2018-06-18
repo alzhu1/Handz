@@ -18,7 +18,7 @@ const T4 = () => {
 
   const title = 'At the beginning of each hand, you will be assigned a \
             contract consisting of a number (the level) and a suit. \
-            Your goal is to make your contract by taking level + 6 number of tricks.'
+            Your goal is to make your contract by taking the level + 6 number of tricks.'
   const body = 'In this example, the contract is 1 Spade. That means to make the contract \
                   you must take 1+6, or 7 tricks.'
   const contract = '1SS'

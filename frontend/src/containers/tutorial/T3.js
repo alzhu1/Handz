@@ -20,7 +20,7 @@ const T3 = () => {
 
   const hand1 = {'spades': "KT84", 'hearts': "Q93",'diamonds': "JT65", 'clubs': "K4"}
   const hand2 = {'spades': "AQ3", 'hearts': "J432",'diamonds': "Q3", 'clubs': "T983"}
-  const title = 'You will also control the North hand, the hand directly facing you. \
+  const title = 'You will also control the North hand, the hand opposite yours. \
                   You will use your two hands to work together to win tricks.'
 
   return (

@@ -1,5 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
+import spadesuit from 'images/SuitSymbols/spade.svg';
+import heartsuit from 'images/SuitSymbols/heart.svg';
+import diamondsuit from 'images/SuitSymbols/diamond.svg';
+import clubsuit from 'images/SuitSymbols/club.svg';
 
 export default class SuitSymbol extends React.Component {
 
@@ -44,9 +48,22 @@ export default class SuitSymbol extends React.Component {
         styles =_.merge(styles, this.props.additionalStyles);
       }
 
-      let src = require('../images/SuitSymbols/' + suit + '.svg')
+      // let src = require('../images/SuitSymbols/' + suit + '.svg')
+      var suit_src;
+      if (suit == 'spade') {
+        suit_src = spadesuit
+      }
+      else if (suit == 'heart') {
+        suit_src = heartsuit
+      }
+      else if (suit == 'diamond') {
+        suit_src = diamondsuit
+      }
+      else if (suit == 'club') {
+        suit_src = clubsuit
+      }
       return  (
-                <img src={src} style={styles}/>
+                <img src={suit_src} style={styles}/>
       )
     }
 }
