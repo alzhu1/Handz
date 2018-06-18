@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from 'material-ui/Typography';
+import SuitSymbol from 'components/SuitSymbol';
 
 const T1 = () => {
 
@@ -12,6 +13,8 @@ const T1 = () => {
   // This tutorial will show you how to play Handz,\
   //             a simplified take on contract bridge.
 
+
+  // Really dumb work around to get suitsymbol to load first time
   return (
     <div>
       <Typography style={textStyle}>
@@ -20,6 +23,7 @@ const T1 = () => {
       <Typography style={textStyle}>
         {body}
       </Typography>
+      <SuitSymbol suit={'S'} additionalStyles={{width: '0px'}}/>
     </div>
   )
 }
