@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from 'material-ui/Typography';
-import SuitSymbol from 'components/SuitSymbol';
+
 
 const T1 = () => {
 
@@ -23,7 +23,6 @@ const T1 = () => {
       <Typography style={textStyle}>
         {body}
       </Typography>
-      <SuitSymbol suit={'S'} additionalStyles={{width: '0px'}}/>
     </div>
   )
 }

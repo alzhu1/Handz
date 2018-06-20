@@ -1,5 +1,6 @@
 import React from 'react';
 import LoginPage from 'components/LoginPage'
+import SuitSymbol from 'components/SuitSymbol';
 
 export default class LoginContainer extends React.Component {
     constructor() {
@@ -17,11 +18,14 @@ export default class LoginContainer extends React.Component {
 
     render() {
         return (
+          <div>
             <LoginPage
                 name={this.state.name}
                 password={this.state.password}
                 changeName={this.changeName}
                 changePassword={this.changePassword}/>
+              <SuitSymbol suit={'S'} additionalStyles={{width: '0px'}}/>
+          </div>
         );
     }
 }
