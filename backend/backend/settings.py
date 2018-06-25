@@ -136,30 +136,30 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# if 'RDS_DB_NAME' in os.environ:
-#     CHANNEL_LAYERS = {
-#      "default": {
-#       "BACKEND": "asgi_redis.RedisChannelLayer",
-#       "CONFIG": {
-#        "hosts": ["redis://backend-redis.ebuevd.0001.usw1.cache.amazonaws.com:6379"],
-#       },
-#      "ROUTING": "backend.routing.channel_routing",
-#      }
-#     }
-#
-#
-# # ["redis://ec2-54-183-221-29.us-west-1.compute.amazonaws.com:6379"]
-#
-# else:
-#     CHANNEL_LAYERS = {
-#         'default': {
-#             'BACKEND': 'asgi_redis.RedisChannelLayer',
-#             'CONFIG': {
-#                 'hosts': [('localhost', 6379)],
-#             },
-#             'ROUTING': 'backend.routing.channel_routing',
-#         },
-#     }
+if 'RDS_DB_NAME' in os.environ:
+    CHANNEL_LAYERS = {
+     "default": {
+      "BACKEND": "asgi_redis.RedisChannelLayer",
+      "CONFIG": {
+       "hosts": ["redis://backend-redis.ebuevd.0001.usw1.cache.amazonaws.com:6379"],
+      },
+     "ROUTING": "backend.routing.channel_routing",
+     }
+    }
+
+
+# ["redis://ec2-54-183-221-29.us-west-1.compute.amazonaws.com:6379"]
+
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'asgi_redis.RedisChannelLayer',
+            'CONFIG': {
+                'hosts': [('localhost', 6379)],
+            },
+            'ROUTING': 'backend.routing.channel_routing',
+        },
+    }
 
 
 REST_FRAMEWORK = {
