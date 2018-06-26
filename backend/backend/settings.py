@@ -9,7 +9,7 @@ SECRET_KEY = 'secret'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['backend-virginia.us-east-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['localhost', 'backendvirginia.us-east-1.elasticbeanstalk.com']
 
 
 
