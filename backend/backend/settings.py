@@ -9,7 +9,7 @@ SECRET_KEY = 'secret'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'backendvir.us-east-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['localhost', 'handz.us-east-1.elasticbeanstalk.com', '172.31.26.217', 'awseb-AWSEB-O02OTW9NE5SA-297083121.us-east-1.elb.amazonaws.com']
 
 
 
@@ -141,7 +141,7 @@ if 'RDS_DB_NAME' in os.environ:
      "default": {
       "BACKEND": "asgi_redis.RedisChannelLayer",
       "CONFIG": {
-       "hosts": ["redis://backend-redis.ebuevd.0001.usw1.cache.amazonaws.com:6379"],
+       "hosts": ["redis://handz-redis.byfelv.0001.use1.cache.amazonaws.com:6379"],
       },
      "ROUTING": "backend.routing.channel_routing",
      }
