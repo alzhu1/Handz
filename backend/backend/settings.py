@@ -9,7 +9,7 @@ SECRET_KEY = 'secret'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'handz.us-east-1.elasticbeanstalk.com', '172.31.26.217', 'awseb-AWSEB-O02OTW9NE5SA-297083121.us-east-1.elb.amazonaws.com']
+ALLOWED_HOSTS = ['localhost', 'handz.us-east-1.elasticbeanstalk.com', '172.31.26.217', 'awseb-AWSEB-O02OTW9NE5SA-297083121.us-east-1.elb.amazonaws.com', 'www.handz.io', 'drv45y0vev73g.cloudfront.net']
 
 
 
