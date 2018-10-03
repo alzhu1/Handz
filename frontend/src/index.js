@@ -32,7 +32,7 @@ const loggerMiddleware = createLogger();
 let sock = new WebSocketBridge();
 
 console.log(window.location.protocol)
-const backend = 'backend-dev2.us-west-1.elasticbeanstalk.com'
+const backend = 'backend.handz.iotest'
 if (window.location.protocol === 'https:') {
     sock.connect('wss://' + backend);
 }
