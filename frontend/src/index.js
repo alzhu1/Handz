@@ -32,7 +32,7 @@ const loggerMiddleware = createLogger();
 let sock = new WebSocketBridge();
 
 console.log(window.location.protocol)
-const backend = 'backend.handz.iotest'
+const backend = 'backend.handz.io'
 if (window.location.protocol === 'https:') {
     sock.connect('wss://' + backend);
 }
