@@ -30,7 +30,16 @@ import red from 'material-ui/colors/red';
 const loggerMiddleware = createLogger();
 
 let sock = new WebSocketBridge();
-sock.connect('ws://backend-dev2.us-west-1.elasticbeanstalk.com/');
+
+console.log(window.location.protocol)
+const backend = 'backend-dev2.us-west-1.elasticbeanstalk.com'
+if (window.location.protocol === 'https:') {
+    sock.connect('wss://' + backend);
+}
+else {
+    sock.connect('ws://' + backend);
+}
+
 // sock.connect('ws://localhost:8000');
 sock.listen((payload, stream) => {
     store.dispatch(payload)
