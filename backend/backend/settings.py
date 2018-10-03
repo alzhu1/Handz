@@ -9,7 +9,7 @@ SECRET_KEY = 'secret'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'handzbackend-dev.us-east-1.elasticbeanstalk.com', 'backend.handz.io']
+ALLOWED_HOSTS = ['localhost', 'handzbackend-dev2.us-east-1.elasticbeanstalk.com', '172.31.41.9', 'backend.handz.io']
 
 
 
